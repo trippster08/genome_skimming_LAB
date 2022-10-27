@@ -1,0 +1,29 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -q sThC.q
+#$ -l mres=6G,h_data=6G,h_vmem=6G
+#$ -cwd
+#$ -j y
+#$ -N fastqc
+#$ -o logs/fastqc.log
+#
+# ----------------Modules------------------------- #
+ module load ~/modulefiles/miniconda
+ source activate fastqc
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+path="$1"
+sampleplus="$2"
+#
+fastqc \
+-o ${path}/fastqc_analyses \
+${path}/${sampleplus}_001.fastq.gz
+#
+echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the fastqc
+# environment, and runs fastqc on all samples
