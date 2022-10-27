@@ -1,2 +1,2 @@
 # genome_skimming_LAB
-This is a set of scripts designed to QC Illumina sequencing data, find whole mitochondrial genomes, and annotize those genomes, all using Smithsonian's Hydra HPC
+This protocol is a set of scripts designed to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed to use hydra, Smithsonian's HPC for fastqc, trimmomatic, getOrganelle, and Spades. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows.
