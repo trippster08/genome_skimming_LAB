@@ -1,0 +1,116 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 16
+#$ -q mThM.q
+#$ -l mres=192G,h_data=12G,h_vmem=12G,himem
+#$ -cwd
+#$ -j y
+#$ -N PROJECT_trim
+#$ -o logs/PROJECT_trim.log
+#
+# ----------------Modules------------------------- #
+ module load ~/modulefiles/miniconda
+ source activate trimmomatic
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+path="$1"
+sample="$2"
+data="$3"
+home=`echo ${path} | cut -d "/" -f 1,2,3,4`
+#
+trimmomatic \
+PE \
+${path}/${sample}_L001_R1_001.fastq.gz \
+${path}/${sample}_L001_R2_001.fastq.gz \
+${data}/trimmed_sequences/${sample}_R1_PE_trimmed.fastq.gz \
+${data}/trimmed_sequences/${sample}_R1_SE_trimmed.fastq.gz \
+${data}/trimmed_sequences/${sample}_R2_PE_trimmed.fastq.gz \
+${data}/trimmed_sequences/${sample}_R2_SE_trimmed.fastq.gz \
+ILLUMINACLIP:${home}/primers/itru_adapters_trimmomatic.fa:2:20:5:3:keepBothReads \
+CROP:150 \
+HEADCROP:3 \
+SLIDINGWINDOW:5:15 \
+MINLEN:30
+
+
+#
+echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the trimmomatic environment,
+# and runs the shell script that will trim all paired samples using trimmomatic.
+# Before using, change -N and -o under Parameters to your project name. Also
+# change the trimming parameters, based on the length of your reads, and the 
+# quality determined by fastqc.
+
+# These are the commands given to Trimmomatic, with a brief description. For 
+# more information please see the manual:
+# http://www.usadellab.org/cms/uploads/supplementary/Trimmomatic/TrimmomaticManual_V0.32.pdf
+
+# The first line after calling the program (line 8) will be either "PE" or
+# "SE", depending upon whether your samples are paired-end or single-end.
+
+# The next two lines (line 25, 26) are the R1 and R2 input files, the
+# demultiplexed illumina read files. 
+
+# Lines 27 and 28 are the output files for the trimmed R1 reads. Line 27 outputs
+# the file for the trimmed R1 reads in which both the R1 and R2 reads have
+# survived trimming. Line 28 outputs the file for trimmed R1 reads in which R2
+# did not survive the trimming process. These are now single-end (SE) reads.
+
+# Lines 29 and 30 are the output files for the trimmed R2 reads. Line 29 points
+# to the file for the trimmed R2 reads in which both the R1 and R2 reads have
+# survived trimming. Line 30 points to the file for trimmed R2 reads in which R1
+# did not survive the trimming process. These are now single-end reads (SE).
+
+# The remaining commands are processed in the order listed. You may use whatever
+# order you prefer.
+
+# ILLUMINACLIP:<primer_adapter_fasta>:<seed mismatches>:<palindromClipThreshold>:
+# <simpleClipThreshold>:<minAdapterLength>:<keepBothReads>. Trimmomatic searches
+# for the adapters contained in the fasta file listed. This file contains the F
+# and R iTru adapters, and their reverse complements (to find and remove 3'
+# adapters on short reads). This should allow Trimmomatic to find any iTru
+# adapter possibly contained in your reads. 
+# "seed mismatches" is the number of mismatches allowed between the adapter and
+# the sequence.
+# "palindromeClipThreshold" is the the alignment score that must be reached for
+# an alignment of the adapter to the 3' end of a read, when a short read has
+# read-through to the other adapter. 
+# "simpleClipThreshold" is the the alignment score that must be reached for an
+# alignment of the adapter to the 5' end of the read. 
+# "minAdapterLength" is the minimum length needed to match the adapter on the 3'
+# end of the read (a read-through adapter).
+# "keepBothReads" tells trimmomatic to keep R2 when an adapter is found on the 
+# 3' end of the read (a read-through adapter). Since R1 and R2 reads contain
+# identical information in short sequences that have been read-through, the 
+# default for trimmomatic is to remove R2 in these instance. However, 
+# paired-end reads are required or easier to deal with in some downstream
+# applications (such as getOrganelle), so we chose to keep R2.
+# You can play with these values if you like, but the ones used here have worked
+# for my analyses.
+
+# CROP:<length> Removes bases from the 3' end of a read, regardless of quality. 
+# The value after the colon is "the number of bases to keep, from the start of
+# the read". It is the length of the read after cropping. This may not be
+# the final read length, since read length may be further reduced by subsequent
+# commands.
+
+# HEADCROP:<length> Removes bases from the 5' end of a read, regardless of
+# quality. The value after the colon is the number of bases to remove.
+
+# LEADING:<quality> Removes low-quality (any below the qualitythreshold chosen)
+# bases from the 5' end of a read. 
+
+# TRAILING:<quality> Removes low-quality (any below the qualitythreshold chosen)
+# bases from the 3' end of a read.
+
+# SLIDINGWINDOW:<windowSize>:<requiredQuality> performs a sliding window
+# trimming, cutting off the 3' end of a sequence when the average quality of the
+# "window" falls below the desired threshhold.
+
+# MINLEN:<length> This is the mimimum length required to keep a read. If the
+# read is below this length it will be removed.
