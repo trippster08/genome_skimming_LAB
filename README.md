@@ -1,4 +1,4 @@
- [Genome Skimming Pipeline for LAB](#Genome-Skimming-Pipeline-for-LAB)
+# Genome Skimming Pipeline for LAB
 1. [Local Computer Configuration](#Local-Computer-Configuration) </br>
 3. [Hydra Configuration](#Hydra-Configuration) </br>
   3.1. [Install conda and biopython](#Install-conda-and-biopython) </br>
@@ -18,7 +18,6 @@
 8. [SPAdes](#SPAdes) </br>
   8.1. [Run SPAdes](#Run-SPAdes)
 
-# Genome Skimming Pipeline for LAB
 This protocol is to analyze paired-end or single-read demultiplexed illumina
 sequences for the purpose of recovering mitochondrial genomes from genomic DNA
 libraries. This pipeline is designed to use hydra, Smithsonian's HPC for
