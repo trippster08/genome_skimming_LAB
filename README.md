@@ -1,22 +1,22 @@
 # Genome Skimming Pipeline for LAB
 1. [Local Computer Configuration](#Local-Computer-Configuration) </br>
-3. [Hydra Configuration](#Hydra-Configuration) </br>
-  3.1. [Install conda and biopython](#Install-conda-and-biopython) </br>
-  3.2. [Install conda packages](#Install-conda-packages) </br>
-  3.3. [Project-specific directory](#Project-specific-directory) </br>
-  3.4. [Transfer reads to hydra](#Transfer-reads-to-hydra) </br>
-4. [FastQC Raw Reads](#FastQC-Raw-Reads) </br>
-  4.1. [Run FastQC](#Run-Fastqc) </br>
-  4.2. [Download Results](#Download-Results) </br>    
-5. [Trimmomatic](#Trimmomatic) </br>
-6. [FastQC Trimmed Reads](#FastQC-Trimmed-Reads) </br>
-  6.1. [Run FastQC](#Run-Fastqc) </br>
-  6.2. [Download Results](#Download-Results) </br>
-7. [GetOrganelle](#GetOrganelle) </br>
-  7.1. [Concatenate single-end reads](#Concatenate-single-end-reads) </br>
-  7.2. [Run GetOrganelle](Run-GetOrganelle) </br>
-8. [SPAdes](#SPAdes) </br>
-  8.1. [Run SPAdes](#Run-SPAdes)
+2. [Hydra Configuration](#Hydra-Configuration) </br>
+  2.1. [Install conda and biopython](#Install-conda-and-biopython) </br>
+  2.2. [Install conda packages](#Install-conda-packages) </br>
+  2.3. [Project-specific directory](#Project-specific-directory) </br>
+  2.4. [Transfer reads to hydra](#Transfer-reads-to-hydra) </br>
+3. [FastQC Raw Reads](#FastQC-Raw-Reads) </br>
+  3.1. [Run FastQC](#Run-Fastqc) </br>
+  3.2. [Download Results](#Download-Results) </br>    
+4. [Trimmomatic](#Trimmomatic) </br>
+5. [FastQC Trimmed Reads](#FastQC-Trimmed-Reads) </br>
+  5.1. [Run FastQC](#Run-Fastqc) </br>
+  5.2. [Download Results](#Download-Results) </br>
+6. [GetOrganelle](#GetOrganelle) </br>
+  6.1. [Concatenate single-end reads](#Concatenate-single-end-reads) </br>
+  6.2. [Run GetOrganelle](Run-GetOrganelle) </br>
+7. [SPAdes](#SPAdes) </br>
+  7.1. [Run SPAdes](#Run-SPAdes)
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina
 sequences for the purpose of recovering mitochondrial genomes from genomic DNA
