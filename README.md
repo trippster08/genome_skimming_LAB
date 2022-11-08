@@ -75,13 +75,21 @@ Add bioconda channel and other channels needed for bioconda. Run this in the
 order shown (this sets priority, with highest priority last).
 ```
 conda config --add channels defaults
+```
+```
 conda config --add channels bioconda
+```
+```
 conda config --add channels conda-forge
 ```
 To run miniconda packages on Hydra, you need to set up a module file
 ```
-mkdir ~/modulefiles
-cd ~/modulefiles
+mkdir ~/modulefiles2 
+```
+```
+cd ~/modulefiles 
+```
+```
 nano miniconda
 ```
 Enter into the new text file the following text (both lines). Remember to
