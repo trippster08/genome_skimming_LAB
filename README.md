@@ -146,7 +146,7 @@ See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
 with transferring files between Hydra and your computer. I usually use scp
 or filezilla.
 
-## `FastQC`Raw Reads
+## FastQC Raw Reads
 
 We are going to run `FastQC`on all our reads to check their quality and help
 determine our trimming parameters. Because we do not want to have to create
