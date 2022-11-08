@@ -164,7 +164,9 @@ with transferring files between Hydra and your computer.
 
 After the shell file, include the path to the directory your read files are
 in. For most, it should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/raw`. 
+```
+/scratch/genomics/<USERNAME>/<PROJECT>/data/raw`. 
+```
 NOTE: Make sure you do not put a forward slash at the end of the path. If you
 use tab to complete, it automatically adds a forward slash at the end. Remove
 it.
