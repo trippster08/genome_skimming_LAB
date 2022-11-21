@@ -360,10 +360,9 @@ save it in a reference subdirectory in my scratch directory.
 
 You need to include two paths after the shell file. The first is the path to the 
 directory your read files are in while the second is the directory your reference
-mitochondrial genome files.
-in. For most, the first should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences` while the second
-will be something like:
+mitochondrial genome files. For most, the first should be something like: 
+`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences` 
+while the second will be something like:
 `/scratch/genomics/<USERNAME>/ref/mito_reference.gb`
 NOTE: Make sure you do not put a forward slash at the end of the path. If you
 use tab to complete, it automatically adds a forward slash at the end. Remove
