@@ -354,9 +354,13 @@ See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
 with transferring files between Hydra and your computer. I usually use scp
 or filezilla.
 
+MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. If
+you don't have one, follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi, and save it. I typically
+save it in a reference subdirectory in my scratch directory.
+
 You need to include two paths after the shell file. The first is the path to the 
 directory your read files are in while the second is the directory your reference
-mitochondrial genome files in GenBank (.gb) format.
+mitochondrial genome files.
 in. For most, the first should be something like: 
 `/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences` while the second
 will be something like:
