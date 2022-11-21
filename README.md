@@ -14,7 +14,7 @@
   5.2. [Download Results](#Download-Results) </br>
 6. [MitoFinder](#MitoFinder) </br>
   6.1. [Concatenate single-end reads](#Concatenate-single-end-reads) </br>
-  6.2. [Run MitoFinder](Run-MitoFinder) </br>
+  6.2. [Run MitoFinder]($Run-MitoFinder) </br>
 7. [SPAdes](#SPAdes) </br>
   7.1. [Run SPAdes](#Run-SPAdes) </br>
 
