@@ -354,15 +354,19 @@ See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
 with transferring files between Hydra and your computer. I usually use scp
 or filezilla.
 
-After the shell file, include the path to the directory your read files are
-in. For most, it should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
+You need to include two paths after the shell file. The first is the path to the 
+directory your read files are in while the second is the directory your reference
+mitochondrial genome files in GenBank (.gb) format.
+in. For most, the first should be something like: 
+`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences` while the second
+will be something like:
+`/scratch/genomics/<USERNAME>/ref/mito_reference.gb`
 NOTE: Make sure you do not put a forward slash at the end of the path. If you
 use tab to complete, it automatically adds a forward slash at the end. Remove
 it.
 
 ```
-sh mitofinder_multi_hydra.sh <path_to_trimmed_sequences>
+sh mitofinder_multi_hydra.sh <path_to_trimmed_sequences> <path_to_reference_database>
 ```
 You don't appear to have the ability to choose where to put the results folder, and
 MitoFinder puts them where they are run from, in this case, the jobs directory.
