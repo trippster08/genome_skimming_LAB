@@ -1,0 +1,43 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 8
+#$ -q mThM.q
+#$ -l mres=96G,h_data=12G,h_vmem=12G,himem
+#$ -cwd
+#$ -j y
+#$ -N ${sample}
+#$ -o logs/${sample}_mitofinder.log
+#
+# ----------------Modules------------------------- #
+module load bioinformatics/mitofinder
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+path="$1"
+sample="$2"
+reference="$3"
+#
+mitofinder \
+-j ${sample} \
+-o 1 \
+-r ${reference} \
+-1 ${path}/${sample}_R1_PE_trimmed.fastq.gz \
+-2 ${path}/${sample}_R2_PE_trimmed.fastq.gz \
+-s ${path}/${sample}_SE_trimmed.fastq.gz 
+
+#
+echo = `date` job $JOB_NAME done
+
+
+# -1 is the path to the R1 PE trimmed file, -2 is the path to the R2 PE trimmed
+#  file. PE files come in pairs, both the R1 and R2 are present. -u is the path
+#  to the unpaired R1 and R2 files. Since there are two of these output by
+# trimmomatic, you can list them both, separated by a comma. 
+# -o is where the output folder will be saved.
+# -F is the type of organelle you are asking the program to find.
+# Don't forget to replace USERNAME with your username, and PROJECT with your
+# project name.
+# --reduce-reads-for-coverage inf
