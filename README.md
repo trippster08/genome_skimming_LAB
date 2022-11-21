@@ -5,23 +5,23 @@
   2.2. [Install conda packages](#Install-conda-packages) </br>
   2.3. [Project-specific directory](#Project-specific-directory) </br>
   2.4. [Transfer reads to hydra](#Transfer-reads-to-hydra) </br>
-3. [FastQC Raw Reads](#FastQC-Raw-Reads) </br>
+3. [`FastQC`Raw Reads](#FastQC-Raw-Reads) </br>
   3.1. [Run FastQC](#Run-Fastqc) </br>
   3.2. [Download Results](#Download-Results) </br>    
 4. [Trimming and Filtering Raw Reads](#Trimming_and_Filtering_Raw_Reads) </br>
-5. [FastQC Trimmed Reads](#FastQC-Trimmed-Reads) </br>
+5. [`FastQC`Trimmed Reads](#FastQC-Trimmed-Reads) </br>
   5.1. [Run FastQC](#Run-Fastqc) </br>
   5.2. [Download Results](#Download-Results) </br>
-6. [GetOrganelle](#GetOrganelle) </br>
+6. [MitoFinder](#MitoFinder) </br>
   6.1. [Concatenate single-end reads](#Concatenate-single-end-reads) </br>
-  6.2. [Run GetOrganelle](Run-GetOrganelle) </br>
+  6.2. [Run MitoFinder](Run-MitoFinder) </br>
 7. [SPAdes](#SPAdes) </br>
   7.1. [Run SPAdes](#Run-SPAdes) </br>
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina
 sequences for the purpose of recovering mitochondrial genomes from genomic DNA
 libraries. This pipeline is designed to use hydra, Smithsonian's HPC for
-fastqc, trimmomatic, GetOrganelle, and SPAdes. The pipeline assumes you have a
+`fastqc`, `trimmomatic`, `MitoFinder`, and `SPAdes`. The pipeline assumes you have a
 current hydra account and are capable of accessing the SI network, either
 in person or through VPN. Our pipeline is specifically written for MacOS,
 but is compatible with Windows. See 
@@ -146,7 +146,7 @@ See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
 with transferring files between Hydra and your computer. I usually use scp
 or filezilla.
 
-## FastQC Raw Reads
+## `FastQC`Raw Reads
 
 We are going to run `FastQC`on all our reads to check their quality and help
 determine our trimming parameters. Because we do not want to have to create
@@ -301,14 +301,14 @@ different for you) to your computer.
 Open the html files using your browser to examine how well you trimming
 parameters worked.
 
-## GetOrganelle
+## MitoFinder
 
-We are going to run `GetOrganelle` on all our paired-end trimmed reads to try to
+We are going to run `MitoFinder` on all our paired-end trimmed reads to try to
 find full mitochondrial genomes. I have set up a single shell file that
-submits a `GetOrganelle` job file for each sample, and runs them simultaneously. 
+submits a `MitoFinder` job file for each sample, and runs them simultaneously. 
 
 ### Concatenate single-end reads 
-`GetOrganelle` can use unpaired (single-end or SE) reads, but it only allows one SE fastq file, so we need to concatenate our R1_SE and R2_SE if we used `Trimmomatic` to trim and filter
+`MitoFinder` can use unpaired (single-end or SE) reads, but it only allows one SE fastq file, so we need to concatenate our R1_SE and R2_SE if we used `Trimmomatic` to trim and filter
 out raw reads.
 
 Go to the directory containing your job files. If you followed this pipeline,
@@ -336,7 +336,7 @@ Check to make sure the concatenated files exist
 ls -lhrt ../data/trimmed_sequences
 ```
 
-### Run GetOrganelle
+### Run MitoFinder
 Open the terminal app and log onto Hydra. You will need your Hydra account
 password.
 ```
@@ -348,7 +348,7 @@ ssh USERNAME@hydra-login02.si.edu
 ```
 Go to the directory containing your job files. If you followed this pipeline,
 that should be `<PROJECT>/jobs`. The shell file below, and the job file that it
-modifies and submits to Hydra, `getorganelle_multi.job` should both be
+modifies and submits to Hydra, `mitofinder_multi.job` should both be
 here. Copy them here if need be. 
 See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
 with transferring files between Hydra and your computer. I usually use scp
@@ -356,23 +356,23 @@ or filezilla.
 
 After the shell file, include the path to the directory your read files are
 in. For most, it should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/raw`. 
+`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
 NOTE: Make sure you do not put a forward slash at the end of the path. If you
 use tab to complete, it automatically adds a forward slash at the end. Remove
 it.
 
 ```
-sh getorganelle_multi_hydra.sh <path_to_trimmed_sequences>
+sh mitofinder_multi_hydra.sh <path_to_trimmed_sequences>
 ```
-Your results should be in 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/results/getorganelle`. The results
-for each sample will be in a separate folder, named with the sample name. 
+You don't appear to have the ability to choose where to put the results folder, and
+MitoFinder puts them where they are run from, in this case, the jobs directory.
+The results for each sample will be in a separate folder, named with the sample name. 
 Transfer these results folders to your local computer. 
 
 ## SPAdes 
 
 We are going to run `SPAdes` on all our paired-end trimmed reads where we were
-not able to get mtgenomes using `GetOrganelle`. `SPAdes` will perform a de-novo
+not able to get mtgenomes using `MitoFinder`. `SPAdes` will perform a de-novo
 assembly and will output a set of contigs. I have set up a shell file that
 will submit a job file for each sample, running them simultaneously.
 
