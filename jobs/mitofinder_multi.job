@@ -36,7 +36,7 @@ echo = `date` job $JOB_NAME done
 #  file. PE files come in pairs, both the R1 and R2 are present. 
 # -o is the genetic code to use. The list below is from the mitofinder
 # documantation (https://github.com/RemiAllio/MitoFinder/blob/master/README.md).
-# -r is the path to the reference database, in genbank (.db) format. Mitofinder
+# -r is the path to the reference database, in genbank (.gb) format. Mitofinder
 # documentation (https://github.com/RemiAllio/MitoFinder/blob/master/README.md),
 # shows how to create a reference database from NCBI.
 # --new-genes denotes that some of the genes in the reference database are not
