@@ -1,15 +1,29 @@
 #!/bin/sh
 
-path="$1"
-reference="$2"
-repath=`echo ${path} | cut -d "/" -f 1,2,3,4,5`
-mkdir -p ${repath}/data/results/mitofinder
+trimmed="$1"
+taxa="$2"
+parent=${trimmed}/../../
+mkdir -p ${parent}/data/results/mitofinder
 
- for x in ${path}/*_R1_PE_trimmed.fastq.gz ; do 
-    sample=`echo ${x} | cut -d "_" -f 1,2,3,4,5 | cut -d "/" -f 8`
+ls ${trimmed}/*.fastq.gz &> /dev/null  || echo "Correct path to read files not entered (*.fastq.gz)"
 
-    qsub -o ${repath}/jobs/logs/${sample}_mitofinder.log \
-    -wd ${repath}/data/results/mitofinder \
-    -N ${sample}_mitofinder \
-    mitofinder_multi.job ${path} ${sample} ${reference}
+if [[ -z $2 ]];
+  then
+  echo "Genetic code not entered (should be a number between 1 and 25)"
+fi
+
+for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
+  sample=`basename ${x}`
+  name=`echo ${sample%_R*}`
+
+  qsub -o ${parent}/jobs/logs/${name}_mitofinder.log \
+  -wd ${parent}/data/results/mitofinder \
+  -N ${name}_mitofinder \
+  mitofinder.job ${trimmed} ${name} ${taxa}
 done
+
+# Mitofinder defaults to put the output in the same folder from which the 
+# program was run, and there doesn't appear to be a way to change this. So, I
+# added "-wd", which tells hydra to run the program in whatever directory is
+# listed, in this case mitofinder/results/. Since this would also cause the log
+# files to be placed here, I have also changed the log output "-o" to jobs/logs/
