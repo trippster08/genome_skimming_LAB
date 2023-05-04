@@ -7,11 +7,11 @@
 3. [Running the Pipeline](#Running-the-Pipeline) </br>
 4. [FastQC Raw Reads](#FastQC-Raw-Reads) </br>
   4.1. [Run FastQC](#Run-Fastqc) </br>
-  4.2. [Download Results](#Download-Results) </br>    
+  4.2. [Download Raw-Reads FastQC Results](#Download-Raw-Reads-FastQC-Results) </br>    
 5. [Trimming and Filtering Raw Reads](#Trimming_and_Filtering_Raw_Reads) </br>
 6. [FastQC Trimmed Reads](#FastQC-Trimmed-Reads) </br>
   6.1. [Run FastQC](#Run-Fastqc) </br>
-  6.2. [Download Results](#Download-Results) </br>
+  6.2. [Download Trimmed-Reads FastQC Results](#Download-Trimmed-Reads-FastQC-Results) </br>
 7. [SPAdes](#SPAdes) </br>
   7.1. [Run SPAdes](#Run-SPAdes) </br>
   7.2. [Move and Rename SPAdes Scaffolds](#Move-and-Rename-SPAdes-Scaffolds) </br>
@@ -77,7 +77,7 @@ sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
 If you do not enter the path to the raw sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding  that path should fix these errors.
 
-### Download Results
+### Download Raw-Reads FastQC Results
 
 Download the directory containing the `FastQC` results (it should be `/data/raw/fastqc_analyses`) to your computer. Open the html files using your browser to examine your read quality. Interpreting `FastQC` results can be tricky, and will not be discussed here. See LAB staff or others familiar with `FastQC` for help.
 
@@ -111,7 +111,7 @@ sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
 If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
-### Download Results
+### Download Trimmed-Reads FastQC Results
 Download the directory containing the `FastQC` results (it should be `/data/trimmed_sequences/fastqc_analyses`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting `FastQC` results can be tricky, and will not be discussed here. See LAB staff or others familiar with `FastQC` for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
 
 ## SPAdes 
