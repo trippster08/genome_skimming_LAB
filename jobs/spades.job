@@ -1,38 +1,41 @@
 # /bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 8
-#$ -q mThM.q
-#$ -l mres=96G,h_data=12G,h_vmem=12G,himem
+#$ -pe mthread 16
+#$ -q sThC.q
+#$ -l mres=128G,h_data=8G,h_vmem=8G
 #$ -cwd
 #$ -j y
 #$ -N PROJECT_spades
 #$ -o logs/PROJECT_spades.log
 #
 # ----------------Modules------------------------- #
- module load ~/modulefiles/miniconda
- source activate spades
+module load tools/conda
+start-conda
+conda activate /scratch/nmnh_lab/envs/genome_skimming/spades_ksm_16Feb23
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
-path="$1"
-sample="$2"
-repath="$3"
+trimmed="$1"
+name="$2"
+data="$3"
 #
 spades.py \
--o ${repath}/results/spades/${sample} \
---pe1-1 ${path}/${sample}_R1_PE_trimmed.fastq.gz \
---pe1-2 ${path}/${sample}_R2_PE_trimmed.fastq.gz \
---pe1-s ${path}/${sample}_SE_concat.fastq.gz 
+-o ${data}/results/spades/${name} \
+--pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
+--pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
+--pe1-s ${trimmed}/${name}_SE_trimmed.fastq.gz \
+-t 16 -m 128
 
 #
 echo = `date` job $JOB_NAME done
 
-# -1 is followed by the path to the R1 trimmed file, and -2 is followed by the
-#  path to the R2 trimmed file.
-# -o is where the output folder will be saved.
-# -F is the type of organelle you are asking the program to find.
-# Don't forget to replace USERNAME with your username, and PROJECT with your
-# project name.
+# -o is the path to the directory where you want your results saved
+# --pe1-1 is the path to the file of the paired R1 reads of the first paired-end 
+# library (you can have mutiple libraries as input files). --pe1-2 is the path
+# to the file of the paired R2 reads of the first paired-end library. --pe1-s
+# is the path of the unpaired reads (both R1 and R2 should be in the same file)
+# of the first paired-end library.
+# -t is the number of threads, and -m is the total amount of memory allocated 
