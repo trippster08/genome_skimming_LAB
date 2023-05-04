@@ -5,23 +5,24 @@
 #$ -l mres=6G,h_data=6G,h_vmem=6G
 #$ -cwd
 #$ -j y
-#$ -N fastqc
+#$ -N fastqc_${name}
 #$ -o logs/fastqc.log
 #
 # ----------------Modules------------------------- #
- module load ~/modulefiles/miniconda
- source activate fastqc
+module load tools/conda
+start-conda
+conda activate /scratch/nmnh_lab/envs/genome_skimming/fastqc_ksm_16Feb23
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
-path="$1"
-sampleplus="$2"
+raw="$1"
+sample="$2"
 #
 fastqc \
--o ${path}/fastqc_analyses \
-${path}/${sampleplus}_001.fastq.gz
+-o ${raw}/fastqc_analyses \
+${raw}/${sample}
 #
 echo = `date` job $JOB_NAME done
 
