@@ -1,274 +1,42 @@
 # Genome Skimming Pipeline for LAB
 1. [Local Computer Configuration](#Local-Computer-Configuration) </br>
 2. [Hydra Configuration](#Hydra-Configuration) </br>
-  2.1. [Install conda and biopython](#Install-conda-and-biopython) </br>
-  2.2. [Install conda packages](#Install-conda-packages) </br>
-  2.3. [Project-specific directory](#Project-specific-directory) </br>
-  2.4. [Transfer reads to hydra](#Transfer-reads-to-hydra) </br>
-3. [`FastQC`Raw Reads](#FastQC-Raw-Reads) </br>
-  3.1. [Run FastQC](#Run-Fastqc) </br>
-  3.2. [Download Results](#Download-Results) </br>    
-4. [Trimming and Filtering Raw Reads](#Trimming_and_Filtering_Raw_Reads) </br>
-5. [`FastQC`Trimmed Reads](#FastQC-Trimmed-Reads) </br>
-  5.1. [Run FastQC](#Run-Fastqc) </br>
-  5.2. [Download Results](#Download-Results) </br>
-6. [MitoFinder](#MitoFinder) </br>
-  6.1. [Concatenate single-end reads](#Concatenate-single-end-reads) </br>
-  6.2. [Run MitoFinder]($Run-MitoFinder) </br>
+  2.1. [Log into Hydra](#Log_into_Hydra) </br>
+  2.2. [Project-specific directory](#Project-specific-directory) </br>
+  2.3. [Transfer files to hydra](#Transfer-files-to-hydra) </br>
+3. [Running the Pipeline](#Running-the-Pipeline) </br>
+4. [FastQC Raw Reads](#FastQC-Raw-Reads) </br>
+  4.1. [Run FastQC](#Run-Fastqc) </br>
+  4.2. [Download Results](#Download-Results) </br>    
+5. [Trimming and Filtering Raw Reads](#Trimming_and_Filtering_Raw_Reads) </br>
+6. [FastQC Trimmed Reads](#FastQC-Trimmed-Reads) </br>
+  6.1. [Run FastQC](#Run-Fastqc) </br>
+  6.2. [Download Results](#Download-Results) </br>
 7. [SPAdes](#SPAdes) </br>
   7.1. [Run SPAdes](#Run-SPAdes) </br>
+  7.2. [Move and Rename SPAdes Scaffolds](#Move-and-Rename-SPAdes-Scaffolds) </br>
+8. [MitoFinder](#MitoFinder) </br>
+  8.1. [Run MitoFinder using Trimmed Reads](#Run-MitoFinder-using-Trimmed-Reads) </br>
+  8.2. [Run MitoFinder using SPAdes Scaffolds](#Run-MitoFinder-using-SPAdes-Scaffolds) </br>
+  8.3. [Move MitoFinder Final Results Directory](#Move-MitoFinder-Final-Results-Directory) </br>
+  8.4. [Download MitoFinder Final Results](#Download-MitoFinder-Final-Results)  </br>
+9. [Download Results](#Download-Results) </br>
 
-This protocol is to analyze paired-end or single-read demultiplexed illumina
-sequences for the purpose of recovering mitochondrial genomes from genomic DNA
-libraries. This pipeline is designed to use hydra, Smithsonian's HPC for
-`fastqc`, `trimmomatic`, `MitoFinder`, and `SPAdes`. The pipeline assumes you have a
-current hydra account and are capable of accessing the SI network, either
-in person or through VPN. Our pipeline is specifically written for MacOS,
-but is compatible with Windows. See 
-https://confluence.si.edu/display/HPC/Logging+into+Hydra to see differences 
-between MacOS and Windows in accessing Hydra.
+This protocol is to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed to use Hydra, Smithsonian's HPC, to run `FastQC`, `fastp`, `MitoFinder`, and `SPAdes`. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See https://confluence.si.edu/display/HPC/Logging+into+Hydra to see differences between MacOS and Windows in accessing Hydra.
 
 ## Local Computer Configuration 
-Make a project directory, and mulitple subdirectories on your local computer.
-Make this wherever you want to store your projects. Hydra is not made for
-long-term storage, so raw sequences, jobs, results, etc should all be kept
-here when your analyses are finished. Although it is not necessary, I use the
-same directory pattern locally as I use in Hydra. 
+Make a project directory, and mulitple subdirectories on your local computer. Make this wherever you want to store your projects. Hydra is not made for long-term storage, so raw sequences, jobs, results, etc should all be kept here when your analyses are finished. Although it is not necessary, I use the same directory pattern locally as I use in Hydra. 
 
 Make sure to replace "PROJECT" with your project name throughout.
 ```
-mkdir -p <PROJECT>/data/raw <PROJECT>/data/trimmed_sequences \
-<PROJECT>/jobs <PROJECT>/data/results
+mkdir -p <PROJECT>/data/raw <PROJECT>/jobs
 ```
-Your raw reads need to be in `<PROJECT>/data/raw`
+Your raw reads should be in `<PROJECT>/data/raw` (or any directory meant to hold only raw read files).
 
 ## Hydra Configuration 
-Open the terminal app and log onto Hydra. You will need your hydra account
-  password.
-```
-ssh USERNAME@hydra-login01.si.edu
-```
-  or
-```
-ssh USERNAME@hydra-login02.si.edu
-```
-### Install Conda and Biopython 
-All the programs we will use in our analyses will be run as conda packages.
-This section and the next ("Install conda packages") will only need to be run
-the first time you run this pipeline. For subsequent analyses, go directly to
-the following step where you set up project-specific directories.
+All programs will be run through shared conda environments, so there is no need for the user to change any Hydra configurations or install any programs.
 
-Get the latest version of `miniconda`.
-```
-wget https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh
-```
-Run the file you just downloaded. Select "yes" to all options, and install to
-your home directory.
-```
-sh Miniconda3-latest-Linux-x86_64.sh
-```
-Install `biopython`
-```
-conda install -c conda-forge biopython
-```
-Add bioconda channel and other channels needed for bioconda. Run this in the
-order shown (this sets priority, with highest priority last).
-```
-conda config --add channels defaults
-```
-```
-conda config --add channels bioconda
-```
-```
-conda config --add channels conda-forge
-```
-To run `miniconda` packages on Hydra, you need to set up a module file
-```
-mkdir ~/modulefiles2 
-```
-```
-cd ~/modulefiles 
-```
-```
-nano miniconda
-```
-Enter into the new text file the following text (both lines). Remember to
-substitute your username for "USERNAME"
-```
-#%Module1.0
-prepend-path PATH /home/<USERNAME>/miniconda3/bin
-```
-### Install Conda Packages 
-Here we install the programs we may need in our analyses. We are going to run
-and install them as conda enviroments. 
-
-Install `FastQC`as a conda envirnoment.
-```
-conda create -n fastqc fastqc
-```
-Install `Trimmomatic` as a conda environment
-```
-conda create -n trimmomatic trimmomatic
-```
-Install `fastp` as a conda environment
-```
-conda create -n fastp fastp
-```
-Install `GetOrganelle` as a conda environment
-```
-conda create -n getorganelle getorganelle
-```
-
-Install `SPAdes` as a conda environment
-```
-conda create -n spades spades
-```
-
-### Project-specific Directory 
-Go to the the directory assigned to you for short-term storage of large
-data-sets. Typically this will be `/scratch/genomics/<USERNAME>`. Replace USERNAME with your hydra username.
-```
-cd /scratch/genomics/<USERNAME>
-```
-Make a project-specific directory, with the following subdirectories:
-`/jobs` `/data/results` `/data/raw`. -p allows you to create subdirectories and
-any parental ones that don't already exist (in this case, PROJECT). I use the
-same directory pattern here as on my local computer, to lessen confusion.
-Again, replace PROJECT with your project name.
-```
-mkdir -p <PROJECT>/data/raw <PROJECT>/data/trimmed_sequences \
-<PROJECT>/jobs <PROJECT>/data/results
-```
-### Transfer Reads to Hydra 
-Your raw reads need to be copied into `<PROJECT>/data/raw`. I usually use scp or
-filezilla for file transfers. 
-See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-with transferring files between Hydra and your computer. I usually use scp
-or filezilla.
-
-## `FastQC`Raw Reads
-
-We are going to run `FastQC`on all our reads to check their quality and help
-determine our trimming parameters. Because we do not want to have to create
-a separate job file for each read file, I have set up a single shell file that
-submits a `FastQC`job file for each read, running them simultaneously. 
-
-### Run FastQC
-Open the terminal app and log onto Hydra. You will need your hydra account
-password.
-
-```
-ssh USERNAME@hydra-login01.si.edu
-```
- or
-```
-ssh USERNAME@hydra-login02.si.edu
-```
-
-Go to the directory containing your job files.  If you followed this pipeline,
-that should be `<PROJECT>/jobs`. The shell file below, and the job file that it
-modifies and submits to Hydra, "fastqc_multi.job" should both be
-here.  Your raw reads should already be in `<PROJECT>/data/raw`.  I usually use
-scp or filezilla for file transfers. 
-See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-with transferring files between Hydra and your computer. 
-
-After the shell file, include the path to the directory your read files are
-in. For most, it should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/raw`. 
-NOTE: Make sure you do not put a forward slash at the end of the path. If you
-use tab to complete, it automatically adds a forward slash at the end. Remove
-it.
-
-Run the shell script.
-```
-sh fastqc_multi_hydra.sh <path_to_raw_sequences>
-```
-### Download Results
-
-Download the directory containing the `fastqc`results (it should be
-`/scratch/<USERNAME>/<PROJECT>/data/raw/fastqc_analyses`, but may be different for you)
-to your computer. I usually use scp or filezilla for file transfers. 
-See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-with transferring files between Hydra and your computer.
-
-Open the html files using your browser to examine your read quality.
-
-Interpreting `fastqc`results can be tricky, and will not be discussed here. See
-LAB staff or others familiar with `fastqc`for help.
-
-## Trimming and Filtering Raw Reads
-
-We are going to run trim all our reads to remove poor quality basepairs and
-residual adapter sequence using either `Trimmomatic` or `fastp`, depending upon
-your preferences. The differences between the two have not been fully
-evaluated, so I do not have a current recommendation. `fastp` is 
-significantly faster while trimming similarly to `Trimmomatic`. I have found
-that `fastp` does filter and trim more aggressviely using the default values (i.e. you
-end up with fewer and shorter trimmed sequences), so the quality filtering parameters may
-need to be evaluated further. One advantage is that both R1 and R2 unpaired
-trimmed reads (reads for which the sequences in one direction did not pass
-quality filtering) can be saved into the same file, so there is no need for
-concatenation before using trimmed reads in `GetOrganelle` or `MitoFinder`)
-
-Because we do not want to have to create a separate job file for each read
-file, I have set up a single shell file that submits a `FastQC` job file for
-each read, running them simultaneously. 
-
-Trimmomatic requires an illumina adapter input fasta to search for and remove
-adapters in the sequence. `fastp` does not require an illumina adapter, but you
-can supply one for better adapter trimming, and we have here. LAB uses two
-types of adapters, itru and nextera. Because most of the genome-skimming
-library prep so far has been using the itru adapters, I only have a fasta file
-for these. It is called `itru_adapters.fas`, and this is included in the Genome
-Skimming pipeline.
-I save the adapter fasta file in `/scratch/genomics/<USERNAME>/primers`. If you
-save it somewhere else, you need to change the path to the primer fasta file
-in the shell script: `fastp_genomeskimming_multi_hydra.sh`
-
-Go to the directory containing your job files.  If you followed this pipeline,
-that should be `<PROJECT>/jobs`. The shell file below, and the job file that it
-modifies and submits to Hydra, `fastqc_multi.job` should both be
-here.  Your raw reads should already be in `<PROJECT>/data/raw`.  I usually use
-scp or filezilla for file transfers. 
-See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-with transferring files between Hydra and your computer. 
-
-Based on the length and quality of your reads (as determined by `FastQC`), you
-may want to edit the fastp or trimmomatic job. 
-
-Open the terminal app and log onto Hydra. You will need your hydra account
-password.
-```
-ssh USERNAME@hydra-login01.si.edu
-```
- or
-```
-ssh USERNAME@hydra-login02.si.edu
-```
-After the shell file, include the path to the directory your read files are
-in. For most, it should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/raw`. 
-NOTE: Make sure you do not put a forward slash at the end of the path. If you
-use tab to complete, it automatically adds a forward slash at the end. Remove
-it.
-
-Run `fastp` shell script
-```
-sh fastp_multi_hydra.sh <path_to_raw_sequences>
-```
-or run `Trimmomatic` shell script
-```
-sh trimmomatic_multi_hydra.sh <path_to_raw_sequences>
-```
-Trimmed reads will be saved in `<PROJECT>/data/trimmed_sequences`.
-
-## FASTQC TRIMMED READS 
-We are going to run `FastQC` on all our trimmed reads to check our trimming
-parameters. We will run the same shell file and job file we ran the first
-time, just using a different target directory.
-
-### Run FastQC
+### Log into Hydra
 Open the terminal app and log onto Hydra. You will need your hydra account password.
 ```
 ssh USERNAME@hydra-login01.si.edu
@@ -277,134 +45,134 @@ ssh USERNAME@hydra-login01.si.edu
 ```
 ssh USERNAME@hydra-login02.si.edu
 ```
-Go to the directory containing your job files. The shell file below, and the
-job file that it modifies and submits to Hydra, `fastqc_multi.job` should both
-be here.  Your trimmed reads should already be in
-`<PROJECT>/data/trimmed_sequences`. 
-See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-with transferring files between Hydra and your computer. 
+### Project-specific Directory 
+Go to the the directory assigned to you for short-term storage of large data-sets. Typically this will be `/scratch/genomics/<USERNAME>`. Replace USERNAME with your hydra username.
+```
+cd /scratch/genomics/<USERNAME>
+```
+Make a project-specific directory, with the following subdirectories: `jobs` and `data/raw`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
+This pipeline is not dependent upon the directory tree shown, so you can set up your space differently, if you prefer. The only two directories that are required are `/data` and `/jobs` but you can name them whatever you like, and neither necessarily have to be in any particular place.This pipeline does create seveal new directories: `/data/trimmed_sequences`, `/data/results`, and within `/data/results` program-specific directories for those results, and `/jobs/logs`. If you don't want these directories created, or want them in different places, they can be changed in the shell scripts. 
+```
+mkdir -p <PROJECT>/data/raw <PROJECT>/jobs
+```
+### Transfer Files to Hydra 
+You will need to transfer all the necessary files for this pipeline to your Hydra account. This includes raw read files (`*.fastq.gz`), job files (`*.job`), and shell scripts (`*.sh`).
+Your raw reads should be copied into `<PROJECT>/data/raw`. Both job files and shell scripts should be copied into `<PROJECT>/jobs`. I usually use scp or filezilla for file transfers. See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help with transferring files between Hydra and your computer. 
 
-After the shell file, include the path to the directory your read files are
-in. For most, it should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
-NOTE: Make sure you do not put a forward slash at the end of the path. If you
-use tab to complete, it automatically adds a forward slash at the end. Remove
-it.
+NOTE: Hydra does not allow jobs names to start with a number, so if your sample names start with a number, you must change the name before running this pipeline.
+
+## Running the Pipeline
+This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/<USERNAME>/<PROJECT>/jobs`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `<PROJECT>/jobs/logs`. As mentioned earlier, while I find 
+NOTE: Additional information for each program can be found in the `.job` file for each specific program. Included is program and parameter descriptions, including recommendations for alternative parameter settings. 
+
+## `FastQC` Raw Reads
+We first run `FastQC` on all our reads to check their quality and help determine our trimming parameters. 
+
+### Run FastQC
+
+Run the `FastQC` shell script, including the path to the directory containing your raw read files. For most, it should be something like: 
+`/scratch/genomics/<USERNAME>/<PROJECT>/data/raw`. 
 ```
-sh fastqc_multi_hydra.sh <path_to_trimmed_sequences>
+sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
+If you do not enter the path to the raw sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding  that path should fix these errors.
+
 ### Download Results
-Download the directory containing the `FastQC`results (it should be
-`/scratch/<USERNAME>/<PROJECT>/data/trimmed_sequences/fastqc_analyses`, but may be
-different for you) to your computer. 
 
-Open the html files using your browser to examine how well you trimming
-parameters worked.
+Download the directory containing the `FastQC` results (it should be `/data/raw/fastqc_analyses`) to your computer. Open the html files using your browser to examine your read quality. Interpreting `FastQC` results can be tricky, and will not be discussed here. See LAB staff or others familiar with `FastQC` for help.
 
-## MitoFinder
+## Trimming and Filtering Raw Reads
 
-We are going to run `MitoFinder` on all our paired-end trimmed reads to try to
-find full mitochondrial genomes. I have set up a single shell file that
-submits a `MitoFinder` job file for each sample, and runs them simultaneously. 
+After the initial QC, we trim all reads to remove poor quality basepairs and residual adapter sequence using `fastp`, a program that trims similarly to `Trimmomatic` (the trimming program we previously used) but is significantly faster. I have found that `fastp` does filter and trim more aggressviely using the similar parameters (i.e. you end up with slightly fewer and shorter trimmed sequences), so the quality filtering parameters may need to be evaluated further. One advantage is that both R1 and R2 unpaired trimmed reads (reads for which the sequence in one direction did not pass quality filtering) can be saved into the same file, so there is no need for concatenation before using trimmed reads in `SPAdes`.
 
-### Concatenate single-end reads 
-`MitoFinder` can use unpaired (single-end or SE) reads, but it only allows one SE fastq file, so we need to concatenate our R1_SE and R2_SE if we used `Trimmomatic` to trim and filter
-out raw reads.
+`fastp` does not require an illumina adapter to remove adapter sequences, but you can supply one for better adapter trimming, and we use one here. LAB uses two types of adapters, itru and nextera. Because most of the genome-skimming library prep so far use the itru adapters, I have included a fasta file for these, called `itru_adapters.fas`. We can provide a nextera adapter file upon request. This pipeline currently points to a directory containing the itru adapter file, if you want to use your own adapter file, you will need to change the path following the command `--adapter_fasta` in `fastp.job`.
 
-Go to the directory containing your job files. If you followed this pipeline,
-that should be `<PROJECT>/jobs`. The shell file below, and the job file that it
-modifies and submits to Hydra, `spades_multi.job` should both be
-here. Copy them here if need be. 
-See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-with transferring files between Hydra and your computer.
-Trimmed read files should be in `<PROJECT>/data/trimmed_sequences`
+Based on the quality of your reads (as determined by `FastQC`), you may want to edit the parameters in  `fastp.job`. The job file contains descriptions and suggestions for each parameter. 
 
-I have a shell script that will concatenate all the trimmed R1.SE and R2.SE 
-files in the trimmed_sequences directory, and rename them. If you trimmed with
-`fastp` instead of `Trimmomatic`, you don't need to concatenate. After the shell
-file, give the path to the directory holding the SE files, typically
+Run the `fastp` shell script, including the path to the directory containing your raw read files. For most, it should be something like: 
+`/scratch/genomics/<USERNAME>/<PROJECT>/data/raw`. 
+
+```
+sh fastp.sh <path_to_raw_sequences>
+```
+If you do not enter the path to the raw sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
+Trimmed reads will be saved in `/data/trimmed_sequences`.
+
+## FASTQC TRIMMED READS 
+We next run `FastQC` on all our trimmed reads to check our trimming parameters. We will run the same shell file and job file we ran the first time, just using a different target directory.
+
+### Run FastQC
+Go to the directory containing your job files. The shell file below, and the job file that it modifies and submits to Hydra, `fastqc.job` should both be here.  Your trimmed reads should already be in `/data/trimmed_sequences`. 
+
+Run the `FastQC` shell script, including the path to the directory containing your trimmed files. For most, it should be something like: 
 `/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
-NOTE: Make sure you do not put a forward slash at the end of the path. If you
-tab-to-complete, it automatically adds a forward slash at the end. Remove
-it.
-Concatenate SE files
 ```
-sh concatenate_SE_reads.sh <path_to_trimmed_sequences>
+sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
-Check to make sure the concatenated files exist
-```
-ls -lhrt ../data/trimmed_sequences
-```
+If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
-### Run MitoFinder
-Open the terminal app and log onto Hydra. You will need your Hydra account
-password.
-```
-ssh USERNAME@hydra-login01.si.edu
-```
-or
-```
-ssh USERNAME@hydra-login02.si.edu
-```
-Go to the directory containing your job files. If you followed this pipeline,
-that should be `<PROJECT>/jobs`. The shell file below, and the job file that it
-modifies and submits to Hydra, `mitofinder_multi.job` should both be
-here. Copy them here if need be. 
-See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-with transferring files between Hydra and your computer. I usually use scp
-or filezilla.
-
-MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. If
-you don't have one, follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi, and save it. I typically
-save it in a reference subdirectory in my scratch directory.
-
-You need to include two paths after the shell file. The first is the path to the 
-directory your read files are in while the second is the directory your reference
-mitochondrial genome files. For most, the first should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences` 
-while the second will be something like:
-`/scratch/genomics/<USERNAME>/ref/mito_reference.gb`
-NOTE: Make sure you do not put a forward slash at the end of the path. If you
-use tab to complete, it automatically adds a forward slash at the end. Remove
-it.
-
-```
-sh mitofinder_multi_hydra.sh <path_to_trimmed_sequences> <path_to_reference_database>
-```
-You don't appear to have the ability to choose where to put the results folder, and
-MitoFinder puts them where they are run from, in this case, the jobs directory.
-The results for each sample will be in a separate folder, named with the sample name. 
-Transfer these results folders to your local computer. 
+### Download Results
+Download the directory containing the `FastQC` results (it should be `/data/trimmed_sequences/fastqc_analyses`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting `FastQC` results can be tricky, and will not be discussed here. See LAB staff or others familiar with `FastQC` for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
 
 ## SPAdes 
 
-We are going to run `SPAdes` on all our paired-end trimmed reads where we were
-not able to get mtgenomes using `MitoFinder`. `SPAdes` will perform a de-novo
-assembly and will output a set of contigs. I have set up a shell file that
-will submit a job file for each sample, running them simultaneously.
+We are going to run `SPAdes` on all our trimmed paired and unpaired reads. `SPAdes` performs a de-novo assembly using both pair-end and single-end reads and outputs a set of contigs or scaffolds. The `SPAdes` documentation suggests using scaffolds instead of contigs in downstream applications. 
 
-Open the terminal app and log onto Hydra. You will need your Hydra account
-password.
-```
-ssh USERNAME@hydra-login01.si.edu
-```
-or
-```
-ssh USERNAME@hydra-login02.si.edu
-```
 ### Run SPAdes 
 
-After the shell file, include the path to the directory your read files are
-in. For most, it should be something like: 
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
-NOTE: Make sure you do not put a forward slash at the end of the path. As 
-above, if you tab-to-complete, it automatically adds a forward slash at the
-end. Remove it.
-
+Run the `SPAdes` shell script, including the path to the directory containing your trimmed read files. For most, it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
 ```
 sh spades_multi_hydra.sh <path_to_trimmed_sequences>
 ```
-Your results should be in
-`/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`. The results for
-each sample will be in a separate folder, named with the sample name. 
-Transfer these results folders to your local computer. 
+If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
+
+Your results should be in `/data/results/spades`. The results for each sample will be in a separate folder, named with the sample name. 
+
+### Move and Rename SPAdes Scaffolds
+
+`SPAdes` recommends using the `scaffolds.fasta` file as resulting sequences, and saves these scaffolds in `/data/results/spades/<SAMPLE>` as a generic `scaffolds.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `scaffolds.fasta ` files into a new directory `/data/results/spades_scaffolds` and renames them with their sample name. This script also copies the `.log` file for each sample into `/data/results/spades_scaffolds`.
+
+Run `rename_spades_scaffolds.sh`, including the path to the `SPAdes` results directory, usually: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`.
+```
+sh rename_spades_scaffolds.sh <path_to_spades_results>
+```
+If you do not enter the path to the spades results directory in the command, or enter a path to a directory that does not contain sample-specific directories containing `scaffolds.fasta` files, you will get the following error "Correct path to SPAdes results not entered". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
+
+## MitoFinder
+
+We are going to run `MitoFinder` on two different sets of data to try to find full mitochondrial genomes. 
+* We will run `MitoFinder` using our paired-end trimmed reads as our input. `MitoFinder` will assemble reads using the program `MEGAHIT` and then annotate assemblies based on your reference file. You may run this simultaneously with your `SPAdes` run.
+* We will run `MitoFinder` using the scaffolds that result from the `SPAdes` assembly. These assemblies may be more likely to contain the entire mitochondrial genome, because unlike `MitoFinder`, `SPAdes` uses trimmed single-end reads in addition to paired-end reads, and therefore utilizes more reads in its assembly. `MitoFinder` also runs more efficiently with scaffolds as inputs because it does not need to perform an assembly step. However, you must first wait for your `SPAdes` run to finish before starting this one.
+
+You do not have to run `MitoFinder` twice. If you only want to run one version, I would recommend running `MitoFinder` using the `SPAdes` scaffolds as input. `SPAdes` typcially results in a longer mitogenome scaffolds, but there are occasions where `MitoFinder` with its `MEGAHIT` assembler results in a longer contig. I have yet to see a situation where one finds the entire mitogenome, while the other does not, but I am sure there are instances in which it happens. If time is short, you will most likely be fine using  `MitoFinder` using trimmed reads, but if this fails to yeild the entire mitogenome, you will need to run both `SPAdes` and `MitoFoinder`. This will greatly enlongate your run time, without guaranteeing you will find the mitogenome.   
+
+### Run MitoFinder using Trimmed Reads
+
+MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline currently uses a metazoan mitochondrial reference database downloaded from GenBank. If you would like to use a different reference database, follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi to make your own, and save it in your home directory. You will have to alter `mitofinder.job` to point to the location of your database.
+
+Run the `MitoFinder` shell script, including the path to the directory containng your trimmed read files and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebratge mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. Results of these analyses are saved in `/data/results/mitofinder`
+```
+sh mitofinder.sh <path_to_trimmed_sequences> <genetic_code>
+```
+ If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)".
+
+### Run MitoFinder using SPAdes Scaffolds
+
+MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline currently uses a metazoan mitochondrial reference database downloaded from GenBank. If you would like to use a different database follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi to make your own, and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database.
+
+Run the  `MitoFinder` for annotating spades scaffolds shell script, including the path to the directory containg your `SPAdes` scaffolds files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/scaffolds`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. Results of these analyses are saved in `/data/results/mitofinder_spades`
+```
+sh mitofinder_annotate_spades.sh <path_to_spades_scaffolds>
+```
+If you do not enter the path to the `SPAdes` scaffolds in the command, or enter a path to a directory that does not contain `scaffolds.fasta` files, you will get the following error "Correct path to SPAdes scaffolds files not entered (*scaffolds.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)".
+
+### Move MitoFinder Final Results Directory
+The most important information from a `MitoFinder` analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these diretories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
+
+Run `copy_mitofinder_final_results.sh`, including the path to the `MitoFinder` results directory, either: `/data/results/mitofinder` or `/data/results/mitofinder_spades`.
+```
+sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
+```
+
+### Download Results
+Finally, we download all the directories containing our results. There should be one for all `mitofinder` results (`/data/results/mitofinder_final_results`) and one for `SPAdes` scaffolds (`/data/results/spades_scaffolds`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
