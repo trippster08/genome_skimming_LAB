@@ -2,8 +2,8 @@
 
 trimmed="$1"
 taxa="$2"
-parent=${trimmed}/../../
-mkdir -p ${parent}/data/results/mitofinder
+data=${trimmed}/../
+mkdir -p ${data}/results/mitofinder
 
 ls ${trimmed}/*.fastq.gz &> /dev/null  || echo "Correct path to read files not entered (*.fastq.gz)"
 
@@ -16,8 +16,8 @@ for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do
   sample=`basename ${x}`
   name=`echo ${sample%_R*}`
 
-  qsub -o ${parent}/jobs/logs/${name}_mitofinder.log \
-  -wd ${parent}/data/results/mitofinder \
+  qsub -o ${data}/results/mitofinder/logs/${name}_mitofinder.log \
+  -wd ${data}/results/mitofinder \
   -N ${name}_mitofinder \
   mitofinder.job ${trimmed} ${name} ${taxa}
 done
