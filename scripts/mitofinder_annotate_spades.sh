@@ -2,8 +2,8 @@
 
 scaffolds="$1"
 taxa="$2"
-parent=${scaffolds}/../../../
-mkdir -p ${parent}/data/results/mitofinder_spades
+results=${scaffolds}/../
+mkdir -p ${results}/mitofinder_spades
 
 ls ${scaffolds}/*_spades_scaffolds.fasta &> /dev/null  || echo "Correct path to SPAdes results not entered (*_spades_scaffolds.fasta)"
 
@@ -16,8 +16,8 @@ for x in ${scaffolds}/*_spades_scaffolds.fasta ; do
     sample=`basename ${x}`
     name=`echo ${sample%_spades_scaffolds.fasta}`
 
-    qsub -o ${parent}/jobs/logs/${name}_mitofinder_spades.log \
-    -wd ${parent}/data/results/mitofinder_spades \
+    qsub -o ${results}/logs/${name}_mitofinder_spades.log \
+    -wd ${results}/mitofinder_spades \
     -N ${name}_mitofinder_spades \
     mitofinder_annotate_spades.job ${scaffolds} ${name} ${taxa}
 done
