@@ -13,7 +13,7 @@ for x in ${raw}/*R1_001.fastq.gz ; do
   echo $name
   echo $nameplus
 
-    qsub -o logs/${name}_fastp.log \
+    qsub -o /logs/${name}_fastp.log \
     -N ${name}_fastp \
     fastp.job ${raw} ${data} ${name} ${nameplus}
 done
