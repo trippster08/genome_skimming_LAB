@@ -18,4 +18,4 @@ for x in ${raw}/*R1_001.fastq.gz ; do
     fastp.job ${raw} ${data} ${name} ${nameplus}
 done
 
-# This script quality trims and removes adapters from raw reads using the program fastp.
+# This script quality trims and removes adapters from raw reads using the program fastp. See .job file for parameter directions
