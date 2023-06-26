@@ -110,7 +110,7 @@ If you do not enter the path to the trimmed sequences in the command, or enter a
 Download the directory containing the fastQC results (it should be `/data/trimmed_sequences/fastqc_analyses`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
 
 ## MitoFinder
-We will run MitoFinder using our paired-end adapter-trimmed reads as our input. MitoFinder will assemble reads using the program `MetaSPAdes` and then annotate assemblies based on your reference file. 
+We will run MitoFinder using our paired-end adapter-trimmed reads as our input. MitoFinder will assemble reads using the program MetaSPAdes and then annotate assemblies based on your reference file. 
 
 ### Run MitoFinder using Adapter-Trimmed Reads
 MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline currently uses a metazoan mitochondrial reference database downloaded from GenBank. If you would like to use a different reference database, follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi to make your own, and save it in your home directory. You will have to alter `mitofinder.job` to point to the location of your database.
