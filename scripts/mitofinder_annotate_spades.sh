@@ -3,7 +3,7 @@
 scaffolds="$1"
 taxa="$2"
 results=${scaffolds}/../
-mkdir -p ${results}/mitofinder_spades
+mkdir -p ${results}/mitofinder
 
 ls ${scaffolds}/*_spades_scaffolds.fasta &> /dev/null  || echo "Correct path to SPAdes results not entered (*_spades_scaffolds.fasta)"
 
@@ -16,10 +16,10 @@ for x in ${scaffolds}/*_spades_scaffolds.fasta ; do
     sample=`basename ${x}`
     name=`echo ${sample%_spades_scaffolds.fasta}`
 
-    qsub -o ${results}/logs/${name}_mitofinder_spades.log \
-    -wd ${results}/mitofinder_spades \
-    -N ${name}_mitofinder_spades \
-    mitofinder_annotate_spades.job ${scaffolds} ${name} ${taxa}
+    qsub -o ${results}/logs/${name}_mitofinder.log \
+    -wd ${results}/mitofinder \
+    -N ${name}_mitofinder \
+    mitofinder_annotate.job ${scaffolds} ${name} ${taxa}
 done
 
 # This is different from a normal mitofinder run because it doesn't use the raw
