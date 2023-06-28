@@ -126,8 +126,8 @@ If you do not enter the path to the trimmed sequences in the command, or enter a
 
 Your results should be in `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`. The results for each sample will be in a separate folder, named with the sample name. 
 
-### Move and Rename SPAdes Scaffolds
-`SPAdes` recommends using the `scaffolds.fasta` file as resulting sequences, and saves these scaffolds in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `scaffolds.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `scaffolds.fasta ` files into a new directory `<PROJECT>/data/results/spades_scaffolds` and renames them with their sample name.
+### Copy and Rename SPAdes Scaffolds
+`SPAdes` recommends using the `scaffolds.fasta` file as resulting sequences, and saves these scaffolds in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `scaffolds.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `scaffolds.fasta ` files into a new directory `<PROJECT>/data/results/spades_scaffolds` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/error_corrected_reads`.
 
 Run `rename_spades_scaffolds.sh`, including the path to the SPAdes results directory, usually: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`.
 ```
@@ -159,4 +159,4 @@ sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
 ```
 
 ### Download Results
-Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes scaffolds (`/data/results/spades_scaffolds`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
+Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes scaffolds (`/data/results/spades_scaffolds`). I typically also download the trimmed, SPAdes error-corrected reads. You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
