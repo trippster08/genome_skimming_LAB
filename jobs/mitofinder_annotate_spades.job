@@ -21,7 +21,7 @@ name="$2"
 taxa="$3"
 #
 mitofinder \
--j ${name}_mitofinder_spades \
+-j ${name}_mitofinder \
 -o ${taxa} \
 -r /scratch/nmnh_lab/macdonaldk/ref/mito_reference.gb \
 -a ${scaffolds}/${name}_spades_scaffolds.fasta \
