@@ -31,7 +31,7 @@ fastp \
 --unpaired1 ${data}/trimmed_sequences/${name}_SE_trimmed.fastq.gz \
 --unpaired2 ${data}/trimmed_sequences/${name}_SE_trimmed.fastq.gz \
 -h logs/${name}_fastp.html \
--l 30 -f 3 -F 3 -t 2 -T 2 \
+-l 30 -f 3 -F 3 \
 --cut_tail --cut_tail_window_size 5 --cut_tail_mean_quality 15 \
 --trim_poly_g \
 --adapter_fasta /scratch/nmnh_lab/macdonaldk/primers/itru_adapters.fa
