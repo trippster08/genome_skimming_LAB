@@ -159,4 +159,4 @@ sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
 ```
 
 ### Download Results
-Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes scaffolds (`/data/results/spades_scaffolds`). I typically also download the trimmed, SPAdes error-corrected reads (`<PROJECT>/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
+Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes scaffolds (`/data/results/spades_scaffolds`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
