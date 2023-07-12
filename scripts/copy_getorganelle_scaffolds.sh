@@ -18,3 +18,4 @@ for x in ${results}/*/; do
   done
 done
 
+# This makes a new folder called "getorganelle_scaffolds", and copies all scaffolds from each getorganelle results folder. Since GetOrganelle names it's scaffolds generically, this script also renames them by adding the sample name to the beginning of each
