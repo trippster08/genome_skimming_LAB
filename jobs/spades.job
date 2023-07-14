@@ -2,8 +2,8 @@
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
 #$ -pe mthread 16
-#$ -q sThC.q
-#$ -l mres=128G,h_data=8G,h_vmem=8G
+#$ -q sThM.q
+#$ -l mres=288G,h_data=24G,h_vmem=24G,himim
 #$ -cwd
 #$ -j y
 #$ -N PROJECT_spades
@@ -27,7 +27,7 @@ spades.py \
 --pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
 --pe1-s ${trimmed}/${name}_SE_trimmed.fastq.gz \
--t 16 -m 128
+-t 12 -m 288
 
 #
 echo = `date` job $JOB_NAME done
