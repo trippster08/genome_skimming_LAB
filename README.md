@@ -33,7 +33,8 @@ Make sure to replace "PROJECT" with your project name throughout.
 ```
 mkdir -p <PROJECT>/data/raw <PROJECT>/jobs
 ```
-Your raw reads should be in `<PROJECT>/data/raw` (or any directory meant to hold only raw read files).
+Your raw reads should be in `<PROJECT>/data/raw` (or any directory meant to hold only raw read files). 
+NOTE: As currently designed, this pipeline requires raw data to be `fastq.gz` formated, and to be named in the default Illumina manner, with 5 elements (sample name, barcode number, lane number, read number, and "001") all separated by underscores (i.e. Sample1_S001_L001_R1_001.fastq.gz). Also, Hydra does not allow jobs names to start with a number, so if your sample names start with a number, change the name to add a letter (I usually use the initials of the researcher) before running this pipeline.
 
 ## Hydra Configuration 
 All programs will be run through shared conda environments, so there is no need for the user to change any Hydra configurations or install any programs.
@@ -60,8 +61,6 @@ mkdir -p <PROJECT>/data/raw <PROJECT>/jobs
 ### Transfer Files to Hydra 
 You will need to transfer all the necessary files for this pipeline to your Hydra account. This includes raw read files (`*.fastq.gz`), job files (`*.job`), and shell scripts (`*.sh`).
 Your raw reads should be copied into `<PROJECT>/data/raw`. Both job files and shell scripts should be copied into `<PROJECT>/jobs`. I usually use scp or filezilla for file transfers. See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help with transferring files between Hydra and your computer. 
-
-NOTE: Hydra does not allow jobs names to start with a number, so if your sample names start with a number, you must change the name before running this pipeline.
 
 ## Running the Pipeline
 This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/<USERNAME>/<PROJECT>/jobs`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `<PROJECT>/jobs/logs`. As mentioned earlier, while I find 
