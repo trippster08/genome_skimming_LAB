@@ -26,7 +26,7 @@ spades.py \
 -o ${data}/results/spades/${name} \
 --pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
---pe1-s ${trimmed}/${name}_SE_trimmed.fastq.gz \
+--pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
 -t 12 -m 288
 
 #
