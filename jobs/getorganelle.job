@@ -26,7 +26,7 @@ data="$4"
 get_organelle_from_reads.py \
 -1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 -2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
--u ${trimmed}/${name}_SE_trimmed.fastq.gz \
+-u ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
 -o ${data}/results/getorganelle/${name} \
 -F ${organelle} \
 -t $NSLOTS
