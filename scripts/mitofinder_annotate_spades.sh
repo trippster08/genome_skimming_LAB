@@ -1,25 +1,25 @@
 #!/bin/sh
 
-scaffolds="$1"
+contigs="$1"
 taxa="$2"
-results=${scaffolds}/../
+results=${contigs}/../
 mkdir -p ${results}/mitofinder
 
-ls ${scaffolds}/*_spades_scaffolds.fasta &> /dev/null  || echo "Correct path to SPAdes results not entered (*_spades_scaffolds.fasta)"
+ls ${contigs}/*_spades_contigs.fasta &> /dev/null  || echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)"
 
 if [[ -z $2 ]];
   then
   echo "Genetic code not entered (should be a number between 1 and 25)"
 fi
 
-for x in ${scaffolds}/*_spades_scaffolds.fasta ; do 
+for x in ${contigs}/*_spades_contigs.fasta ; do 
     sample=`basename ${x}`
-    name=`echo ${sample%_spades_scaffolds.fasta}`
+    name=`echo ${sample%_spades_contigs.fasta}`
 
     qsub -o ${results}/logs/${name}_mitofinder.log \
     -wd ${results}/mitofinder \
     -N ${name}_mitofinder \
-    mitofinder_annotate.job ${scaffolds} ${name} ${taxa}
+    mitofinder_annotate.job ${contigs} ${name} ${taxa}
 done
 
 # This is different from a normal mitofinder run because it doesn't use the raw
