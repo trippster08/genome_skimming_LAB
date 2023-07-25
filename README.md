@@ -14,10 +14,10 @@
   6.2. [Download FastQC of Trimmed Reads](#Download-FastQC-of-Trimmed-Reads) </br>
 7. [SPAdes](#SPAdes) </br>
   7.1. [Run SPAdes](#Run-SPAdes) </br>
-  7.2. [Move and Rename SPAdes Scaffolds](#Move-and-Rename-SPAdes-Scaffolds) </br>
+  7.2. [Move and Rename SPAdes Contigs](#Move-and-Rename-SPAdes-Contigs) </br>
   7.3. [Download Error-Corrected Reads](Download-Error-Corrected-Reads) </br>
 8. [MitoFinder](#MitoFinder) </br>
-  8.1. [Run MitoFinder using SPAdes Scaffolds](#Run-MitoFinder-using-Adapter-Trimmed-Reads) </br>
+  8.1. [Run MitoFinder using SPAdes Contigs](#Run-MitoFinder-using-Adapter-Trimmed-Reads) </br>
   8.3. [Move MitoFinder Final Results Directory](#Move-MitoFinder-Final-Results-Directory) </br>
   8.4. [Download MitoFinder Final Results](#Download-MitoFinder-Final-Results)  </br>
 9. [Download Results](#Download-Results) </br>
@@ -125,27 +125,27 @@ If you do not enter the path to the trimmed sequences in the command, or enter a
 
 Your results should be in `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`. The results for each sample will be in a separate folder, named with the sample name. 
 
-### Copy and Rename SPAdes Scaffolds
-`SPAdes` recommends using the `scaffolds.fasta` file as resulting sequences, and saves these scaffolds in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `scaffolds.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `scaffolds.fasta ` files into a new directory `<PROJECT>/data/results/spades_scaffolds` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/error_corrected_reads`.
+### Copy and Rename SPAdes Contigs
+`SPAdes` recommends using the `contigs.fasta` file as resulting sequences, and saves these contigs in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `contigs.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `contigs.fasta ` files into a new directory `<PROJECT>/data/results/spades_contigs` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/error_corrected_reads`.
 
-Run `rename_spades_scaffolds.sh`, including the path to the SPAdes results directory, usually: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`.
+Run `rename_spades_contigs.sh`, including the path to the SPAdes results directory, usually: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`.
 ```
-sh rename_spades_scaffolds.sh <path_to_spades_results>
+sh rename_spades_contigs.sh <path_to_spades_results>
 ```
-If you do not enter the path to the spades results directory in the command, or enter a path to a directory that does not contain sample-specific directories containing `scaffolds.fasta` files, you will get the following error "Correct path to SPAdes results not entered". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
+If you do not enter the path to the spades results directory in the command, or enter a path to a directory that does not contain sample-specific directories containing `contigs.fasta` files, you will get the following error "Correct path to SPAdes results not entered". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
 ## MitoFinder
-We will run MitoFinder using the scaffolds that result from the SPAdes assembly. These assemblies may be more likely to contain the entire mitochondrial genome, because unlike MitoFinder, SPAdes uses trimmed single-end reads in addition to paired-end reads, and therefore utilizes more reads in its assembly. MitoFinder also runs more efficiently with scaffolds as inputs because it does not need to perform an assembly step.
+We will run MitoFinder using the contigs that result from the SPAdes assembly. These assemblies may be more likely to contain the entire mitochondrial genome, because unlike MitoFinder, SPAdes uses trimmed single-end reads in addition to paired-end reads, and therefore utilizes more reads in its assembly. MitoFinder also runs more efficiently with contigs as inputs because it does not need to perform an assembly step.
 
-### Run MitoFinder using SPAdes Scaffolds
+### Run MitoFinder using SPAdes Contigs
 MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline currently uses a metazoan mitochondrial reference database downloaded from GenBank. If you would like to use a different database follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi to make your own, and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database.
 
-Run the  MitoFinder for annotating spades scaffolds shell script, including the path to the directory containg your SPAdes scaffolds files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/scaffolds`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. 
+Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. 
 NOTE: Make sure you do not put a forward slash at the end of the path. If you use tab to complete, it automatically adds a forward slash at the end. Remove it.
 ```
-sh mitofinder_annotate_spades.sh <path_to_spades_scaffolds>
+sh mitofinder_annotate_spades.sh <path_to_spades_contigs>
 ```
-If you do not enter the path to the SPAdes scaffolds in the command, or enter a path to a directory that does not contain `scaffolds.fasta` files, you will get the following error "Correct path to SPAdes scaffolds files not entered (*scaffolds.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)".
+If you do not enter the path to the SPAdes contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)".
 
 Results of these analyses are saved in `PROJECT/data/results/mitofinder`
 
@@ -158,4 +158,4 @@ sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
 ```
 
 ### Download Results
-Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes scaffolds (`/data/results/spades_scaffolds`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
+Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes contigs (`/data/results/spades_contigs`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
