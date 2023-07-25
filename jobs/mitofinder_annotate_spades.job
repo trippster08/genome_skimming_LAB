@@ -16,7 +16,7 @@ module load bioinformatics/mitofinder
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
-scaffolds="$1"
+contigs="$1"
 name="$2"
 taxa="$3"
 #
@@ -24,7 +24,7 @@ mitofinder \
 -j ${name}_mitofinder \
 -o ${taxa} \
 -r /scratch/nmnh_lab/macdonaldk/ref/mito_reference.gb \
--a ${scaffolds}/${name}_spades_scaffolds.fasta \
+-a ${contigs}/${name}_spades_contigs.fasta \
 --new-genes -p $NSLOTS -m 16
 
 #
