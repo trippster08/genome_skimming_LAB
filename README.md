@@ -117,7 +117,6 @@ We are going to run SPAdes on all our trimmed paired and unpaired reads. SPAdes 
 
 ### Run SPAdes 
 Run the SPAdes shell script, including the path to the directory containing your trimmed read files. For most, it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
-NOTE: Make sure you do not put a forward slash at the end of the path. As above, if you tab-to-complete, it automatically adds a forward slash at the end. Remove it.
 ```
 sh spades_multi_hydra.sh <path_to_trimmed_sequences>
 ```
@@ -126,7 +125,7 @@ If you do not enter the path to the trimmed sequences in the command, or enter a
 Your results should be in `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`. The results for each sample will be in a separate folder, named with the sample name. 
 
 ### Copy and Rename SPAdes Contigs
-`SPAdes` recommends using the `contigs.fasta` file as resulting sequences, and saves these contigs in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `contigs.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `contigs.fasta ` files into a new directory `<PROJECT>/data/results/spades_contigs` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/error_corrected_reads`.
+We are using the `contigs.fasta` file as resulting sequences, and these contigs are saved in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `contigs.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `contigs.fasta ` files into a new directory `<PROJECT>/data/results/spades_contigs` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/error_corrected_reads`.
 
 Run `rename_spades_contigs.sh`, including the path to the SPAdes results directory, usually: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`.
 ```
@@ -141,7 +140,6 @@ We will run MitoFinder using the contigs that result from the SPAdes assembly. T
 MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline currently uses a metazoan mitochondrial reference database downloaded from GenBank. If you would like to use a different database follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi to make your own, and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database.
 
 Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. 
-NOTE: Make sure you do not put a forward slash at the end of the path. If you use tab to complete, it automatically adds a forward slash at the end. Remove it.
 ```
 sh mitofinder_annotate_spades.sh <path_to_spades_contigs>
 ```
