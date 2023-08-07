@@ -9,9 +9,9 @@ for x in ${raw}/*R1_001.fastq.gz ; do
   sample=`basename ${x}`
   name=`echo ${sample%_L0*}`
   nameplus=`echo ${sample%_R*}`
-  echo $sample
-  echo $name
-  echo $nameplus
+  # echo $sample
+  # echo $name
+  # echo $nameplus
 
     qsub -o logs/${name}_fastp.log \
     -N ${name}_fastp \

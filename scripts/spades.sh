@@ -9,8 +9,8 @@ ls ${trimmed}/*.fastq.gz &> /dev/null  || echo "Correct path to read files not e
 for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
   sample=`basename ${x}`
   name=`echo ${sample%_R*}`
-  echo $sample
-  echo $name
+#  echo $sample
+#  echo $name
   
     qsub -o ${data}/results/spades/${name}_spades.log \
     -N ${name}_spades \
