@@ -16,7 +16,7 @@ for x in ${contigs}/*_spades_contigs.fasta ; do
     sample=`basename ${x}`
     name=`echo ${sample%_spades_contigs.fasta}`
 
-    qsub -o ${results}/logs/${name}_mitofinder.log \
+    qsub -o ${results}/mitofinder/${name}_mitofinder.log \
     -wd ${results}/mitofinder \
     -N ${name}_mitofinder \
     mitofinder_annotate.job ${contigs} ${name} ${taxa}
