@@ -12,7 +12,7 @@ mkdir -p ${data}/results/getorganelle/
 
     qsub -o ${data}/results/getorganelle/${name}_getorganelle.log \
     -N ${name}_getorganelle \
-    getorganelle_multi.job ${trimmed} ${organelle} ${name} ${data}
+    getorganelle.job ${trimmed} ${organelle} ${name} ${data}
 
 done
 
