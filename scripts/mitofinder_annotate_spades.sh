@@ -19,7 +19,7 @@ for x in ${contigs}/*_spades_contigs.fasta ; do
     qsub -o ${results}/mitofinder/${name}_mitofinder.log \
     -wd ${results}/mitofinder \
     -N ${name}_mitofinder \
-    mitofinder_annotate.job ${contigs} ${name} ${taxa}
+    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa}
 done
 
 # This is different from a normal mitofinder run because it doesn't use the raw
