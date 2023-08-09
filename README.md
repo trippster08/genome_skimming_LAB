@@ -118,7 +118,7 @@ We are going to run SPAdes on all our trimmed paired and unpaired reads. SPAdes 
 ### Run SPAdes 
 Run the SPAdes shell script, including the path to the directory containing your trimmed read files. For most, it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/trimmed_sequences`. 
 ```
-sh spades_multi_hydra.sh <path_to_trimmed_sequences>
+sh spades.sh <path_to_trimmed_sequences>
 ```
 If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
