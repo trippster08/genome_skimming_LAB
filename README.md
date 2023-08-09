@@ -141,7 +141,7 @@ MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. Thi
 
 Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. 
 ```
-sh mitofinder_annotate_spades.sh <path_to_spades_contigs>
+sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code>
 ```
 If you do not enter the path to the SPAdes contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)".
 
