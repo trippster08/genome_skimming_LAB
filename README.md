@@ -138,7 +138,7 @@ We will run MitoFinder using the contigs that result from the SPAdes assembly. T
 ### Run MitoFinder using SPAdes Contigs
 MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline currently uses a metazoan mitochondrial reference database downloaded from GenBank. If you would like to use a different database follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi to make your own, and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database.
 
-Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. 
+Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
 ```
 sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code>
 ```
@@ -147,14 +147,18 @@ If you do not enter the path to the SPAdes contigs in the command, or enter a pa
 Results of these analyses are saved in `PROJECT/data/results/mitofinder`
 
 ### Copy MitoFinder Final Results Directory
-The most important information from a MitoFinder analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these diretories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
+The most important information from a MitoFinder analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these directories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
 
 Run `copy_mitofinder_final_results.sh`, including the path to the MitoFinder results directory: `/data/results/mitofinder`.
 ```
 sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
 ```
 ## MITOS
+MitoFinder does not always do a great job of annotating all the features present in your assembly, especially when there are not closely related taxa in the reference library. In these instances, MITOS can sometimes annotate genes that MitoFinder was not able to find. If you are only skimming from taxonomic groups that have a lot of represtantion in the reference library, this section is not needed. However, even with good references, MITOS can sometimes find some features, such as tRNA's, that MitoFinder does not, so I always run this, and only use as needed. For this pipeline, MITOS uses the contigs in the MitoFinder Final Results directory created in the previous step.  
 
-
+Run the  MITOS for annotating MitoFinder contigs shell script, including the path to the directory containng your sample-specific MitoFinder directories files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/mitofinder_final_results/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
+```
+sh mitos_annotate_mitofinder.sh <path_to_mitofinder_final_results> <genetic_code>
+```
 ### Download Results
 Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes contigs (`/data/results/spades_contigs`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
