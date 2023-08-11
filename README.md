@@ -17,7 +17,7 @@
   7.2. [Copy and Rename SPAdes Contigs](#copy-and-rename-spades-contigs) </br>
 8. [MitoFinder](#mitofinder) </br>
   8.1. [Run MitoFinder using SPAdes Contigs](#run-mitofinder-using-spades-contigs) </br>
-  8.2. [Move MitoFinder Final Results Directory](#move-mitofinder-final-results-directory) </br>
+  8.2. [Copy MitoFinder Final Results Directory](#copy-mitofinder-final-results-directory) </br>
 9. [Download Results](#download-results) </br>
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed to use Hydra, Smithsonian's HPC, to run fastQC, fastp, SPAdes, and MitoFinder. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See https://confluence.si.edu/display/HPC/Logging+into+Hydra to see differences between MacOS and Windows in accessing Hydra.
@@ -145,7 +145,7 @@ If you do not enter the path to the SPAdes contigs in the command, or enter a pa
 
 Results of these analyses are saved in `PROJECT/data/results/mitofinder`
 
-### Move MitoFinder Final Results Directory
+### Copy MitoFinder Final Results Directory
 The most important information from a MitoFinder analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these diretories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
 
 Run `copy_mitofinder_final_results.sh`, including the path to the MitoFinder results directory: `/data/results/mitofinder`.
