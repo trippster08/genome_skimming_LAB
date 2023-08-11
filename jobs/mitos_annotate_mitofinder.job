@@ -1,0 +1,47 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -q mThC.q
+#$ -l mres=8G,h_data=8G,h_vmem=8G
+#$ -cwd
+#$ -j y
+#$ -N ${sample}_mitos
+#$ -o logs/${sample}_mitos.log
+#
+# ----------------Modules------------------------- #
+module load tools/conda
+start-conda
+conda activate /scratch/nmnh_lab/envs/genome_skimming/mitos_ksm
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+mitofinder_contigs="$1"
+results="$2"
+sample="$3"
+name="$4"
+taxa="$5"
+#
+runmitos.py -i ${mitofinder_contigs}/${sample} \
+-c ${taxa} \
+-o ${results}/mitos_mitofinder/${name} \
+-r /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
+-R /scratch/nmnh_lab/macdonaldk/ref/refseq89m 
+
+#
+echo = `date` job $JOB_NAME done
+
+
+# -1 is the path to the R1 PE trimmed file, -2 is the path to the R2 PE trimmed
+#  file. PE files come in pairs, both the R1 and R2 are present. 
+# -o is the genetic code to use. The list below is from the mitofinder
+# documantation (https://github.com/RemiAllio/MitoFinder/blob/master/README.md).
+# -r is the path to the reference database, in genbank (.gb) format. Mitofinder
+# documentation (https://github.com/RemiAllio/MitoFinder/blob/master/README.md),
+# shows how to create a reference database from NCBI.
+# --new-genes denotes that some of the genes in the reference database are not
+# one of the "official" genes as determined by mitofinder. This is often true
+# if you have downloaded the reference database from genbank, because there are 
+# some mispellings in gene names in genbank.
+
