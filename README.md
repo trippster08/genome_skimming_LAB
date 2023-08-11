@@ -1,26 +1,24 @@
 # Genome Skimming Pipeline for LAB
-1. [Local Computer Configuration](#Local-Computer-Configuration) </br>
-2. [Hydra Configuration](#Hydra-Configuration) </br>
-  2.1. [Log into Hydra](#Log_into_Hydra) </br>
-  2.2. [Project-specific directory](#Project-specific-directory) </br>
-  2.3. [Transfer files to hydra](#Transfer-files-to-hydra) </br>
-3. [Running the Pipeline](#Running-the-Pipeline) </br>
-4. [FastQC Raw Reads](#FastQC-Raw-Reads) </br>
-  4.1. [Run FastQC](#Run-Fastqc) </br>
-  4.2. [Download Raw-Reads FastQC Results](#Download-Raw-Reads-FastQC-Results) </br>    
-5. [Trimming and Filtering Raw Reads](#Trimming-and-Filtering-Raw-Reads) </br>
-6. [FastQC Trimmed Reads](#FastQC-Trimmed-Reads) </br>
-  6.1. [Run FastQC](#Run-Fastqc) </br>
-  6.2. [Download FastQC of Trimmed Reads](#Download-FastQC-of-Trimmed-Reads) </br>
-7. [SPAdes](#SPAdes) </br>
-  7.1. [Run SPAdes](#Run-SPAdes) </br>
-  7.2. [Move and Rename SPAdes Contigs](#Move-and-Rename-SPAdes-Contigs) </br>
-  7.3. [Download Error-Corrected Reads](Download-Error-Corrected-Reads) </br>
-8. [MitoFinder](#MitoFinder) </br>
-  8.1. [Run MitoFinder using SPAdes Contigs](#Run-MitoFinder-using-Adapter-Trimmed-Reads) </br>
-  8.3. [Move MitoFinder Final Results Directory](#Move-MitoFinder-Final-Results-Directory) </br>
-  8.4. [Download MitoFinder Final Results](#Download-MitoFinder-Final-Results)  </br>
-9. [Download Results](#Download-Results) </br>
+1. [Local Computer Configuration](#local-computer-configuration) </br>
+2. [Hydra Configuration](#hydra-configuration) </br>
+  2.1. [Log into Hydra](#log-into-hydra) </br>
+  2.2. [Project-specific directory](#project-specific-directory) </br>
+  2.3. [Transfer files to hydra](#transfer-files-to-hydra) </br>
+3. [Running the Pipeline](#running-the-pipeline) </br>
+4. [FastQC Raw Reads](#fastqc-raw-reads) </br>
+  4.1. [Run FastQC](#run-fastqc) </br>
+  4.2. [Download Raw-Reads FastQC Results](#download-raw-reads-fastqc-results) </br>    
+5. [Trimming and Filtering Raw Reads](#trimming-and-filtering-raw-reads) </br>
+6. [FastQC Trimmed Reads](#fastqc-trimmed-reads) </br>
+  6.1. [Run FastQC](#run-fastqc) </br>
+  6.2. [Download FastQC of Trimmed Reads](#download-fastqc-of-trimmed-reads) </br>
+7. [SPAdes](#spades) </br>
+  7.1. [Run SPAdes](#run-spades) </br>
+  7.2. [Copy and Rename SPAdes Contigs](#copy-and-rename-spades-contigs) </br>
+8. [MitoFinder](#mitofinder) </br>
+  8.1. [Run MitoFinder using SPAdes Contigs](#run-mitofinder-using-spades-contigs) </br>
+  8.2. [Move MitoFinder Final Results Directory](#move-mitofinder-final-results-directory) </br>
+9. [Download Results](#download-results) </br>
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed to use Hydra, Smithsonian's HPC, to run fastQC, fastp, SPAdes, and MitoFinder. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See https://confluence.si.edu/display/HPC/Logging+into+Hydra to see differences between MacOS and Windows in accessing Hydra.
 
