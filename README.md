@@ -18,7 +18,8 @@
 8. [MitoFinder](#mitofinder) </br>
   8.1. [Run MitoFinder using SPAdes Contigs](#run-mitofinder-using-spades-contigs) </br>
   8.2. [Copy MitoFinder Final Results Directory](#copy-mitofinder-final-results-directory) </br>
-9. [Download Results](#download-results) </br>
+9. [Mitos](#mitos)
+10. [Download Results](#download-results) </br>
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed to use Hydra, Smithsonian's HPC, to run fastQC, fastp, SPAdes, and MitoFinder. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See https://confluence.si.edu/display/HPC/Logging+into+Hydra to see differences between MacOS and Windows in accessing Hydra.
 
@@ -152,6 +153,8 @@ Run `copy_mitofinder_final_results.sh`, including the path to the MitoFinder res
 ```
 sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
 ```
+## MITOS
+
 
 ### Download Results
 Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes contigs (`/data/results/spades_contigs`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
