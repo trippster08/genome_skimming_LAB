@@ -124,7 +124,7 @@ If you do not enter the path to the trimmed sequences in the command, or enter a
 Your results should be in `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`. The results for each sample will be in a separate folder, named with the sample name. 
 
 ### Copy and Rename SPAdes Contigs
-We are using the `contigs.fasta` file as resulting sequences, and these contigs are saved in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `contigs.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `contigs.fasta ` files into a new directory `<PROJECT>/data/results/spades_contigs` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/error_corrected_reads`.
+We are using the `contigs.fasta` file as resulting sequences, and these contigs are saved in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `contigs.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `contigs.fasta ` files into a new directory `<PROJECT>/data/results/spades_contigs` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/spades_error_corrected_reads`.
 
 Run `rename_spades_contigs.sh`, including the path to the SPAdes results directory, usually: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`.
 ```
@@ -160,5 +160,7 @@ Run the  MITOS for annotating MitoFinder contigs shell script, including the pat
 ```
 sh mitos_annotate_mitofinder.sh <path_to_mitofinder_final_results> <genetic_code>
 ```
+Results of these analyses are saved in `PROJECT/data/results/mitos_mitofinder`.
+
 ### Download Results
-Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes contigs (`/data/results/spades_contigs`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
+Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`), one for SPAdes contigs (`/data/results/spades_contigs`), and one for MITOS results (`/data/results/mitos_mitofinder`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/spades_error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
