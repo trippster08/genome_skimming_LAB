@@ -2,8 +2,8 @@
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
 #$ -pe mthread 12
-#$ -q sThM.q
-#$ -l mres=432G,h_data=36G,h_vmem=36G,himim
+#$ -q mThM.q
+#$ -l mres=144G,h_data=12G,h_vmem=12G,himem
 #$ -cwd
 #$ -j y
 #$ -N PROJECT_spades
