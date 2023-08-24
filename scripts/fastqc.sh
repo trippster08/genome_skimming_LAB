@@ -1,9 +1,15 @@
 #!/bin/sh
 
 raw="$1"
-mkdir -p ${raw}/fastqc_analyses
 
-ls ${raw}/*.fastq.gz &> /dev/null  || echo "Correct path to read files not entered (*.fastq.gz)"
+if
+  ls ${raw}/*.fastq.gz &> /dev/null
+then
+  echo "Correct path to read files not entered (*.fastq.gz)";
+  exit 1;
+fi
+
+mkdir -p ${raw}/fastqc_analyses
 
 for x in ${raw}/*.fastq.gz ; do 
   sample=`basename ${x}`
