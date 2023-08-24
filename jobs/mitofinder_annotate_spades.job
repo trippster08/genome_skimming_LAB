@@ -19,11 +19,12 @@ echo + NSLOTS = $NSLOTS
 contigs="$1"
 name="$2"
 taxa="$3"
+ref="$4"
 #
 mitofinder \
 -j ${name}_mitofinder \
 -o ${taxa} \
--r /scratch/nmnh_lab/macdonaldk/ref/mito_reference.gb \
+-r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${ref}_23Aug23.gb \
 -a ${contigs}/${name}_spades_contigs.fasta \
 --new-genes -p $NSLOTS -m 16
 
