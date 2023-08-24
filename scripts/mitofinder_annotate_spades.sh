@@ -2,15 +2,31 @@
 
 contigs="$1"
 taxa="$2"
+ref="$3"
 results=${contigs}/../
-mkdir -p ${results}/mitofinder
 
-ls ${contigs}/*_spades_contigs.fasta &> /dev/null  || echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)"
-
-if [[ -z $2 ]];
-  then
-  echo "Genetic code not entered (should be a number between 1 and 25)"
+if
+  ls ${contigs}/*_spades_contigs.fasta &> /dev/null
+then
+  echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)";
+  exit 1;
 fi
+
+if
+  [[ -z $2 ]];
+then
+  echo "Genetic code not entered (should be a number between 1 and 25)";
+  exit 1;
+fi
+
+if
+  [[ ${ref} != Mollusca && ${ref} != Cnidaria && ${ref} != Arthropoda && ${ref} != Annelida && ${ref} != Vertebrate && ${ref} != full ]];
+then
+  echo 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrate", or "full"';
+  exit 1;
+fi
+
+mkdir -p ${results}/mitofinder
 
 for x in ${contigs}/*_spades_contigs.fasta ; do 
     sample=`basename ${x}`
@@ -19,7 +35,7 @@ for x in ${contigs}/*_spades_contigs.fasta ; do
     qsub -o ${results}/mitofinder/${name}_mitofinder.log \
     -wd ${results}/mitofinder \
     -N ${name}_mitofinder \
-    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa}
+    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa} ${ref}
 done
 
 
@@ -34,9 +50,10 @@ done
 # results/mitofinder_spades. Since this would also cause the log
 # files to be placed here, I have also changed the log output "-o" to jobs/logs/
 
-# This MitoFinder shell requires two elements after calling the script
+# This MitoFinder shell requires three elements after calling the script
 # 1: path to the spades contigs
 # 2: the genetic code
+# 3: taxonomic group for reference database
 
 # The shell expects on of the following Genetic codes
 # 1. The Standard Code 
@@ -58,3 +75,16 @@ done
 # 23. Thraustochytrium Mitochondrial Code 
 # 24. Pterobranchia Mitochondrial Code 
 # 25. Candidate Division SR1 and Gracilibacteria Code
+
+# Using a more limited reference database greatly reduces run time. For exmaple,
+# changing from the full database (14000+ mitogenomes) to just molluscs (<500
+# mitogenomes) reduces run time from > 3 hours to < 5 minutes, typically.
+# Currently there are 5 taxon-specific databases: 
+# "Vertebrata"
+# "Mollusca"
+# "Cnidaria"
+# "Annelida"
+# "Arthropoda"
+# If your taxa of interest are not in one of these groups, you can either enter
+# "full" to use the entire database or contact me and I can typically create
+# your chosen database in short order.
