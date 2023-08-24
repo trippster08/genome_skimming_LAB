@@ -142,7 +142,7 @@ Run the  MitoFinder for annotating spades contigs shell script, including the pa
 ```
 sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code> <reference_database>
 ```
-If you do not enter the path to the SPAdes contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)".
+If you do not enter the path to the SPAdes contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)". If you don't include a reference database, or use an incorrect database, you will get the following error 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrate", or "full"'.
 
 Results of these analyses are saved in `PROJECT/data/results/mitofinder`
 
@@ -156,10 +156,13 @@ sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
 ## MITOS
 MitoFinder does not always do a great job of annotating all the features present in your assembly, especially when there are not closely related taxa in the reference library. In these instances, MITOS can sometimes annotate genes that MitoFinder was not able to find. If you are only skimming from taxonomic groups that have a lot of represtantion in the reference library, this section is not needed. However, even with good references, MITOS can sometimes find some features, such as tRNA's, that MitoFinder does not, so I always run this, and only use as needed. For this pipeline, MITOS uses the contigs in the MitoFinder Final Results directory created in the previous step.  
 
-Run the  MITOS for annotating MitoFinder contigs shell script, including the path to the directory containng your sample-specific MitoFinder directories files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/mitofinder_final_results/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
+Run the  MITOS for annotating MitoFinder contigs shell script, including the path to the directory containng your sample-specific MitoFinder directories files and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/mitofinder_final_results/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
 ```
 sh mitos_annotate_mitofinder.sh <path_to_mitofinder_final_results> <genetic_code>
 ```
+If you do not enter the path to the mitofinder contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)". 
+
+
 Results of these analyses are saved in `PROJECT/data/results/mitos_mitofinder`.
 
 ### Download Results
