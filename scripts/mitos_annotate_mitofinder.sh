@@ -4,12 +4,15 @@ mitofinder_final_results="$1"
 taxa="$2"
 
 results=${mitofinder_final_results}/../
-mkdir -p ${results}/mitos_mitofinder
 
-if [[ -z $2 ]];
-  then
-  echo "Genetic code not entered (should be a number between 1 and 25)"
+if
+  [[ -z $2 ]];
+then
+  echo "Genetic code not entered (should be a number between 1 and 25)";
+  exit 1;
 fi
+
+mkdir -p ${results}/mitos_mitofinder
 
 for x in ${mitofinder_final_results}/* ; do 
   sample=`basename ${x}`
