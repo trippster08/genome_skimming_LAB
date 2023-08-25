@@ -8,7 +8,7 @@
 4. [FastQC Raw Reads](#fastqc-raw-reads) </br>
   4.1. [Run FastQC](#run-fastqc) </br>
   4.2. [Download Raw-Reads FastQC Results](#download-raw-reads-fastqc-results) </br>    
-5. [Trimming and Filtering Raw Reads](#trimming-and-filtering-raw-reads) </br>
+5. [Trimming and Filtering Raw Reads with  fastp](#trimming-and-filtering-raw-reads-with-fastp) </br>
 6. [FastQC Trimmed Reads](#fastqc-trimmed-reads) </br>
   6.1. [Run FastQC](#run-fastqc) </br>
   6.2. [Download FastQC of Trimmed Reads](#download-fastqc-of-trimmed-reads) </br>
@@ -79,8 +79,8 @@ If you do not enter the path to the raw sequences in the command, or enter a pat
 ### Download Raw-Reads FastQC Results
 Download the directory containing the fastQC results (it should be `/data/raw/fastqc_analyses`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
 
-## Trimming and Filtering Raw Reads
-We are going to trim all our reads to remove poor quality basepairs and residual adapter sequence using fastp, a program that trims similarly to `Trimmomatic` (the trimming program we previously used), but is significantly faster. fastp also filters out poor-quality or exceptionally short reads. I have found that fastp does filter and trim more aggressviely using the similar parameters (i.e. you end up with slightly fewer and shorter trimmed sequences), so the quality filtering parameters may need to be evaluated further. One advantage is that both R1 and R2 unpaired trimmed reads (reads for which the sequence in one direction did not pass quality filtering) can be saved into the same file, so there is no need for concatenation before using trimmed reads in `SPAdes`.
+## Trimming and Filtering Raw Reads with fastp
+We are going to trim all our reads to remove poor quality basepairs and residual adapter sequence using fastp, a program that trims similarly to Trimmomatic (the trimming program we previously used), but is significantly faster. fastp also filters out poor-quality or exceptionally short reads. I have found that fastp does filter and trim more aggressviely using the similar parameters (i.e. you end up with slightly fewer and shorter trimmed sequences), so the quality filtering parameters may need to be evaluated further. One advantage is that both R1 and R2 unpaired trimmed reads (reads for which the sequence in one direction did not pass quality filtering) can be saved into the same file, so there is no need for concatenation before using trimmed reads in SPAdes.
 
 fastp does not require an illumina adapter to remove adapter sequences, but you can supply one for better adapter trimming, and we use one here. LAB uses two types of adapters, itru and nextera. Because most of the genome-skimming library prep so far use the itru adapters, I have included a fasta file for these, called `itru_adapters.fas`. We can provide a nextera adapter file upon request. This pipeline currently points to a directory containing the itru adapter file, if you want to use your own adapter file, you will need to change the path following the command `--adapter_fasta` in `fastp.job`.
 
