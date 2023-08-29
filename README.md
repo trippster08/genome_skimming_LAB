@@ -119,7 +119,6 @@ Run the SPAdes shell script, including the path to the directory containing your
 ```
 sh spades.sh <path_to_trimmed_sequences>
 ```
-If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
 Your results should be in `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`. The results for each sample will be in a separate folder, named with the sample name. 
 
@@ -130,7 +129,6 @@ Run `rename_spades_contigs.sh`, including the path to the SPAdes results directo
 ```
 sh rename_spades_contigs.sh <path_to_spades_results>
 ```
-If you do not enter the path to the spades results directory in the command, or enter a path to a directory that does not contain sample-specific directories containing `contigs.fasta` files, you will get the following error "Correct path to SPAdes results not entered". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
 ## MitoFinder
 We will run MitoFinder using the contigs that result from the SPAdes assembly. These assemblies may be more likely to contain the entire mitochondrial genome, because unlike MitoFinder, SPAdes uses trimmed single-end reads in addition to paired-end reads, and therefore utilizes more reads in its assembly. MitoFinder also runs more efficiently with contigs as inputs because it does not need to perform an assembly step.
@@ -142,9 +140,7 @@ Run the  MitoFinder for annotating spades contigs shell script, including the pa
 ```
 sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code> <reference_database>
 ```
-If you do not enter the path to the SPAdes contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)". If you don't include a reference database, or use an incorrect database, you will get the following error 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrate", or "full"'.
-
-Results of these analyses are saved in `PROJECT/data/results/mitofinder`
+Results of these analyses are saved in `PROJECT/data/results/mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
 
 ### Copy MitoFinder Final Results Directory
 The most important information from a MitoFinder analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these directories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
@@ -160,10 +156,8 @@ Run the  MITOS for annotating MitoFinder contigs shell script, including the pat
 ```
 sh mitos_annotate_mitofinder.sh <path_to_mitofinder_final_results> <genetic_code>
 ```
-If you do not enter the path to the mitofinder contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)". 
 
-
-Results of these analyses are saved in `PROJECT/data/results/mitos_mitofinder`.
+Results of these analyses are saved in `PROJECT/data/results/mitos_mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
 
 ### Download Results
 Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`), one for SPAdes contigs (`/data/results/spades_contigs`), and one for MITOS results (`/data/results/mitos_mitofinder`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/spades_error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
