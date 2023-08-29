@@ -74,7 +74,7 @@ Run the fastQC shell script, including the path to the directory containing your
 ```
 sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
-If you do not enter the path to the raw sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding  that path should fix these errors.
+The results of these analyses are saved in `<PROJECT>/data/raw/fastqc_analyses`
 
 ### Download Raw-Reads FastQC Results
 Download the directory containing the fastQC results (it should be `/data/raw/fastqc_analyses`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
@@ -92,7 +92,6 @@ Run the fastp shell script, including the path to the directory containing your 
 ```
 sh fastp.sh <path_to_raw_sequences>
 ```
-If you do not enter the path to the raw sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 Trimmed reads will be saved in `/data/trimmed_sequences`.
 
 ## FASTQC TRIMMED READS 
@@ -106,7 +105,7 @@ Run the fastQC shell script, including the path to the directory containing your
 ```
 sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
-If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
+The results of these analyses are saved in `<PROJECT>/data/trimmed_sequences/fastqc_analyses`
 
 ### Download FastQC of Trimmed Reads
 Download the directory containing the fastQC results (it should be `/data/trimmed_sequences/fastqc_analyses`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
@@ -140,7 +139,7 @@ Run the  MitoFinder for annotating spades contigs shell script, including the pa
 ```
 sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code> <reference_database>
 ```
-Results of these analyses are saved in `PROJECT/data/results/mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
+Results of these analyses are saved in `<PROJECT>/data/results/mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
 
 ### Copy MitoFinder Final Results Directory
 The most important information from a MitoFinder analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these directories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
@@ -157,7 +156,7 @@ Run the  MITOS for annotating MitoFinder contigs shell script, including the pat
 sh mitos_annotate_mitofinder.sh <path_to_mitofinder_final_results> <genetic_code>
 ```
 
-Results of these analyses are saved in `PROJECT/data/results/mitos_mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
+Results of these analyses are saved in `<PROJECT>/data/results/mitos_mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
 
 ### Download Results
 Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`), one for SPAdes contigs (`/data/results/spades_contigs`), and one for MITOS results (`/data/results/mitos_mitofinder`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/spades_error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
