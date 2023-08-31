@@ -6,10 +6,10 @@ ref="$3"
 results=${contigs}/../
 
 if
-  ls ${contigs}/*_spades_contigs.fasta &> /dev/null
+  [[ -z "$(ls ${contigs}/*_spades_contigs.fasta 2>/dev/null | grep fasta)" ]] 
 then
-  echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)";
-  exit 1;
+  echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)"
+  exit
 fi
 
 if
@@ -20,9 +20,9 @@ then
 fi
 
 if
-  [[ ${ref} != Mollusca && ${ref} != Cnidaria && ${ref} != Arthropoda && ${ref} != Annelida && ${ref} != Vertebrate && ${ref} != full ]];
+  [[ ${ref} != mollusca && ${ref} != cnidaria && ${ref} != arthropoda && ${ref} != annelida && ${ref} != vertebrate && ${ref} != full ]];
 then
-  echo 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrate", or "full"';
+  echo 'Incorrect reference database. Please enter "mollusca", "cnidaria", "arthropoda", "annelida", "vertebrate", or "full"';
   exit 1;
 fi
 
