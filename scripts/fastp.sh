@@ -4,10 +4,10 @@ raw="$1"
 data=${raw}/../
 
 if
-  ls ${raw}/*.fastq.gz &> /dev/null  
+  [[ -z "$(ls ${raw}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]  
 then  
-  echo "Correct path to read files not entered (*.fastq.gz)";
-  exit 1;
+  echo "Correct path to read files not entered (*.fastq.gz)"
+  exit
 fi
 
 mkdir -p ${data}/trimmed_sequences
