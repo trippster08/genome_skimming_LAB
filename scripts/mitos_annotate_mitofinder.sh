@@ -3,23 +3,37 @@
 mitofinder_final_results="$1" 
 taxa="$2"
 
-results=${mitofinder_final_results}/../
-
 if
-  [[ -z $2 ]];
+  [[ -z $2 ]]
 then
-  echo "Genetic code not entered (should be a number between 1 and 25)";
-  exit 1;
+  echo "Genetic code not entered (should be a number between 1 and 25)"
+  exit
 fi
 
-mkdir -p ${results}/mitos_mitofinder
+results=${mitofinder_final_results}/../
 
-for x in ${mitofinder_final_results}/* ; do 
+for x in ${mitofinder_final_results}/*/; do 
   sample=`basename ${x}`
   name=`echo ${sample%_mitofinder_final_results}`
 
+  if
+    [[ -z "$(ls ${mitofinder_final_results}/${sample}/${name}*.fasta 2>/dev/null | egrep contig.fasta)" ]]
+  then
+    if
+      [[ -z "$(ls ${mitofinder_final_results}/${sample}/${name}*.fasta 2>/dev/null | egrep [0-9].fasta)" ]]
+    then
+      echo "Correct path to MitoFinder results not entered (*.fasta)"
+      exit
+    else 
+      for x in ${mitofinder_final_results}/${sample}/*; do
+        cat ${mitofinder_final_results}/${sample}/${name}_mitofinder_mtDNA_contig_[0-9].fasta > \
+        ${mitofinder_final_results}/${sample}/${name}_mitofinder_mtDNA_contig.fasta
+      done
+    fi
+  fi
+
   mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder
-  
+
   qsub -o ${results}/mitos_mitofinder/${name}_mitos_mitofinder.log \
   -N ${name}_mitos_mitofinder \
   mitos_annotate_mitofinder.job ${mitofinder_final_results} ${results} ${sample} ${name} ${taxa}
