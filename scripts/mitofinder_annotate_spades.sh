@@ -13,17 +13,17 @@ then
 fi
 
 if
-  [[ -z $2 ]];
+  [[ -z $2 ]]
 then
-  echo "Genetic code not entered (should be a number between 1 and 25)";
-  exit 1;
+  echo "Genetic code not entered (should be a number between 1 and 25)"
+  exit
 fi
 
 if
-  [[ ${ref} != mollusca && ${ref} != cnidaria && ${ref} != arthropoda && ${ref} != annelida && ${ref} != vertebrate && ${ref} != full ]];
+  [[ ${ref} != mollusca && ${ref} != cnidaria && ${ref} != arthropoda && ${ref} != annelida && ${ref} != vertebrate && ${ref} != full ]]
 then
-  echo 'Incorrect reference database. Please enter "mollusca", "cnidaria", "arthropoda", "annelida", "vertebrate", or "full"';
-  exit 1;
+  echo 'Incorrect reference database. Please enter "mollusca", "cnidaria", "arthropoda", "annelida", "vertebrate", or "full"'
+  exit
 fi
 
 mkdir -p ${results}/mitofinder
