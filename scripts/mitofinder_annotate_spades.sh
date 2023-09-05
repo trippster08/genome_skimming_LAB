@@ -80,11 +80,11 @@ done
 # changing from the full database (14000+ mitogenomes) to just molluscs (<500
 # mitogenomes) reduces run time from > 3 hours to < 5 minutes, typically.
 # Currently there are 5 taxon-specific databases: 
-# "Vertebrata"
-# "Mollusca"
-# "Cnidaria"
-# "Annelida"
-# "Arthropoda"
+# "vertebrata"
+# "mollusca"
+# "cnidaria"
+# "annelida"
+# "arthropoda"
 # If your taxa of interest are not in one of these groups, you can either enter
 # "full" to use the entire database or contact me and I can typically create
 # your chosen database in short order.
