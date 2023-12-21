@@ -19,11 +19,12 @@ echo + NSLOTS = $NSLOTS
 contigs="$1"
 name="$2"
 taxa="$3"
+ref="$4"
 #
 mitofinder \
 -j ${name}_mitofinder \
 -o ${taxa} \
--r /scratch/nmnh_lab/macdonaldk/ref/mito_reference.gb \
+-r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${ref}_*.gb \
 -a ${contigs}/${name}_spades_contigs.fasta \
 --new-genes -p $NSLOTS -m 16
 
@@ -63,3 +64,17 @@ echo = `date` job $JOB_NAME done
 # 23. Thraustochytrium Mitochondrial Code 
 # 24. Pterobranchia Mitochondrial Code 
 # 25. Candidate Division SR1 and Gracilibacteria Code
+
+# Using a more limited reference database greatly reduces run time. For exmaple,
+# changing from the full database (14000+ mitogenomes) to just molluscs (<500
+# mitogenomes) reduces run time from > 3 hours to < 5 minutes, typically.
+# Currently there are 6 taxon-specific databases: 
+# "Vertebrata"
+# "Mollusca"
+# "Cnidaria"
+# "Annelida"
+# "Arthropoda"
+# "Tunicata"
+# If your taxa of interest are not in one of these groups, you can either enter
+# "full" to use the entire database or contact me and I can typically create
+# your chosen database in short order.

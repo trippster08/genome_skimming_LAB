@@ -8,7 +8,7 @@
 4. [FastQC Raw Reads](#fastqc-raw-reads) </br>
   4.1. [Run FastQC](#run-fastqc) </br>
   4.2. [Download Raw-Reads FastQC Results](#download-raw-reads-fastqc-results) </br>    
-5. [Trimming and Filtering Raw Reads](#trimming-and-filtering-raw-reads) </br>
+5. [Trimming and Filtering Raw Reads with  fastp](#trimming-and-filtering-raw-reads-with-fastp) </br>
 6. [FastQC Trimmed Reads](#fastqc-trimmed-reads) </br>
   6.1. [Run FastQC](#run-fastqc) </br>
   6.2. [Download FastQC of Trimmed Reads](#download-fastqc-of-trimmed-reads) </br>
@@ -18,7 +18,8 @@
 8. [MitoFinder](#mitofinder) </br>
   8.1. [Run MitoFinder using SPAdes Contigs](#run-mitofinder-using-spades-contigs) </br>
   8.2. [Copy MitoFinder Final Results Directory](#copy-mitofinder-final-results-directory) </br>
-9. [Download Results](#download-results) </br>
+9. [Mitos](#mitos)
+10. [Download Results](#download-results) </br>
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed to use Hydra, Smithsonian's HPC, to run fastQC, fastp, SPAdes, and MitoFinder. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See https://confluence.si.edu/display/HPC/Logging+into+Hydra to see differences between MacOS and Windows in accessing Hydra.
 
@@ -73,13 +74,13 @@ Run the fastQC shell script, including the path to the directory containing your
 ```
 sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
-If you do not enter the path to the raw sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding  that path should fix these errors.
+The results of these analyses are saved in `<PROJECT>/data/raw/fastqc_analyses`
 
 ### Download Raw-Reads FastQC Results
 Download the directory containing the fastQC results (it should be `/data/raw/fastqc_analyses`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
 
-## Trimming and Filtering Raw Reads
-We are going to trim all our reads to remove poor quality basepairs and residual adapter sequence using fastp, a program that trims similarly to `Trimmomatic` (the trimming program we previously used), but is significantly faster. fastp also filters out poor-quality or exceptionally short reads. I have found that fastp does filter and trim more aggressviely using the similar parameters (i.e. you end up with slightly fewer and shorter trimmed sequences), so the quality filtering parameters may need to be evaluated further. One advantage is that both R1 and R2 unpaired trimmed reads (reads for which the sequence in one direction did not pass quality filtering) can be saved into the same file, so there is no need for concatenation before using trimmed reads in `SPAdes`.
+## Trimming and Filtering Raw Reads with fastp
+We are going to trim all our reads to remove poor quality basepairs and residual adapter sequence using fastp, a program that trims similarly to Trimmomatic (the trimming program we previously used), but is significantly faster. fastp also filters out poor-quality or exceptionally short reads. I have found that fastp does filter and trim more aggressviely using the similar parameters (i.e. you end up with slightly fewer and shorter trimmed sequences), so the quality filtering parameters may need to be evaluated further. One advantage is that both R1 and R2 unpaired trimmed reads (reads for which the sequence in one direction did not pass quality filtering) can be saved into the same file, so there is no need for concatenation before using trimmed reads in SPAdes.
 
 fastp does not require an illumina adapter to remove adapter sequences, but you can supply one for better adapter trimming, and we use one here. LAB uses two types of adapters, itru and nextera. Because most of the genome-skimming library prep so far use the itru adapters, I have included a fasta file for these, called `itru_adapters.fas`. We can provide a nextera adapter file upon request. This pipeline currently points to a directory containing the itru adapter file, if you want to use your own adapter file, you will need to change the path following the command `--adapter_fasta` in `fastp.job`.
 
@@ -91,7 +92,6 @@ Run the fastp shell script, including the path to the directory containing your 
 ```
 sh fastp.sh <path_to_raw_sequences>
 ```
-If you do not enter the path to the raw sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 Trimmed reads will be saved in `/data/trimmed_sequences`.
 
 ## FASTQC TRIMMED READS 
@@ -105,7 +105,7 @@ Run the fastQC shell script, including the path to the directory containing your
 ```
 sh fastqc_genomeskimming.sh <path_to_raw_sequences>
 ```
-If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
+The results of these analyses are saved in `<PROJECT>/data/trimmed_sequences/fastqc_analyses`
 
 ### Download FastQC of Trimmed Reads
 Download the directory containing the fastQC results (it should be `/data/trimmed_sequences/fastqc_analyses`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
@@ -118,40 +118,45 @@ Run the SPAdes shell script, including the path to the directory containing your
 ```
 sh spades.sh <path_to_trimmed_sequences>
 ```
-If you do not enter the path to the trimmed sequences in the command, or enter a path to a directory that does not contain `fastq.gz` files, you will get the following error "Correct path to read files not entered (*.fastq.gz)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
 Your results should be in `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`. The results for each sample will be in a separate folder, named with the sample name. 
 
 ### Copy and Rename SPAdes Contigs
-We are using the `contigs.fasta` file as resulting sequences, and these contigs are saved in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `contigs.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `contigs.fasta ` files into a new directory `<PROJECT>/data/results/spades_contigs` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/error_corrected_reads`.
+We are using the `contigs.fasta` file as resulting sequences, and these contigs are saved in `<PROJECT>/data/results/spades/<SAMPLE>` as a generic `contigs.fasta` file. This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all `contigs.fasta ` files into a new directory `<PROJECT>/data/results/spades_contigs` and renames them with their sample name. I also copy the trimmed reads that have been error-corrected by SPAdes into a new directory `<PROJECT>/data/results/spades_error_corrected_reads`.
 
 Run `rename_spades_contigs.sh`, including the path to the SPAdes results directory, usually: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades`.
 ```
 sh rename_spades_contigs.sh <path_to_spades_results>
 ```
-If you do not enter the path to the spades results directory in the command, or enter a path to a directory that does not contain sample-specific directories containing `contigs.fasta` files, you will get the following error "Correct path to SPAdes results not entered". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors.
 
 ## MitoFinder
 We will run MitoFinder using the contigs that result from the SPAdes assembly. These assemblies may be more likely to contain the entire mitochondrial genome, because unlike MitoFinder, SPAdes uses trimmed single-end reads in addition to paired-end reads, and therefore utilizes more reads in its assembly. MitoFinder also runs more efficiently with contigs as inputs because it does not need to perform an assembly step.
 
 ### Run MitoFinder using SPAdes Contigs
-MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline currently uses a metazoan mitochondrial reference database downloaded from GenBank. If you would like to use a different database follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi to make your own, and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database.
+MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline allows you to chose either a metazoan mitochondrial reference database downloaded from GenBank or one of several taxon-specific databases culled from the full metazoan database. The current databases available are "full" (for the entire metazoan database), "Vertebrata", "Arthropoda", "Mollusca", "Annelida", and "Cnidera". Please let me know if you would like a reference database for a taxonomic group other than in this list. If you would like to make your own database follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database. Using a taxon-specific database signficantly reduces program runtime, so I recommend using one when able. As an example, changing from the full database (14000+ mitogenomes) to just molluscs (<500 mitogenomes) reduces run time from > 3 hours to < 5 minutes.
 
-Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files and the number representing the genetic code you wish to use. For most, the it should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.job ` file for a complete list. 
+Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. The reference database should be one of: "full" (for the entire metazoan database), "Vertebrata", "Arthropoda", "Mollusca", "Annelida", "Tunicata", and "Cnidera"
 ```
-sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code>
+sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code> <reference_database>
 ```
-If you do not enter the path to the SPAdes contigs in the command, or enter a path to a directory that does not contain `contigs.fasta` files, you will get the following error "Correct path to SPAdes contigs files not entered (*contigs.fasta)". You may get additional errors, but they should stem from an incorrect or missing path, so adding that path should fix these errors. If you don't include a number representing a genetic code, you will get the following error "Genetic code not entered (should be a number between 1 and 25)".
-
-Results of these analyses are saved in `PROJECT/data/results/mitofinder`
+Results of these analyses are saved in `<PROJECT>/data/results/mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
 
 ### Copy MitoFinder Final Results Directory
-The most important information from a MitoFinder analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these diretories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
+The most important information from a MitoFinder analysis is saved in the `<SAMPLE>_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these directories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `<SAMPLE>_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
 
 Run `copy_mitofinder_final_results.sh`, including the path to the MitoFinder results directory: `/data/results/mitofinder`.
 ```
 sh copy_mitofinder_final_results.sh <path_to_mitofinder_results>
 ```
+## MITOS
+MitoFinder does not always do a great job of annotating all the features present in your assembly, especially when there are not closely related taxa in the reference library. In these instances, MITOS can sometimes annotate genes that MitoFinder was not able to find. If you are only skimming from taxonomic groups that have a lot of represtantion in the reference library, this section is not needed. However, even with good references, MITOS can sometimes find some features, such as tRNA's, that MitoFinder does not, so I always run this, and only use as needed. For this pipeline, MITOS uses the contigs in the MitoFinder Final Results directory created in the previous step.  
+
+Run the  MITOS for annotating MitoFinder contigs shell script, including the path to the directory containng your sample-specific MitoFinder directories files and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/mitofinder_final_results/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
+```
+sh mitos_annotate_mitofinder.sh <path_to_mitofinder_final_results> <genetic_code>
+```
+
+Results of these analyses are saved in `<PROJECT>/data/results/mitos_mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
 
 ### Download Results
-Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`) and one for SPAdes contigs (`/data/results/spades_contigs`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
+Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`), one for SPAdes contigs (`/data/results/spades_contigs`), and one for MITOS results (`/data/results/mitos_mitofinder`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/spades_error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.

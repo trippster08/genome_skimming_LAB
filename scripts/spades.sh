@@ -2,9 +2,15 @@
 
 trimmed="$1"
 data=${trimmed}/../
-mkdir -p ${data}/results/spades
 
-ls ${trimmed}/*.fastq.gz &> /dev/null  || echo "Correct path to read files not entered (*.fastq.gz)"
+if
+  [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]  
+then
+  echo "Correct path to read files not entered (*.fastq.gz)"
+  exit
+fi
+
+mkdir -p ${data}/results/spades
 
 for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
   sample=`basename ${x}`

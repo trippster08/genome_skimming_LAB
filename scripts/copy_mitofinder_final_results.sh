@@ -1,13 +1,20 @@
 #!/bin/sh
 
-results="$1"
-cd ${results}
+mitofinder_results="$1"
 
+cd ${mitofinder_results}
 mkdir ../mitofinder_final_results
 
-for x in ${results}/*/; do 
+for x in ${mitofinder_results}/*/; do 
   sample=`basename ${x}`
-  ls ${sample}/${sample}_Final_Results &> /dev/null  || echo "Correct path to MitoFinder results not entered"
+
+  if
+    [[ -z "$(ls ${mitofinder_results}/${sample}/* 2>/dev/null | grep Final_Results)" ]] 
+  then
+    echo "Correct path to MitoFinder results not entered (*_contigs.fasta)"
+    exit
+  fi
+
   cp -r ${sample}/${sample}_Final_Results ../mitofinder_final_results/${sample}_final_results
   cp ${sample}_MitoFinder.log ../mitofinder_final_results/${sample}.log
 done

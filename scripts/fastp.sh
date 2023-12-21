@@ -2,8 +2,15 @@
 
 raw="$1"
 data=${raw}/../
+
+if
+  [[ -z "$(ls ${raw}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]  
+then  
+  echo "Correct path to read files not entered (*.fastq.gz)"
+  exit
+fi
+
 mkdir -p ${data}/trimmed_sequences
-ls ${raw}/*.fastq.gz &> /dev/null  || echo "Correct path to read files not entered (*.fastq.gz)"
 
 for x in ${raw}/*R1_001.fastq.gz ; do 
   sample=`basename ${x}`
