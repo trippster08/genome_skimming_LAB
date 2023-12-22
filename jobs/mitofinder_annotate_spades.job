@@ -75,6 +75,7 @@ echo = `date` job $JOB_NAME done
 # "Annelida"
 # "Arthropoda"
 # "Tunicata"
+# "Echinodermata"
 # If your taxa of interest are not in one of these groups, you can either enter
-# "full" to use the entire database or contact me and I can typically create
+# "Metazoa" to use the entire database or contact me and I can typically create
 # your chosen database in short order.

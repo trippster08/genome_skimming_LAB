@@ -79,13 +79,14 @@ done
 # Using a more limited reference database greatly reduces run time. For exmaple,
 # changing from the full database (14000+ mitogenomes) to just molluscs (<500
 # mitogenomes) reduces run time from > 3 hours to < 5 minutes, typically.
-# Currently there are 6 taxon-specific databases: 
+# Currently there are 7 taxon-specific databases: 
 # "Vertebrata"
 # "Mollusca"
 # "Cnidaria"
 # "Annelida"
 # "Arthropoda"
 # "Tunicata"
+# "Echinodermata"
 # If your taxa of interest are not in one of these groups, you can either enter
-# "full" to use the entire database or contact me and I can typically create
+# "Metazoa" to use the entire database or contact me and I can typically create
 # your chosen database in short order.
