@@ -24,8 +24,8 @@ name="$3"
 nameplus="$4"
 #
 fastp \
--i ${raw}/${nameplus}_R1_001.fastq.gz \
--I ${raw}/${nameplus}_R2_001.fastq.gz \
+-i ${raw}/${nameplus}_R1*.fastq.gz \
+-I ${raw}/${nameplus}_R2*.fastq.gz \
 -o ${data}/trimmed_sequences/${name}_R1_PE_trimmed.fastq.gz \
 -O ${data}/trimmed_sequences/${name}_R2_PE_trimmed.fastq.gz \
 --unpaired1 ${data}/trimmed_sequences/${name}_R0_SE_trimmed.fastq.gz \
