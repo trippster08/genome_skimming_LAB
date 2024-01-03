@@ -10,6 +10,7 @@
 #$ -o logs/PROJECT_spades.log
 #
 # ----------------Modules------------------------- #
+module load tools/ssd
 module load tools/conda
 start-conda
 conda activate /scratch/nmnh_lab/envs/genome_skimming/spades_ksm
@@ -27,8 +28,9 @@ spades.py \
 --pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
 --pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
--t $NSLOTS  -m 432
+-t $NSLOTS  -m 432 --tmp-dir $SSD_DIR
 
+rm -rf $SSD_DIR/*
 #
 echo = `date` job $JOB_NAME done
 
@@ -39,3 +41,7 @@ echo = `date` job $JOB_NAME done
 # is the path of the unpaired reads (both R1 and R2 should be in the same file)
 # of the first paired-end library.
 # -t is the number of threads, and -m is the total amount of memory allocated 
+# --tmp-dir creates a temporary SSD to hold SPAdes temporary files. SPAdes 
+# creates a large number of temporary files, sometimes more than hydra allows.
+# This creates a temporary SSD to hold those files so hydra won't kill the
+# job. we then remove those files with rm -rf $SSD_DIR/*
