@@ -33,7 +33,7 @@ Make sure to replace "PROJECT" with your project name throughout.
 mkdir -p <PROJECT>/data/raw <PROJECT>/jobs
 ```
 Your raw reads should be in `<PROJECT>/data/raw` (or any directory meant to hold only raw read files). 
-NOTE: As currently designed, this pipeline requires raw data to be `fastq.gz` formated, and to be named in the default Illumina manner, with 5 elements (sample name, barcode number, lane number, read number, and "001") all separated by underscores (i.e. Sample1_S001_L001_R1_001.fastq.gz). Also, Hydra does not allow jobs names to start with a number, so if your sample names start with a number, change the name to add a letter (I usually use the initials of the researcher) before running this pipeline.
+NOTE: As currently designed, this pipeline works best if raw data is `fastq.gz` formated, named in the default Illumina manner, with 5 elements (sample name, barcode number, lane number, read number, and "001") all separated by underscores (i.e. Sample1_S001_L001_R1_001.fastq.gz). The required elements are sample name (that contains no underscores) and read number (either R1 or R2), and these two elements need to be separated by an underscore. Also, Hydra does not allow jobs names to start with a number, so if your sample names start with a number, change the name to add a letter (I usually use the initials of the researcher) before running this pipeline.
 
 ## Hydra Configuration 
 All programs will be run through shared conda environments, so there is no need for the user to change any Hydra configurations or install any programs.
