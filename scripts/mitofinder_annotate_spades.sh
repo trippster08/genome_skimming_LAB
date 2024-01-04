@@ -20,9 +20,11 @@ then
 fi
 
 if
-  [[ ${ref} != mollusca && ${ref} != cnidaria && ${ref} != arthropoda && ${ref} != annelida && ${ref} != vertebrate && ${ref} != full ]]
+  [[ ${ref} != Mollusca && ${ref} != Cnidaria && ${ref} != Arthropoda && ${ref} \
+  != Annelida && ${ref} != Vertebrata && ${ref} != Metazoa && \
+  ${ref} != Tunicata && ${ref} != Echinodermata ]]
 then
-  echo 'Incorrect reference database. Please enter "mollusca", "cnidaria", "arthropoda", "annelida", "vertebrate", or "full"'
+  echo 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrata", or "Metazoa"'
   exit
 fi
 
