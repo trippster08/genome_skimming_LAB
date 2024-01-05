@@ -68,7 +68,7 @@ echo = `date` job $JOB_NAME done
 # Using a more limited reference database greatly reduces run time. For exmaple,
 # changing from the full database (14000+ mitogenomes) to just molluscs (<500
 # mitogenomes) reduces run time from > 3 hours to < 5 minutes, typically.
-# Currently there are 6 taxon-specific databases: 
+# Currently there are 7 taxon-specific databases: 
 # "Vertebrata"
 # "Mollusca"
 # "Cnidaria"
