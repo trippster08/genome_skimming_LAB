@@ -22,9 +22,9 @@ fi
 if
   [[ ${ref} != Mollusca && ${ref} != Cnidaria && ${ref} != Arthropoda && ${ref} \
   != Annelida && ${ref} != Vertebrata && ${ref} != Metazoa && \
-  ${ref} != Tunicata && ${ref} != Echinodermata ]]
+  ${ref} != Tunicata && ${ref} != Echinodermata && ${ref} != Bryozoa ]]
 then
-  echo 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrata", or "Metazoa"'
+  echo 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrata", "Echinodermata", "Tunicata", "Bryozoa", or "Metazoa"'
   exit
 fi
 
@@ -34,7 +34,7 @@ for x in ${contigs}/*_spades_contigs.fasta ; do
     sample=`basename ${x}`
     name=`echo ${sample%_spades_contigs.fasta}`
 
-    qsub -o ${results}/mitofinder/${name}/${name}_mitofinder.log \
+    qsub -o ${results}/mitofinder/${name}_mitofinder/${name}_mitofinder.log \
     -wd ${results}/mitofinder \
     -N ${name}_mitofinder \
     mitofinder_annotate_spades.job ${contigs} ${name} ${taxa} ${ref}
@@ -81,7 +81,7 @@ done
 # Using a more limited reference database greatly reduces run time. For exmaple,
 # changing from the full database (14000+ mitogenomes) to just molluscs (<500
 # mitogenomes) reduces run time from > 3 hours to < 5 minutes, typically.
-# Currently there are 7 taxon-specific databases: 
+# Currently there are 8 taxon-specific databases: 
 # "Vertebrata"
 # "Mollusca"
 # "Cnidaria"
@@ -89,6 +89,7 @@ done
 # "Arthropoda"
 # "Tunicata"
 # "Echinodermata"
+# "Bryozoa"
 # If your taxa of interest are not in one of these groups, you can either enter
 # "Metazoa" to use the entire database or contact me and I can typically create
 # your chosen database in short order.
