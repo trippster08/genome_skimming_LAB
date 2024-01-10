@@ -24,7 +24,8 @@ if
   != Annelida && ${ref} != Vertebrata && ${ref} != Metazoa && \
   ${ref} != Tunicata && ${ref} != Echinodermata && ${ref} != Bryozoa ]]
 then
-  echo 'Incorrect reference database. Please enter "Mollusca", "Cnidaria", "Arthropoda", "Annelida", "Vertebrata", "Echinodermata", "Tunicata", "Bryozoa", or "Metazoa"'
+  echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria",' \
+   '"Ctenophora", "Echinodermata", "Metazoa", "Mollusca", "Nemertea", "Porifera", "Tunicata", or "Vertebrata"'
   exit
 fi
 
@@ -81,15 +82,20 @@ done
 # Using a more limited reference database greatly reduces run time. For exmaple,
 # changing from the full database (14000+ mitogenomes) to just molluscs (<500
 # mitogenomes) reduces run time from > 3 hours to < 5 minutes, typically.
-# Currently there are 8 taxon-specific databases: 
-# "Vertebrata"
-# "Mollusca"
-# "Cnidaria"
+# Currently there are 11 taxon-specific databases: 
 # "Annelida"
 # "Arthropoda"
-# "Tunicata"
-# "Echinodermata"
 # "Bryozoa"
+# "Cnidaria"
+# "Ctenophora"
+# "Echinodermata"
+# "Mollusca"
+# "Nemertea"
+# "Porifera"
+# "Tunicata"
+# "Vertebrata"
+# There is one database containing the full Genbank refseq database:
+# "Metazoa"
 # If your taxa of interest are not in one of these groups, you can either enter
 # "Metazoa" to use the entire database or contact me and I can typically create
 # your chosen database in short order.

@@ -135,7 +135,21 @@ We will run MitoFinder using the contigs that result from the SPAdes assembly. T
 ### Run MitoFinder using SPAdes Contigs
 MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline allows you to chose either a metazoan mitochondrial reference database downloaded from GenBank or one of several taxon-specific databases culled from the full metazoan database. The current databases available are "full" (for the entire metazoan database), "Vertebrata", "Arthropoda", "Mollusca", "Annelida", and "Cnidera". Please let me know if you would like a reference database for a taxonomic group other than in this list. If you would like to make your own database follow the directions here: https://github.com/RemiAllio/MitoFinder/blob/master/README.md#how-to-get-reference-mitochondrial-genomes-from-ncbi and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database. Using a taxon-specific database signficantly reduces program runtime, so I recommend using one when able. As an example, changing from the full database (14000+ mitogenomes) to just molluscs (<500 mitogenomes) reduces run time from > 3 hours to < 5 minutes.
 
-Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. The reference database should be one of: "Metazoa" (for the entire metazoan database), "Vertebrata", "Arthropoda", "Mollusca", "Annelida", "Tunicata", "Echinodermata" and "Cnidaria"
+Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/<USERNAME>/<PROJECT>/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
+The reference database should be one of: 
+"Metazoa" (for the entire database)
+"Annelida"
+"Arthropoda"
+"Bryozoa"
+"Cnidaria"
+"Ctenophora"
+"Echinodermata"
+"Mollusca"
+"Nemertea"
+"Porifera"
+"Tunicata"
+"Vertebrata"
+
 ```
 sh mitofinder_annotate_spades.sh <path_to_spades_contigs> <genetic_code> <reference_database>
 ```
