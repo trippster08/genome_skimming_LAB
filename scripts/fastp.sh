@@ -14,7 +14,7 @@ mkdir -p ${data}/trimmed_sequences
 
 for x in ${raw}/*R1_001.fastq.gz ; do 
   sample=`basename ${x}`
-  name=`echo ${sample%_S*}`
+  name=`echo ${sample%%_*}`
   nameplus=`echo ${sample%_R*}`
   # echo $sample
   # echo $name
