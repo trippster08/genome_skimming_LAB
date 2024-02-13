@@ -1,9 +1,9 @@
 # /bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 12
+#$ -pe mthread 10
 #$ -q mThM.q
-#$ -l mres=144G,h_data=12G,h_vmem=12G,himem
+#$ -l mres=200G,h_data=20G,h_vmem=20G,himem
 #$ -l ssd_res=200G -v SSD_SAVE_MAX=0
 #$ -cwd
 #$ -j y
@@ -29,7 +29,7 @@ spades.py \
 --pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
 --pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
--t $NSLOTS  -m 432 --tmp-dir $SSD_DIR
+-t $NSLOTS  -m 200 --tmp-dir $SSD_DIR
 
 #
 echo = `date` job $JOB_NAME done
