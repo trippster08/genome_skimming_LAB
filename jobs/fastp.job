@@ -22,10 +22,11 @@ raw="$1"
 data="$2"
 name="$3"
 nameplus="$4"
+post="$5"
 #
 fastp \
--i ${raw}/${nameplus}_R1*.fastq.gz \
--I ${raw}/${nameplus}_R2*.fastq.gz \
+-i ${raw}/${nameplus}_R1${post} \
+-I ${raw}/${nameplus}_R2${post} \
 -o ${data}/trimmed_sequences/${name}_R1_PE_trimmed.fastq.gz \
 -O ${data}/trimmed_sequences/${name}_R2_PE_trimmed.fastq.gz \
 --unpaired1 ${data}/trimmed_sequences/${name}_R0_SE_trimmed.fastq.gz \
@@ -36,7 +37,7 @@ fastp \
 --cut_tail --cut_tail_window_size 5 --cut_tail_mean_quality 15 \
 --trim_poly_g \
 --adapter_fasta /scratch/nmnh_lab/macdonaldk/primers/itru_adapters.fa
---thread $NSLOTS
+--threads $NSLOTS
 #
 echo = `date` job $JOB_NAME done
 
