@@ -1,0 +1,8 @@
+
+prefetch \
+-O /scratch/nmnh_lab/macdonaldk/skimming_workshop/data/sra \
+--option-file /scratch/nmnh_lab/macdonaldk/skimming_workshop/data/sra/SraAccList.csv \
+--progress
+
+
+vdb-validate
