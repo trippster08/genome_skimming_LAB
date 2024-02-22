@@ -12,25 +12,20 @@ fi
 
 results=${mitofinder_final_results}/../
 
-for x in ${mitofinder_final_results}/*/; do 
+mkdir -p ${results}/mitofinder_contigs
+
+for x in ${mitofinder_final_results}/*/; do
   sample=`basename ${x}`
   name=`echo ${sample%_mitofinder_final_results}`
 
-  if
-    [[ -z "$(ls ${mitofinder_final_results}/${sample}/${name}*.fasta 2>/dev/null | egrep contig.fasta)" ]]
-  then
-    if
-      [[ -z "$(ls ${mitofinder_final_results}/${sample}/${name}*.fasta 2>/dev/null | egrep [0-9].fasta)" ]]
-    then
-      echo "Correct path to MitoFinder results not entered (*.fasta)"
-      exit
-    else 
-      for x in ${mitofinder_final_results}/${sample}/*; do
-        cat ${mitofinder_final_results}/${sample}/${name}_mitofinder_mtDNA_contig_[0-9].fasta > \
-        ${mitofinder_final_results}/${sample}/${name}_mitofinder_mtDNA_contig.fasta
-      done
-    fi
-  fi
+[ ! -f ${mitofinder_final_results}/${sample}/${name}*contig.fasta ] || \
+    cp ${mitofinder_final_results}/${sample}/${name}*contig.fasta \
+    ${results}/mitofinder_contigs/${name}_mitofinder_mtDNA_contig.fasta 
+
+[ ! -f ${mitofinder_final_results}/${sample}/${name}*[0-9].fasta ] 2>/dev/null || \
+cat ${mitofinder_final_results}/${sample}/${name}*[0-9].fasta > \
+        ${results}/mitofinder_contigs/${name}_mitofinder_mtDNA_contig.fasta 2>/dev/null
+
 
   mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder
 
