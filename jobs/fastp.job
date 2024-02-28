@@ -36,7 +36,7 @@ fastp \
 -l 30 -f 3 -F 3 -t 2 -T 2 \
 --cut_tail --cut_tail_window_size 5 --cut_tail_mean_quality 15 \
 --trim_poly_g \
---adapter_fasta /scratch/nmnh_lab/macdonaldk/primers/itru_adapters.fa
+--adapter_fasta /scratch/nmnh_lab/macdonaldk/primers/itru_adapters.fa \
 --threads $NSLOTS
 #
 echo = `date` job $JOB_NAME done
