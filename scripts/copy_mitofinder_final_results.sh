@@ -16,5 +16,5 @@ for x in ${mitofinder_results}/*/; do
   fi
 
   cp -r ${sample}/${sample}_Final_Results ../mitofinder_final_results/${sample}_final_results
-  cp ${sample}_Mitofinder.log ../mitofinder_final_results/${sample}.log
+  cp ${sample}_MitoFinder.log ../mitofinder_final_results/${sample}.log
 done
