@@ -27,4 +27,5 @@ ${raw}/${sample}
 echo = `date` job $JOB_NAME done
 
 # This job file loads the conda module, activates the fastqc
-# environment, and runs fastqc on all samples
+# environment, and runs fastqc on all samples.
+# -o is the path to the output directory
