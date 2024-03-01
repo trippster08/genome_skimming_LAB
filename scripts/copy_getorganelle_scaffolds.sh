@@ -7,14 +7,12 @@ mkdir ../getorganelle_scaffolds
 
 for x in ${results}/*/; do 
   sample=`basename ${x}`
+  mkdir ../getorganelle_scaffolds/${sample}
   for y in ${results}/${sample}/*_sequence.fasta; do
     sample2=`basename ${y}`
     name=`echo ${sample2%_sequence*}`
-    echo $sample
-    echo $sample2
-    echo $name
-  cp ${sample}/${sample2} ../getorganelle_scaffolds/${sample}_${sample2}_sequence.fasta
-  cp ${sample}_getorganelle.log ../getorganelle_scaffolds/${sample}.log
+  cp ${sample}/${sample2} ../getorganelle_scaffolds/${sample}/${sample}_${sample2}
+  cp ${sample}_getorganelle.log ../getorganelle_scaffolds/${sample}/${sample}.log
   done
 done
 
