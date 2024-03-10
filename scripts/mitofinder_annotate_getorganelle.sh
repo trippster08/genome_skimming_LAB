@@ -29,16 +29,16 @@ then
   exit
 fi
 
-mkdir -p ${results}/mitofinder
+mkdir -p ${results}/mitofinder_getorganelle
 
 for x in ${contigs}/*_path_sequence.fasta ; do 
     sample=`basename ${x}`
-    name=`echo ${sample%_path_sequence.fasta}`
-
-    qsub -o ${results}/mitofinder/${name}_mitofinder/${name}_mitofinder_getorganelle.log \
-    -wd ${results}/mitofinder \
+    name=`echo ${sample%.path_sequence.fasta}`
+echo ${name}
+    qsub -o ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle.log \
+    -wd ${results}/mitofinder_getorganelle \
     -N ${name}_mitofinder_getorganelle \
-    mitofinder_annotate_getorganelle.job ${contigs} ${name} ${taxa} ${ref}
+    mitofinder_annotate_getorganelle.job ${contigs} ${name} ${taxa} ${ref} ${sample}
 done
 
 
