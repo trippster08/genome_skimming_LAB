@@ -20,12 +20,13 @@ contigs="$1"
 name="$2"
 taxa="$3"
 ref="$4"
+sample="$5"
 #
 mitofinder \
 -j ${name}_mitofinder_getorganelle \
 -o ${taxa} \
 -r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${ref}_*.gb \
--a ${contigs}/${name}_path_sequence.fasta \
+-a ${contigs}/${sample} \
 --new-genes -p $NSLOTS -m 16
 
 #
