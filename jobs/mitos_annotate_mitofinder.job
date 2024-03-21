@@ -1,8 +1,8 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -q mThC.q
-#$ -l mres=8G,h_data=8G,h_vmem=8G
+#$ -q sThM.q
+#$ -l mres=24G,h_data=24G,h_vmem=24G,himem
 #$ -cwd
 #$ -j y
 #$ -N ${sample}_mitos
@@ -11,7 +11,7 @@
 # ----------------Modules------------------------- #
 module load tools/conda
 start-conda
-conda activate /scratch/nmnh_lab/envs/genome_skimming/mitos2_ksm
+conda activate /scratch/nmnh_lab/genome_skimming/envs/mitos2_env
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
@@ -23,7 +23,8 @@ sample="$3"
 name="$4"
 taxa="$5"
 #
-runmitos.py -i ${mitofinder_final_results}/${sample} \
+runmitos.py \
+-i ${mitofinder_final_results}/${sample}/${name}_mitofinder_getorganelle_mtDNA_contigs.fasta \
 -c ${taxa} \
 -o ${results}/mitos_mitofinder/${name}_mitos_mitofinder \
 -r /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
