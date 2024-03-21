@@ -31,7 +31,7 @@ fi
 
 mkdir -p ${results}/mitofinder_getorganelle
 
-for x in ${contigs}/*_path_sequence.fasta ; do 
+for x in ${contigs}/*.path_sequence.fasta ; do 
     sample=`basename ${x}`
     name=`echo ${sample%.path_sequence.fasta}`
 echo ${name}
