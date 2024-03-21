@@ -12,20 +12,9 @@ fi
 
 results=${mitofinder_final_results}/../
 
-mkdir -p ${results}/mitofinder_contigs
-
 for x in ${mitofinder_final_results}/*/; do
   sample=`basename ${x}`
-  name=`echo ${sample%_mitofinder_final_results}`
-
-[ ! -f ${mitofinder_final_results}/${sample}/${name}*contig.fasta ] || \
-    cp ${mitofinder_final_results}/${sample}/${name}*contig.fasta \
-    ${results}/mitofinder_contigs/${name}_mitofinder_mtDNA_contig.fasta 
-
-[ ! -f ${mitofinder_final_results}/${sample}/${name}*[0-9].fasta ] 2>/dev/null || \
-cat ${mitofinder_final_results}/${sample}/${name}*[0-9].fasta > \
-        ${results}/mitofinder_contigs/${name}_mitofinder_mtDNA_contig.fasta 2>/dev/null
-
+  name=`echo ${sample%_mitofinder_getorganelle_final_results}`
 
   mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder
 
