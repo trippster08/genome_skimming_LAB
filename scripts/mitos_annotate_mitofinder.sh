@@ -18,7 +18,7 @@ for x in ${mitofinder_final_results}/*/; do
 
   mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder
 
-  qsub -o ${results}/mitos_mitofinder/${name}_mitos_mitofinder.log \
+  qsub -o logs/${name}_mitos_mitofinder.log \
   -N ${name}_mitos_mitofinder \
   mitos_annotate_mitofinder.job ${mitofinder_final_results} ${results} ${sample} ${name} ${taxa}
 done

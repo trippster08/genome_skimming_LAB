@@ -10,7 +10,7 @@ mkdir -p ${data}/results/getorganelle/
   sample=`basename ${x}`
   name=`echo ${sample%_R*}`
 
-    qsub -o ${data}/results/getorganelle/${name}_getorganelle.log \
+    qsub -o logs/${name}_getorganelle.log \
     -N ${name}_getorganelle \
     getorganelle.job ${trimmed} ${organelle} ${name} ${data}
 

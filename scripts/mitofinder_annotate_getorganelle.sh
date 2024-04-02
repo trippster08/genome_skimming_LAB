@@ -35,7 +35,7 @@ for x in ${contigs}/*.path_sequence.fasta ; do
     sample=`basename ${x}`
     name=`echo ${sample%.path_sequence.fasta}`
 echo ${name}
-    qsub -o ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle.log \
+    qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
     -wd ${results}/mitofinder_getorganelle \
     -N ${name}_mitofinder_getorganelle \
     mitofinder_annotate_getorganelle.job ${contigs} ${name} ${taxa} ${ref} ${sample}

@@ -18,7 +18,7 @@ for x in ${contigs}/*_path_sequence.fasta ; do
     name=`echo ${sample%.path_sequence.fasta}`
 echo ${name}
 echo ${sample}
-    qsub -o ${results}/bowtie2_getorganelle/${name}_bowtie2_getorganelle.log \
+    qsub -o logs/${name}_bowtie2_getorganelle.log \
     -wd ${results}/bowtie2_getorganelle \
     -N ${name}_bowtie2_getorganelle \
     bowtie2_getorganelle.job ${contigs} ${name} ${sample} ${trimmed} ${results}
