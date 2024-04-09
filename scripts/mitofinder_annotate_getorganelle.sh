@@ -6,9 +6,9 @@ ref="$3"
 results=${contigs}/../
 
 if
-  [[ -z "$(ls ${contigs}/*_sequence.fasta 2>/dev/null | grep fasta)" ]] 
+  [[ -z "$(ls ${contigs}/*.path_sequence.fasta 2>/dev/null | grep fasta)" ]] 
 then
-  echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)"
+  echo "Correct path to GetOrganelle results not entered (*.path_sequence.fasta)"
   exit
 fi
 
