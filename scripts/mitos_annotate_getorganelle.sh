@@ -24,7 +24,7 @@ for x in ${contigs}/*.path_sequence.fasta; do
   name=`echo ${sample%.path_sequence.fasta}`
   shortname=`echo ${sample%%_*}`
 
-  mkdir -p ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle
+  mkdir -p ${results}/mitos_getorganelle/${name}_mitos_getorganelle
   mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
   qsub -o logs/${name}_mitos_getorganelle.log \
   -N ${name}_mitos_getorganelle \
