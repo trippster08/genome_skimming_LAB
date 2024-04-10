@@ -27,37 +27,37 @@ shortname="$6"
 runmitos.py \
 -i ${contigs}/${sample} \
 -c ${taxa} \
--o ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle \
+-o ${results}/mitos_getorganelle/${name}_mitos_getorganelle \
 -r /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
 -R /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
 --debug
 #
 echo = `date` job $JOB_NAME done
 
-if 
-  [[ -f "${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.gff" ]]; 
+if
+  [[ -f "${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.gff" ]]
 then
   cp -r ${results}/mitos_getorganelle/${name}_mitos_getorganelle/plots \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}_plots
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}_plots
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.bed \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.bed
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.bed
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.gff \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.gff
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.gff
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.fas \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.fas
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.fas
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.faa \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.faa
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.faa
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.mitos \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.mitos
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.mitos
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.seq \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.seq
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.seq
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.geneorder \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.geneorder
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.geneorder
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.png \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}.png
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.png
   cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/stst.dat \
-  ${results}/mitos_results/${shortname}_mitos_getorganelle/${name}stst.dat
-else 
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}stst.dat
+else
   echo ${shortname} >> ${results}/mitos_results/mitos_failures.txt
 fi
 
