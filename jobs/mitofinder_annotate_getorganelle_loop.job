@@ -1,9 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 4
+#$ -pe mthread 2
 #$ -q sThC.q
-#$ -l mres=16G,h_data=4G,h_vmem=4G
+#$ -l mres=4G,h_data=2G,h_vmem=2G
 #$ -cwd
 #$ -j y
 #$ -N ${sample}
@@ -21,6 +21,7 @@ name="$2"
 taxa="$3"
 ref="$4"
 sample="$5"
+results="$6"
 #
 mitofinder \
 -j ${name}_mitofinder_getorganelle \
@@ -29,8 +30,17 @@ mitofinder \
 -a ${contigs}/${sample} \
 --new-genes -p $NSLOTS -m 16
 
+test -d ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
+&& cp -r ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
+${results}/mitofinder_final_results/${name}_mitofinder_getorganelle_Final_Results
+
+
 #
 echo = `date` job $JOB_NAME done
+
+
+
+
 
 
 # -a is the fasta file containing the contigs that mitofinder will use to 
