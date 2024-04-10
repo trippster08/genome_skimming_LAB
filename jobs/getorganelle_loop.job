@@ -34,13 +34,16 @@ get_organelle_from_reads.py \
 
 for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
-  if [[ ${contig} == *"repeat_pattern"* ]]; then
+  if [[ ${contig} == *"repeat_pattern"* ]]
+  then
     echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_repeats.txt
-  elif [[ ${contig} == *"scaffold"* ]]; then
+  elif [[ ${contig} == *"scaffold"* ]]
+  then
     echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_scaffolds.txt
     cp ${data}/results/getorganelle/${name}/*scaffold*.fasta \
     ${data}/results/getorganelle_contigs/${name}_${contig}
-  elif [[ ${contig} == *"complete"* ]]; then
+  elif [[ ${contig} == *"complete"* ]]
+  then
     cp ${data}/results/getorganelle/${name}/*complete*.fasta \
     ${data}/results/getorganelle_contigs/${name}_${contig}
   else echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_failed.txt
