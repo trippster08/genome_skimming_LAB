@@ -11,17 +11,24 @@ then
 fi
 
 results=${contigs}/../
+mkdir ${results}/mitos_results
+
+echo "MITOS was not able to annotate the samples listed below. The most common problem \
+is insufficient requested RAM. Please check run details for failed runs to see if \
+maxvmem is greater than mem_res. If you have determined insufficient RAM was not \
+the problem, see LAB staff for help troubleshooting" > \
+${results}/mitos_results/mitos_failures.txt
 
 for x in ${contigs}/*.path_sequence.fasta; do
   sample=`basename ${x}`
   name=`echo ${sample%.path_sequence.fasta}`
-echo ${sample}
-echo ${name}
-  mkdir -p ${results}/mitos_getorganelle/${name}_mitos_getorganelle
+  shortname=`echo ${sample%%_*}`
 
+  mkdir -p ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle
+  mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
   qsub -o logs/${name}_mitos_getorganelle.log \
   -N ${name}_mitos_getorganelle \
-  mitos_annotate_getorganelle.job ${contigs} ${results} ${sample} ${name} ${taxa}
+  mitos_annotate_getorganelle.job ${contigs} ${results} ${sample} ${name} ${taxa} ${shortname}
 done
 
 # This MITOS shell requires two elements after calling the script
