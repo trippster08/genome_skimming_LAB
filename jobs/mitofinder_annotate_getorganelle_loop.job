@@ -32,7 +32,7 @@ mitofinder \
 
 test -d ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
 && cp -r ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
-${results}/mitofinder_final_results/${name}_mitofinder_getorganelle_Final_Results
+${results}/mitofinder_results/${name}_mitofinder_getorganelle_Final_Results
 
 
 #
