@@ -13,8 +13,7 @@ then
   exit
 fi
 
-mkdir -p ${data}/results/getorganelle/ \
-${data}/results/getorganelle_contigs
+mkdir -p ${data}/results/getorganelle/ ${data}/results/getorganelle_contigs
 echo "GetOrganelle was not able to find the correct complete mitogenome for these samples. \
 Instead it found multiple similar contigs with different repetitive regions attached. These \
 contigs will not be copied to getorganelle_contigs/" \
