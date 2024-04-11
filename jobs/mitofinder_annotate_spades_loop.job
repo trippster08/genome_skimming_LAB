@@ -1,9 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 4
+#$ -pe mthread 2
 #$ -q sThC.q
-#$ -l mres=16G,h_data=4G,h_vmem=4G
+#$ -l mres=4G,h_data=2G,h_vmem=2G
 #$ -cwd
 #$ -j y
 #$ -N ${sample}
@@ -20,13 +20,19 @@ contigs="$1"
 name="$2"
 taxa="$3"
 ref="$4"
+sample="$5"
+results="$6"
 #
 mitofinder \
 -j ${name}_mitofinder \
 -o ${taxa} \
 -r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${ref}_*.gb \
--a ${contigs}/${name}_spades_contigs.fasta \
+-a ${contigs}/${sample} \
 --new-genes -p $NSLOTS -m 16
+
+test -d ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_Final_Results \
+&& cp -r ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_Final_Results \
+${results}/mitofinder_results/${name}_mitofinder_spades_Final_Results
 
 #
 echo = `date` job $JOB_NAME done
