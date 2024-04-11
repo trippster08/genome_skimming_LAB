@@ -29,7 +29,7 @@ then
   exit
 fi
 
-mkdir -p ${results}/mitofinder_getorganelle ${results}/mitofinder_final_results
+mkdir -p ${results}/mitofinder_getorganelle ${results}/mitofinder_results
 
 for x in ${contigs}/*.path_sequence.fasta ; do 
     sample=`basename ${x}`
