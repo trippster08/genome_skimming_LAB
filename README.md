@@ -13,15 +13,11 @@
   6.1. [Run FastQC](#run-fastqc) </br>
   6.2. [Download FastQC of Trimmed Reads](#download-fastqc-of-trimmed-reads) </br>
 7. [GetOrganelle](#getorganelle) </br> 
-  7.1. [Run GetOrganelle](#run-getorganelle) </br>
-  7.2. [Copy and Rename GetOrganelle Contigs](#copy-and-rename-getorganelle-contigs) </br>
-8. [MitoFinder](#mitofinder) </br>
-  8.1. [Run MitoFinder using GetOrganelle Contigs](#run-mitofinder-using-getorganelle-contigs) </br>
-  8.2. [Copy MitoFinder Final Results Directory](#copy-mitofinder-final-results-directory) </br>
-9. [Mitos](#mitos)
-10. [Map Reads to Reference](#map-reads-to-reference) </br>
-  10.1. [Bowtie2](#bowtie2)
-11. [Download Results](#download-results) </br>
+8. [Annotation](#annotation) </br>
+  8.1. [MitoFinder using GetOrganelle Contigs](#mitofinder-using-getorganelle-contigs) </br>
+  8.2. [MITOS using GetOrganelle Contigs](#mitos-using-getorganelle-contigs) </br>
+9. [Map Reads With Bowtie2](#map-reads-with-bowtie2) </br>
+10. [Download Results](#download-results) </br>
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed to use [Hydra](https://confluence.si.edu/display/HPC/High+Performance+Computing), Smithsonian's HPC, to run [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [fastp](https://github.com/OpenGene/fastp), [GetOrganelle](https://github.com/Kinggerm/GetOrganelle), [MitoFinder](https://github.com/RemiAllio/MitoFinder), [MITOS](https://gitlab.com/Bernt/MITOS/), and [Bowtie2](https://github.com/BenLangmead/bowtie2). The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See [Hydra on Windows PCs](https://confluence.si.edu/display/HPC/Logging+into+Hydra) for differences between MacOS and Windows in accessing Hydra.
 
@@ -34,7 +30,7 @@ Make sure to replace "PROJECT" with your project name throughout.
 ```
 mkdir -p PROJECT/data/raw PROJECT/jobs
 ```
-Your raw reads should be in `PROJECT/data/raw` (or any directory meant to hold only raw read files). 
+Your raw reads should be in `data/raw/` (or any directory meant to hold only raw read files). 
 NOTE: As currently designed, this pipeline works best if raw data is `fastq.gz` formated, named in the default Illumina manner, with 5 elements (sample name, barcode number, lane number, read number, and "001") all separated by underscores (i.e. Sample1_S001_L001_R1_001.fastq.gz). However, the pipeline does work with reduced filenames. The required elements are a unique sample name (that contains no underscores) at the start of the filename, and read number (either R1 or R2) later in the filename, and all elements need to be separated by an underscore. Also, Hydra does not allow jobs names to start with a number, so if your sample names start with a number, change the name to add a letter (I usually use the initials of the researcher) before running this pipeline.
 
 ## Hydra Configuration 
@@ -50,21 +46,21 @@ ssh USERNAME@hydra-login01.si.edu
 ssh USERNAME@hydra-login02.si.edu
 ```
 ### Project-specific Directory 
-Go to the the directory assigned to you for short-term storage of large data-sets. Typically this will be `/scratch/genomics/USERNAME`. Replace USERNAME with your hydra username.
+Go to the the directory assigned to you for short-term storage of large data-sets. Typically this will be `/scratch/genomics/USERNAME/`. Replace USERNAME with your hydra username.
 ```
 cd /scratch/genomics/USERNAME
 ```
-Make a project-specific directory, with the following subdirectories: `jobs` and `data/raw`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
-This pipeline is not dependent upon the directory tree shown, so you can set up your space differently, if you prefer. The only two directories that are required are `/data` and `/jobs` but you can name them whatever you like, and neither necessarily have to be in any particular place.This pipeline does create seveal new directories: `/data/trimmed_sequences`, `/data/results`, and within `/data/results` program-specific directories for those results, and `/jobs/logs`. If you don't want these directories created, or want them in different places, they can be changed in the shell scripts. 
+Make a project-specific directory, with the following subdirectories: `jobs/` and `data/raw/`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
+This pipeline is not dependent upon the directory tree shown, so you can set up your space differently, if you prefer. The only two directories that are required are `/data` and `/jobs` but you can name them whatever you like, and neither necessarily have to be in any particular place.This pipeline does create seveal new directories: `data/trimmed_sequences/`, `data/results/`, and within `data/results/` program-specific directories for those results, and `jobs/logs/`. If you don't want these directories created, or want them in different places, they can be changed in the shell scripts. 
 ```
 mkdir -p PROJECT/data/raw PROJECT/jobs
 ```
 ### Transfer Files to Hydra 
 You will need to transfer all the necessary files for this pipeline to your Hydra account. This includes raw read files (`*.fastq.gz`), job files (`*.job`), and shell scripts (`*.sh`).
-Your raw reads should be copied into `PROJECT/data/raw`. Both job files and shell scripts should be copied into `PROJECT/jobs`. I usually use scp or filezilla for file transfers. See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help with transferring files between Hydra and your computer. 
+Your raw reads should be copied into `data/raw/`. Both job files and shell scripts should be copied into `jobs/`. I usually use scp or filezilla for file transfers. See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help with transferring files between Hydra and your computer. 
 
 ## Running the Pipeline
-This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/USERNAME/PROJECT/jobs`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `PROJECT/jobs/logs`. As mentioned earlier, while I find 
+This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/USERNAME/PROJECT/jobs/`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `jobs/logs/`. As mentioned earlier, while I find 
 NOTE: Additional information for each program can be found in the `.job` file for each specific program. Included is program and parameter descriptions, including recommendations for alternative parameter settings. 
 
 ## fastQC Raw Reads
@@ -72,14 +68,14 @@ We first run fastQC on all our reads to check their quality and help determine o
 
 ### Run FastQC
 Run the fastQC shell script, including the path to the directory containing your raw read files. For most, it should be something like: 
-`/scratch/genomics/USERNAME/PROJECT/data/raw`. 
+`/scratch/genomics/USERNAME/PROJECT/data/raw/`. 
 ```
 sh fastqc_genomeskimming.sh path_to_raw_sequences
 ```
-The results of these analyses are saved in `PROJECT/data/raw/fastqc_analyses`
+The results of these analyses are saved in `data/raw/fastqc_analyses/`
 
 ### Download Raw-Reads FastQC Results
-Download the directory containing the fastQC results (it should be `/data/raw/fastqc_analyses`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
+Download the directory containing the fastQC results (it should be `data/raw/fastqc_analyses/`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
 
 ## Trimming and Filtering Raw Reads with fastp
 We are going to trim all our reads to remove poor quality basepairs and residual adapter sequences, and filter out poor-quality or exceptionally short reads using the program fastp.  
@@ -89,32 +85,32 @@ fastp does not require an illumina adapter to remove adapter sequences, but you 
 Based on the quality of your reads (as determined by fastQC), you may want to edit the parameters in  `fastp.job`. The job file contains descriptions and suggestions for each parameter. 
 
 Run the fastp shell script, including the path to the directory containing your raw read files. For most, it should be something like: 
-`/scratch/genomics/USERNAME/PROJECT/data/raw`. 
+`/scratch/genomics/USERNAME/PROJECT/data/raw/`. 
 
 ```
 sh fastp.sh path_to_raw_sequences
 ```
-Trimmed reads will be saved in `/data/trimmed_sequences`.
+Trimmed reads will be saved in `data/trimmed_sequences/`.
 
 ## FASTQC TRIMMED READS 
 We next run fastQC on all our trimmed reads to check our trimming parameters. We will run the same shell file and job file we ran the first time, just using a different target directory.
 
 ### Run FastQC
-Go to the directory containing your job files. The shell file below, and the job file that it modifies and submits to Hydra, `fastqc.job` should both be here.  Your trimmed reads should already be in `/data/trimmed_sequences`. 
+Go to the directory containing your job files. The shell file below, and the job file that it modifies and submits to Hydra, `fastqc.job` should both be here.  Your trimmed reads should already be in `data/trimmed_sequences/`. 
 
 Run the fastQC shell script, including the path to the directory containing your trimmed files. For most, it should be something like: 
-`/scratch/genomics/USERNAME/PROJECT/data/trimmed_sequences`. 
+`/scratch/genomics/USERNAME/PROJECT/data/trimmed_sequences/`. 
 ```
 sh fastqc_genomeskimming.sh path_to_raw_sequences
 ```
-The results of these analyses are saved in `PROJECT/data/trimmed_sequences/fastqc_analyses`
+The results of these analyses are saved in `data/trimmed_sequences/fastqc_analyses/`
 
 ### Download FastQC of Trimmed Reads
-Download the directory containing the fastQC results (it should be `/data/trimmed_sequences/fastqc_analyses`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
+Download the directory containing the fastQC results (it should be `data/trimmed_sequences/fastqc_analyses/`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
 
 ## GetOrganelle
 
-We are going to run GetOrganelle on all our trimmed paired and unpaired reads. GetOrganelle performs a de-novo assembly using both pair-end and single-end reads (after xxxxx for mitochondrial reads - see [GetOrganelle Flowchart](https://github.com/Kinggerm/GetOrganelle?tab=readme-ov-file#getorganelle-flowchart) for a graphical representation of the assembly process) and outputs one or more mitochondrial contigs.
+We are going to run GetOrganelle on all our trimmed paired and unpaired reads. GetOrganelle performs a de-novo assembly using both pair-end and single-end reads (after filtering for mitochondrial reads - see [GetOrganelle Flowchart](https://github.com/Kinggerm/GetOrganelle?tab=readme-ov-file#getorganelle-flowchart) for a graphical representation of the assembly process) and outputs one or more mitochondrial contigs.
 
 Before we run GetOrganelle for the first time, we need to download the program's `animal_mt` database. This only needs to be done one time for each database available through GetOrganelle (see the github website for a list of available databases).  Run this step directly from the command prompt. It will take about 30 seconds to run.
 
@@ -130,41 +126,15 @@ Run the GetOrganelle shell script, including the path to the directory containin
 ```
 sh getorganelle.sh path_to_trimmed_sequences
 ```
-Your results should be in /scratch/genomics/USERNAME/PROJECT/data/results/getorganelle. The results for each sample will be in a separate folder, named with the sample name.
+GetOrganelle results will be saved in `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle/`. The results for each sample will be in a separate direcotry, named with the sample name. Unfortunately, like many of the programs in this pipeline, the resultant mitochondrial contigs that will be used for annotation are generically named, with no sample name attached. Additionally, there are a lot of files and folders in the results directory that are extremely large and largely uneccesary to keep. To simplify annotation and downloading of the most essential information, the GetOrganelle job copies resultant mitochondrial contigs to `data/results/getorganelle_contigs/` while also prepending the sample name.  the getorganelle_contigs directory also contains three text files: 'getorganelle_repeats.txt', 'getorganelle_scaffolds.txt', and 'getorganelle_failures.txt'. 'getorganelle_scaffolds.txt' contains a list of all samples for which no contig was found. 'getorganelle_repeats.txt' contains a list of samples for which multiple contigs were found, all the same except for varying repeat regions attached to one end. These contigs are not copied to `data/results/getorganelle_contigs/`.  'getorganelle_scaffolds.txt' contains a list of all samples for which one or more mitochondrial contigs were found, but these contigs were not complete and circularizable. These contigs are copies to `data/results/getorganelle_contigs/` for annotation.
 
-### Copy and Rename GetOrganelle Contigs
-We are using the contigs file(s) as resulting sequences, and these are saved in PROJECT/data/results/getorganelle/SAMPLE as either a generic animal_mt.KXXX.complete.graphX.X.path_sequence.fasta or animal_mt.KXXX.scaffolds.graphX.X.path_sequence.fasta file (depending upon whether a complete mitochondrial genome was assembled or not). This makes it difficult to batch transfer these files, because there is no sample differentiation. To fix this, run this shell script which copies all "complete" or "scaffold" fasta files into a new directory PROJECT/data/results/getorganelle_contigs and renames them with their sample name. 
+## Annotation
+We will annotate our GetOrganelle mitochondrial genomes (both complete and incomplete) using two programs, [MitoFinder](https://github.com/RemiAllio/MitoFinder) and [MITOS](https://gitlab.com/Bernt/MITOS). 
 
-Run copy_getorganelle_scaffolds.sh, including the path to the GetOrganelle results directory, usually: /scratch/genomics/USERNAME/PROJECT/data/results/getorganelle.
-
-
-
-
-We need a results folder for GetOrganelle: `data/results/getorganelle`. The GetOrganelle results for each paired set of reads (each hydra job) will be saved in a sample-specific directory. Unlike SPAdes, GetOrganelle creates that directory, so you don't need to create that (and GetOrganelle will stop and give you and error if you do create it). The contig file(s) that will be used in the next annotation step are named similar to either animal_mt.Kxxx.complete.graph1.x.path_sequence.fasta if GetOrgenelle found a complete mitogenome, or animal_mt.Kxxx.scaffolds.graph1.x.path_sequence.fasta if it found contigs that could not be circularized. 
-
-Before we start GetOrganelle, we need to download the program's `animal_mt` database. This only needs to be done one time for each database available through GetOrganelle.
-
-We're going to run this step directly from the command prompt rather than submitting a job. It will take about 30 seconds to run.
-
-```bash
-module load tools/conda
-start-conda
-conda activate /scratch/nmnh_lab/envs/genome_skimming/getorganelle_ksm
-get_organelle_config.py -a animal_mt
-```
-
-Create and submit a GetOrganelle job for each set of trimmed fastq or fastq.gz read files.
-A generic GetOrganelle job can be found here: [GetOrganelle.job](https://raw.githubusercontent.com/SmithsonianWorkshops/Genome_Skimming_Workshop_LAB_2024/main/job_files/getorganelle.job).
-
-**Don't forget that you will need to create `data/results/getorganelle` first.**
-
-## MitoFinder
-We will run MitoFinder using the contigs that result from the GetOrganelle assembly. 
-
-### Run MitoFinder using GetOrganelle Scaffolds
+### MitoFinder Using GetOrganelle Contigs
 MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline allows you to chose either a metazoan mitochondrial reference database downloaded from GenBank or one of several taxon-specific databases culled from the full metazoan database. The current databases available are listed below. Please let me know if you would like a reference database for a taxonomic group other than these. If you would like to make your own database follow the directions here: [How To Get Reference Mitochondrial Genomes from NCBI](https://github.com/RemiAllio/MitoFinder/blob/master/README) and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database. Using a taxon-specific database signficantly reduces program runtime, so I recommend using one when able. As an example, changing from the full database (14000+ mitogenomes) to just molluscs (500 mitogenomes) reduces run time from  3 hours to  5 minutes.
 
-Run the  MitoFinder for annotating spades contigs shell script, including the path to the directory containg your SPAdes contigs files, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/spades/contigs`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list of genetic codes available.  
+Run the  MitoFinder for annotating getorganelle contigs shell script, including the path to the directory containg your GetOrganelle contigs files, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle_contigs/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list of genetic codes available.  
 
 The reference database should be one of: 
 "Metazoa" (for the entire database)  
@@ -181,31 +151,23 @@ The reference database should be one of:
 "Vertebrata"  
 
 ```
-sh mitofinder_annotate_spades.sh path_to_spades_contigs genetic_code reference_database
+sh mitofinder_annotate_getorganelle.sh path_to_getorganelle_contigs genetic_code reference_database
 ```
-Results of these analyses are saved in `PROJECT/data/results/mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
+Results of these analyses are saved in `data/results/mitofinder_getorganelle/`. The results for each sample will be in a separate directory, named with the sample name. The most important information from a MitoFinder analysis is saved in a subdirectory called `SAMPLE_Final_Results`.  This directory does not contain any of the very large intermediate files that MitoFinder used during annotation, so it is a good target for downloading. However, because this subdirectory is found in each sample-specific results directory, downloading only this data from many sample runs can be time-consuminug. To make downloading easier, the job file has a script that copies `SAMPLE_Final_Results` for all samples to `data/results/mitofinder_results/`.  
 
-### Copy MitoFinder Final Results Directory
-The most important information from a MitoFinder analysis is saved in the `SAMPLE_Final_Results` directory. Because this directory is found in each sample-specific results directory, downloading these directories from many sample runs can be time-consuminug. To make downloading easier, here is a shell script that copies `SAMPLE_Final_Results` from all samples into a single `/data/results/mitofinder_final_results` directory. This script also copies the `.log` file for each sample into `/data/results/mitofinder_final_results`.
+### MITOS Using GetOrganelle Contigs
+MitoFinder does not always do a great job of annotating all the features present in your assembly, especially when there are not closely-related taxa in the reference library. In these instances, MITOS can sometimes annotate genes that MitoFinder was not able to find. If you are only skimming from taxonomic groups that have a lot of representation in the reference library, this section is not needed. However, even with good references, MITOS can sometimes find some features, such as tRNAs and rRNAs, that MitoFinder does not, so I always run MITOS. As with MitoFinder, MITOS uses the contigs in the getorganelle_contigs directory.  
 
-Run `copy_mitofinder_final_results.sh`, including the path to the MitoFinder results directory: `/data/results/mitofinder`.
+Run the MITOS for annotating getorganelle contigs shell script, including the path to the directory containng your getorganelle contigs and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle_contigs/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
 ```
-sh copy_mitofinder_final_results.sh path_to_mitofinder_results
+sh mitos_annotate_mitofinder.sh path_to_getorganelle_contigs genetic_code
 ```
-## MITOS
-MitoFinder does not always do a great job of annotating all the features present in your assembly, especially when there are not closely related taxa in the reference library. In these instances, MITOS can sometimes annotate genes that MitoFinder was not able to find. If you are only skimming from taxonomic groups that have a lot of representation in the reference library, this section is not needed. However, even with good references, MITOS can sometimes find some features, such as tRNAs and rRNAs, that MitoFinder does not, so I always run this, and only use as needed. For this pipeline, MITOS uses the contigs in the MitoFinder Final Results directory created in the previous step.  
+Results of these analyses are saved in `data/results/mitos_getorganelle/`. The results for each sample will be in a separate sample-specific directory. The results are labeled generically, which no sample identification. Also in these sample-specific results directories are a lot of other very large files that you do not necessarily need to download. To make downloading and identifying MITOS results easier, the job file also copies all of the most important results into sample-specific directiries to `data/results/mitos_results/`. It also prepends the sample name to the copied results files. `mitos_results/` also contains a text file called 'mitos_failures.txt'. This file contains a list of the MITOS sample runs that did not result in mitogenome annotation.
 
-Run the  MITOS for annotating MitoFinder contigs shell script, including the path to the directory containng your sample-specific MitoFinder directories files and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/mitofinder_final_results/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
-```
-sh mitos_annotate_mitofinder.sh path_to_mitofinder_final_results genetic_code
-```
+## Map Reads With Bowtie2
+One way to evaluate your assemblies is to map your trimmed reads to your contigs. We will map trimmed reads to our GetOrganelle mitochondrial contigs using the program [Bowtie2](https://github.com/BenLangmead/bowtie2). 
 
-Results of these analyses are saved in `PROJECT/data/results/mitos_mitofinder`. The results for each sample will be in a separate folder, named with the sample name.
-
-
-## Map Reads to Reference
-
-### Bowtie2
+Bowtie2 normally creates a SAM file, saving it (and other program-specific files) in a samples-specific directory in `/scratch/genomics/USERNAME/PROJECT/data/results/bowtie2_getorganelle/`. However, we would prefer a BAM file (a binary version of a SAM file that usually are smaller and more efficient) that also only contains assembled reads (i.e. reads from the mitochondrial genome), so we modify our bowtie2 output using samtools to output your resulting Bowtie2 BAM file to `data/results/bowtie2_results/`. 
 
 ## Download Results
-Finally, we download all the directories containing our results. There should be one for all MitoFinder results (`/data/results/mitofinder_final_results`), one for SPAdes contigs (`/data/results/spades_contigs`), and one for MITOS results (`/data/results/mitos_mitofinder`). I typically also download the trimmed, SPAdes error-corrected reads (`/data/results/spades_error_corrected_reads`). You may want to download additional files depending upon what you or your group decides to keep, but these are the immediately most important results.
+Finally, we download all the directories containing our results. There should be one for GetOrganelle contigs (`data/results/getorganelle_contigs`), one for MitoFinder results (`data/results/mitofinder_results`), one for MITOS results (`data/results/mitos_results`) and one for Bowtie2 results (`data/results/bowtie2_results`). These directories contain all the files you need for evaluation of your mitogenomes. You may want to download additional files depending upon what you or your group decides to keep for archival purposes.
