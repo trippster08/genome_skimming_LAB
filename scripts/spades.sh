@@ -3,6 +3,7 @@
 trimmed="$1"
 data=${trimmed}/../
 
+
 if
   [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]  
 then
@@ -10,7 +11,12 @@ then
   exit
 fi
 
-mkdir -p ${data}/results/spades
+mkdir -p ${data}/results/spades ${data}/results/spades_contigs
+echo "SPAdes did not sucessfully assemble the following samples. Please check the  \
+log to evaluate any problems. If you cannot get SPAdes to work on these samples, \
+please see LAB staff."
+
+results=${data}/${results}
 
 for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
   sample=`basename ${x}`
@@ -18,8 +24,8 @@ for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do
 #  echo $sample
 #  echo $name
   
-    qsub -o ${data}/results/spades/${name}_spades.log \
+    qsub -o logs/${name}_spades.log \
     -N ${name}_spades \
-    spades.job ${trimmed} ${name} ${data}
+    spades.job ${trimmed} ${name} ${data} ${results}
     
 done

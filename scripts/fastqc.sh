@@ -13,7 +13,7 @@ mkdir -p ${raw}/fastqc_analyses
 
 for x in ${raw}/*.fastq.gz ; do 
   sample=`basename ${x}`
-  name=`echo ${sample%_001*}`
+  name=`echo ${sample%.fastq.gz}`
 
   qsub -o logs/${name}_fastqc.log \
   -N ${name}_fastqc \

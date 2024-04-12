@@ -2,7 +2,7 @@
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
 #$ -q sThM.q
-#$ -l mres=24G,h_data=24G,h_vmem=24G,himem
+#$ -l mres=48G,h_data=48G,h_vmem=48G,himem
 #$ -cwd
 #$ -j y
 #$ -N ${sample}_mitos
@@ -17,21 +17,55 @@ conda activate /scratch/nmnh_lab/genome_skimming/envs/mitos2_env
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
-mitofinder_final_results="$1"
+contigs="$1"
 results="$2"
 sample="$3"
 name="$4"
 taxa="$5"
+shortname="$6"
 #
 runmitos.py \
--i ${mitofinder_final_results}/${sample}/${name}_mitofinder_getorganelle_mtDNA_contigs.fasta \
+-i ${contigs}/${sample} \
 -c ${taxa} \
--o ${results}/mitos_mitofinder/${name}_mitos_mitofinder \
+-o ${results}/mitos_getorganelle/${name}_mitos_getorganelle \
 -r /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
 -R /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
 --debug
 #
 echo = `date` job $JOB_NAME done
+
+if
+  [[ -f "${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.gff" ]]
+then
+  cp -r ${results}/mitos_getorganelle/${name}_mitos_getorganelle/plots \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}_plots
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.bed \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.bed
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.gff \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.gff
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.fas \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.fas
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.faa \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.faa
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.mitos \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.mitos
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.seq \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.seq
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.geneorder \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.geneorder
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.png \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.png
+  cp ${results}/mitos_getorganelle/${name}_mitos_getorganelle/stst.dat \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}stst.dat
+else
+  echo ${shortname} >> ${results}/mitos_results/mitos_failures.txt
+fi
+
+
+
+
+
+
 
 
 # -c is the genetic code

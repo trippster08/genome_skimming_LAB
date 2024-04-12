@@ -1,9 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 4
+#$ -pe mthread 6
 #$ -q sThC.q
-#$ -l mres=8G,h_data=2G,h_vmem=2G
+#$ -l mres=6G,h_data=1G,h_vmem=1G
 #$ -cwd
 #$ -j y
 #$ -N PROJECT_trim

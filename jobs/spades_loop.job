@@ -23,6 +23,7 @@ echo + NSLOTS = $NSLOTS
 trimmed="$1"
 name="$2"
 data="$3"
+results="$4"
 #
 spades.py \
 -o ${data}/results/spades/${name} \
@@ -30,6 +31,12 @@ spades.py \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
 --pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
 -t $NSLOTS  -m 200 --tmp-dir $SSD_DIR
+
+test -f ${results}/spades/${name}/contigs.fasta \
+&& cp ${results}/spades/${name}/contigs.fasta \
+${results}/spades_contigs/${name}_spades_contigs.fasta
+
+
 
 #
 echo = `date` job $JOB_NAME done

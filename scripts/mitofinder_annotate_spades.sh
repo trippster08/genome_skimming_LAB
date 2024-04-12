@@ -20,12 +20,12 @@ then
 fi
 
 if
-  [[ ${ref} != Mollusca && ${ref} != Cnidaria && ${ref} != Arthropoda && ${ref} \
-  != Annelida && ${ref} != Vertebrata && ${ref} != Metazoa && \
-  ${ref} != Tunicata && ${ref} != Echinodermata && ${ref} != Bryozoa ]]
+  [[ ${ref} != Annelida && ${ref} != Arthropoda && ${ref} != Bryozoa && ${ref} != Cnidaria && ${ref} \
+  != Ctenophora && ${ref} != Echinodermata && ${ref} != Mollusca && ${ref} != Nemertea && \
+  ${ref} != Porifera && ${ref} != Tunicata && ${ref} != Vertebrata && ${ref} != Metazoa ]]
 then
-  echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria",' \
-   '"Ctenophora", "Echinodermata", "Metazoa", "Mollusca", "Nemertea", "Porifera", "Tunicata", or "Vertebrata"'
+  echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria", \
+   "Ctenophora", "Echinodermata", "Mollusca", "Nemertea", "Porifera", "Tunicata", "Vertebrata" or , "Metazoa"'
   exit
 fi
 
@@ -35,10 +35,10 @@ for x in ${contigs}/*_spades_contigs.fasta ; do
     sample=`basename ${x}`
     name=`echo ${sample%_spades_contigs.fasta}`
 
-    qsub -o ${results}/mitofinder/${name}_mitofinder/${name}_mitofinder.log \
+    qsub -o ${results}/../../jobs/logs/${name}_mitofinder.log \
     -wd ${results}/mitofinder \
     -N ${name}_mitofinder \
-    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa} ${ref}
+    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
 done
 
 

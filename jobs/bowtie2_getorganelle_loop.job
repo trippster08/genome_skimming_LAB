@@ -1,9 +1,9 @@
 # /bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 6
-#$ -q mThC.q
-#$ -l mres=24G,h_data=4G,h_vmem=4G
+#$ -pe mthread 12
+#$ -q sThC.q
+#$ -l mres=12G,h_data=1G,h_vmem=1G
 #$ -cwd
 #$ -j y
 #$ -N SRRxxxx_bowtie2_ASSEMBLY
@@ -23,18 +23,19 @@ name="$2"
 sample="$3"
 trimmed="$4"
 results="$5"
+shortname="$6"
 #
 bowtie2-build \
 ${contigs}/${sample} \
-${results}/bowtie2/${name}/${name}_contig
+${results}/bowtie2_getorganelle/${shortname}/${shortname}_contig
 #
 bowtie2 \
 -p $NSLOTS \
--x ${results}/bowtie2/${name}/${name}_contig \
--1 ${trimmed}/${sample}_R1_PE_trimmed.fastq \
--2 ${trimmed}/${sample}_R2_PE_trimmed.fastq \
+-x ${results}/bowtie2_getorganelle/${shortname}/${shortname}_contig \
+-1 ${trimmed}/${shortname}_R1_PE_trimmed.fastq.gz \
+-2 ${trimmed}/${shortname}_R2_PE_trimmed.fastq.gz \
 | samtools view -F 4 -b > \
-/scratch/genomics/USER/PROJECT/data/results/bowtie2/SRRxxxx/SRRxxxx_bowtie2_PROGRAM.bam
+${results}/bowtie2_results/${shortname}_bowtie_getorganelle.bam
 
 #
 echo = `date` job $JOB_NAME done
@@ -46,8 +47,4 @@ echo = `date` job $JOB_NAME done
 # library (you can have mutiple libraries as input files). 
 # -2 is the path to the file of the paired R2 reads of the first paired-end 
 # library. 
-# -p is the number of threads, and -m is the total amount of memory allocated 
-# --tmp-dir creates a temporary SSD to hold SPAdes temporary files. SPAdes 
-# creates a large number of temporary files, sometimes more than hydra allows.
-# This creates a temporary SSD to hold those files so hydra won't kill the
-# job. we then remove those files with rm -rf $SSD_DIR/*
+# -p is the number of threads

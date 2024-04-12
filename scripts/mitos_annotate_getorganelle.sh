@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mitofinder_final_results="$1" 
+contigs="$1" 
 taxa="$2"
 
 if
@@ -10,17 +10,25 @@ then
   exit
 fi
 
-results=${mitofinder_final_results}/../
+results=${contigs}/../
+mkdir ${results}/mitos_results
 
-for x in ${mitofinder_final_results}/*/; do
+echo "MITOS was not able to annotate the samples listed below. The most common problem \
+is insufficient requested RAM. Please check run details for failed runs to see if \
+maxvmem is greater than mem_res. If you have determined insufficient RAM was not \
+the problem, see LAB staff for help troubleshooting" > \
+${results}/mitos_results/mitos_failures.txt
+
+for x in ${contigs}/*.path_sequence.fasta; do
   sample=`basename ${x}`
-  name=`echo ${sample%_mitofinder_getorganelle_final_results}`
+  name=`echo ${sample%.path_sequence.fasta}`
+  shortname=`echo ${sample%%_*}`
 
-  mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder
-
-  qsub -o ${results}/mitos_mitofinder/${name}_mitos_mitofinder.log \
-  -N ${name}_mitos_mitofinder \
-  mitos_annotate_mitofinder.job ${mitofinder_final_results} ${results} ${sample} ${name} ${taxa}
+  mkdir -p ${results}/mitos_getorganelle/${name}_mitos_getorganelle
+  mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
+  qsub -o logs/${name}_mitos_getorganelle.log \
+  -N ${name}_mitos_getorganelle \
+  mitos_annotate_getorganelle.job ${contigs} ${results} ${sample} ${name} ${taxa} ${shortname}
 done
 
 # This MITOS shell requires two elements after calling the script

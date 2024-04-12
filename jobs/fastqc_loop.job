@@ -5,8 +5,8 @@
 #$ -l mres=6G,h_data=6G,h_vmem=6G
 #$ -cwd
 #$ -j y
-#$ -N fastqc_${name}
-#$ -o logs/fastqc.log
+#$ -N null
+#$ -o null
 #
 # ----------------Modules------------------------- #
 module load tools/conda

@@ -6,9 +6,9 @@ ref="$3"
 results=${contigs}/../
 
 if
-  [[ -z "$(ls ${contigs}/*_sequence.fasta 2>/dev/null | grep fasta)" ]] 
+  [[ -z "$(ls ${contigs}/*.path_sequence.fasta 2>/dev/null | grep fasta)" ]] 
 then
-  echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)"
+  echo "Correct path to GetOrganelle results not entered (*.path_sequence.fasta)"
   exit
 fi
 
@@ -20,25 +20,25 @@ then
 fi
 
 if
-  [[ ${ref} != Mollusca && ${ref} != Cnidaria && ${ref} != Arthropoda && ${ref} \
-  != Annelida && ${ref} != Vertebrata && ${ref} != Metazoa && \
-  ${ref} != Tunicata && ${ref} != Echinodermata && ${ref} != Bryozoa ]]
+  [[ ${ref} != Annelida && ${ref} != Arthropoda && ${ref} != Bryozoa && ${ref} != Cnidaria && ${ref} \
+  != Ctenophora && ${ref} != Echinodermata && ${ref} != Mollusca && ${ref} != Nemertea && \
+  ${ref} != Porifera && ${ref} != Tunicata && ${ref} != Vertebrata && ${ref} != Metazoa ]]
 then
-  echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria",' \
-   '"Ctenophora", "Echinodermata", "Metazoa", "Mollusca", "Nemertea", "Porifera", "Tunicata", or "Vertebrata"'
+  echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria", \
+   "Ctenophora", "Echinodermata", "Mollusca", "Nemertea", "Porifera", "Tunicata", "Vertebrata" or , "Metazoa"'
   exit
 fi
 
-mkdir -p ${results}/mitofinder_getorganelle
+mkdir -p ${results}/mitofinder_getorganelle ${results}/mitofinder_results
 
 for x in ${contigs}/*.path_sequence.fasta ; do 
     sample=`basename ${x}`
     name=`echo ${sample%.path_sequence.fasta}`
 echo ${name}
-    qsub -o ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle.log \
+    qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
     -wd ${results}/mitofinder_getorganelle \
     -N ${name}_mitofinder_getorganelle \
-    mitofinder_annotate_getorganelle.job ${contigs} ${name} ${taxa} ${ref} ${sample}
+    mitofinder_annotate_getorganelle.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
 done
 
 
