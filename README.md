@@ -135,8 +135,7 @@ We will annotate our GetOrganelle mitochondrial genomes (both complete and incom
 MitoFinder requires a mitochondrial genome database in GenBank (.gb) format. This pipeline allows you to chose either a metazoan mitochondrial reference database downloaded from GenBank or one of several taxon-specific databases culled from the full metazoan database. The current databases available are listed below. Please let me know if you would like a reference database for a taxonomic group other than these. If you would like to make your own database follow the directions here: [How To Get Reference Mitochondrial Genomes from NCBI](https://github.com/RemiAllio/MitoFinder/blob/master/README) and save it in your home directory. You will have to alter `mitofinder_annotate_spades.job` to point to the location of your database. Using a taxon-specific database signficantly reduces program runtime, so I recommend using one when able. As an example, changing from the full database (14000+ mitogenomes) to just molluscs (500 mitogenomes) reduces run time from  3 hours to  5 minutes.
 
 Run the  MitoFinder for annotating getorganelle contigs shell script, including the path to the directory containg your GetOrganelle contigs files, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle_contigs/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list of genetic codes available.  
-
-The reference database should be one of: 
+The reference database should be one of:  
 "Metazoa" (for the entire database)  
 "Annelida"  
 "Arthropoda"  
