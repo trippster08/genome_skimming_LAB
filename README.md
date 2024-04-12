@@ -12,10 +12,10 @@
 6. [FastQC Trimmed Reads](#fastqc-trimmed-reads) </br>
   6.1. [Run FastQC](#run-fastqc) </br>
   6.2. [Download FastQC of Trimmed Reads](#download-fastqc-of-trimmed-reads) </br>
-7. [GetOrganelle](#getorganelle) </br> 
+7. [Assemble Reads Using GetOrganelle](#assemble-reads-using-getorganelle) </br> 
 8. [Annotation](#annotation) </br>
-  8.1. [MitoFinder using GetOrganelle Contigs](#mitofinder-using-getorganelle-contigs) </br>
-  8.2. [MITOS using GetOrganelle Contigs](#mitos-using-getorganelle-contigs) </br>
+  8.1. [MitoFinder Using GetOrganelle Contigs](#mitofinder-using-getorganelle-contigs) </br>
+  8.2. [MITOS Using GetOrganelle Contigs](#mitos-using-getorganelle-contigs) </br>
 9. [Map Reads With Bowtie2](#map-reads-with-bowtie2) </br>
 10. [Download Results](#download-results) </br>
 
@@ -108,7 +108,7 @@ The results of these analyses are saved in `data/trimmed_sequences/fastqc_analys
 ### Download FastQC of Trimmed Reads
 Download the directory containing the fastQC results (it should be `data/trimmed_sequences/fastqc_analyses/`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
 
-## GetOrganelle
+## Assemble Reads Using GetOrganelle
 
 We are going to run GetOrganelle on all our trimmed paired and unpaired reads. GetOrganelle performs a de-novo assembly using both pair-end and single-end reads (after filtering for mitochondrial reads - see [GetOrganelle Flowchart](https://github.com/Kinggerm/GetOrganelle?tab=readme-ov-file#getorganelle-flowchart) for a graphical representation of the assembly process) and outputs one or more mitochondrial contigs.
 
