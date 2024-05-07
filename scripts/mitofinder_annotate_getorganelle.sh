@@ -38,7 +38,7 @@ echo ${name}
     qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
     -wd ${results}/mitofinder_getorganelle \
     -N ${name}_mitofinder_getorganelle \
-    mitofinder_annotate_getorganelle.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
+    mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
 done
 
 

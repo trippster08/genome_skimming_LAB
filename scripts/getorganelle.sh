@@ -32,7 +32,7 @@ respective log file for further information." \
 
     qsub -o logs/${name}_getorganelle.log \
     -N ${name}_getorganelle \
-    getorganelle.job ${trimmed} ${organelle} ${name} ${data}
+    getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
 
 done
 

@@ -28,7 +28,7 @@ for x in ${contigs}/*.path_sequence.fasta; do
   mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
   qsub -o logs/${name}_mitos_getorganelle.log \
   -N ${name}_mitos_getorganelle \
-  mitos_annotate_getorganelle.job ${contigs} ${results} ${sample} ${name} ${taxa} ${shortname}
+  mitos_annotate_getorganelle_loop.job ${contigs} ${results} ${sample} ${name} ${taxa} ${shortname}
 done
 
 # This MITOS shell requires two elements after calling the script
