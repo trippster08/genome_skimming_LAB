@@ -157,14 +157,20 @@ Results of these analyses are saved in `data/results/mitofinder_getorganelle/`. 
 ### MITOS Using GetOrganelle Contigs
 MitoFinder does not always do a great job of annotating all the features present in your assembly, especially when there are not closely-related taxa in the reference library. In these instances, MITOS can sometimes annotate genes that MitoFinder was not able to find. If you are only skimming from taxonomic groups that have a lot of representation in the reference library, this section is not needed. However, even with good references, MITOS can sometimes find some features, such as tRNAs and rRNAs, that MitoFinder does not, so I always run MITOS. As with MitoFinder, MITOS uses the contigs in the getorganelle_contigs directory.  
 
-Run the MITOS for annotating getorganelle contigs shell script, including the path to the directory containng your getorganelle contigs and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle_contigs/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
+Run the MITOS for annotating getorganelle contigs shell script, including the path to the directory containing your getorganelle contigs and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle_contigs/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
 ```
 sh mitos_annotate_mitofinder.sh path_to_getorganelle_contigs genetic_code
 ```
 Results of these analyses are saved in `data/results/mitos_getorganelle/`. The results for each sample will be in a separate sample-specific directory. The results are labeled generically, which no sample identification. Also in these sample-specific results directories are a lot of other very large files that you do not necessarily need to download. To make downloading and identifying MITOS results easier, the job file also copies all of the most important results into sample-specific directiries to `data/results/mitos_results/`. It also prepends the sample name to the copied results files. `mitos_results/` also contains a text file called 'mitos_failures.txt'. This file contains a list of the MITOS sample runs that did not result in mitogenome annotation.
 
 ## Map Reads With Bowtie2
-One way to evaluate your assemblies is to map your trimmed reads to your contigs. We will map trimmed reads to our GetOrganelle mitochondrial contigs using the program [Bowtie2](https://github.com/BenLangmead/bowtie2). 
+One way to evaluate your assemblies is to map your trimmed reads to your contigs. We will map trimmed reads to our GetOrganelle mitochondrial contigs using the program [Bowtie2](https://github.com/BenLangmead/bowtie2).
+
+Run the Bowtie2 using the getorganelle contigs shell script, including the path to the directory containing your getorganelle contigs and the path to the directory containing your trimmed sequences.
+
+```
+sh bowtie2_getorganelle.sh path_to_getorganelle_contigs path_to_trimmed_sequences
+```
 
 Bowtie2 normally creates a SAM file, saving it (and other program-specific files) in a samples-specific directory in `/scratch/genomics/USERNAME/PROJECT/data/results/bowtie2_getorganelle/`. However, we would prefer a BAM file (a binary version of a SAM file that usually are smaller and more efficient) that also only contains assembled reads (i.e. reads from the mitochondrial genome), so we modify our bowtie2 output using samtools to output your resulting Bowtie2 BAM file to `data/results/bowtie2_results/`. 
 
