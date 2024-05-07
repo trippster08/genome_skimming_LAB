@@ -122,7 +122,7 @@ get_organelle_config.py -a animal_mt
 ```
 
 ### Run GetOrganelle
-Run the GetOrganelle shell script, including the path to the directory containing your trimmed read files. For most, it should be something like: /scratch/genomics/USERNAME/PROJECT/data/trimmed_sequences.
+Run the GetOrganelle shell script, including the path to the directory containing your trimmed read files followed by organelle type (one of "embplant_pt", "other_pt", "embplant_mt", "embplant_nr", "animal_mt", "fungus_mt"). For most, it should be something like: `/scratch/genomics/USERNAME/PROJECT/data/trimmed_sequences animal_mt.`
 ```
 sh getorganelle.sh path_to_trimmed_sequences
 ```
