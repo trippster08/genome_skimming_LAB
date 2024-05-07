@@ -70,7 +70,7 @@ We first run fastQC on all our reads to check their quality and help determine o
 Run the fastQC shell script, including the path to the directory containing your raw read files. For most, it should be something like: 
 `/scratch/genomics/USERNAME/PROJECT/data/raw/`. 
 ```
-sh fastqc_genomeskimming.sh path_to_raw_sequences
+sh fastqc.sh path_to_raw_sequences
 ```
 The results of these analyses are saved in `data/raw/fastqc_analyses/`
 
