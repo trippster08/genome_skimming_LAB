@@ -166,7 +166,7 @@ Results of these analyses are saved in `data/results/mitos_getorganelle/`. The r
 ## Map Reads With Bowtie2
 One way to evaluate your assemblies is to map your trimmed reads to your contigs. We will map trimmed reads to our GetOrganelle mitochondrial contigs using the program [Bowtie2](https://github.com/BenLangmead/bowtie2).
 
-Run the Bowtie2 using the getorganelle contigs shell script, including the path to the directory containing your getorganelle contigs and the path to the directory containing your trimmed sequences.
+Run the Bowtie2 shell script, including the path to the directory containing your getorganelle contigs and the path to the directory containing your trimmed sequences.
 
 ```
 sh bowtie2_getorganelle.sh path_to_getorganelle_contigs path_to_trimmed_sequences
