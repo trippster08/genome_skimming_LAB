@@ -101,7 +101,7 @@ Go to the directory containing your job files. The shell file below, and the job
 Run the fastQC shell script, including the path to the directory containing your trimmed files. For most, it should be something like: 
 `/scratch/genomics/USERNAME/PROJECT/data/trimmed_sequences/`. 
 ```
-sh fastqc_genomeskimming.sh path_to_raw_sequences
+sh fastqc.sh path_to_raw_sequences
 ```
 The results of these analyses are saved in `data/trimmed_sequences/fastqc_analyses/`
 
