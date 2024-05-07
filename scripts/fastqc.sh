@@ -17,7 +17,7 @@ for x in ${raw}/*.fastq.gz ; do
 
   qsub -o logs/${name}_fastqc.log \
   -N ${name}_fastqc \
-  fastqc.job ${raw} ${sample}
+  fastqc_loop.job ${raw} ${sample}
 done
 
 
