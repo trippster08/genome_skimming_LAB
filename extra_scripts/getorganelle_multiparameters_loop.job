@@ -1,0 +1,52 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 6
+#$ -q sThM.q
+#$ -l mres=72G,h_data=12G,h_vmem=12G,himem
+#$ -cwd
+#$ -j y
+#$ -N SAMPLE-NAME_getorganelle
+#$ -o logs/SAMPLE-NAME_getorganelle.log
+#
+# ----------------Modules------------------------- #
+module load tools/conda
+start-conda
+conda activate /scratch/nmnh_lab/envs/genome_skimming/getorganelle_ksm
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+trimmed="$1"
+organelle="$2"
+name="$3"
+data="$4"
+#
+get_organelle_from_reads.py \
+-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
+-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
+-u ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
+-o ${data}/results/getorganelle/${name} \
+-F ${organelle} \
+-t $NSLOTS
+#
+
+for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
+  contig=`basename ${y}`
+  if [[ ${contig} == *"repeat_pattern"* ]]
+  then
+    echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_repeats.txt
+  elif [[ ${contig} == *"scaffold"* ]]
+  then
+    echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_scaffolds.txt
+    cp ${data}/results/getorganelle/${name}/*scaffold*.fasta \
+    ${data}/results/getorganelle_contigs/${name}_${contig}
+  elif [[ ${contig} == *"complete"* ]]
+  then
+    cp ${data}/results/getorganelle/${name}/*complete*.fasta \
+    ${data}/results/getorganelle_contigs/${name}_${contig}
+  else echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_failed.txt
+  fi
+done
+  echo = `date` job $JOB_NAME done  
