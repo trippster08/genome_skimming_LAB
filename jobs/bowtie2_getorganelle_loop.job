@@ -10,9 +10,7 @@
 #$ -o logs/SRRxxxx_bowtie2_ASSEMBLY.log
 
 # ----------------Modules------------------------- #
-module load tools/conda
-start-conda
-conda activate /scratch/nmnh_lab/genome_skimming/envs/bowtie2_env
+module load tools/bowtie2
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
@@ -37,6 +35,7 @@ bowtie2 \
 | samtools view -F 4 -b > \
 ${results}/bowtie2_results/${shortname}_bowtie_getorganelle.bam
 
+cp ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle.log {results}/bowtie2_results/
 #
 echo = `date` job $JOB_NAME done
 

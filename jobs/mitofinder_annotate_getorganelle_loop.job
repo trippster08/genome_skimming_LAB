@@ -30,6 +30,9 @@ mitofinder \
 -a ${contigs}/${sample} \
 --new-genes -p $NSLOTS -m 16
 
+cp ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
+${results}/mitofinder_results/${name}_mitofinder_getorganelle_Final_Results
+
 test -d ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
 && cp -r ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
 ${results}/mitofinder_results/${name}_mitofinder_getorganelle_Final_Results

@@ -10,9 +10,7 @@
 #$ -o logs/SAMPLE-NAME_getorganelle.log
 #
 # ----------------Modules------------------------- #
-module load tools/conda
-start-conda
-conda activate /scratch/nmnh_lab/envs/genome_skimming/getorganelle_ksm
+module load bio/getorganelle
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
@@ -34,6 +32,8 @@ get_organelle_from_reads.py \
 
 for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
+  cp logs/${name}_getorganelle.log ${data}/results/getorganelle_contigs/
+
   if [[ ${contig} == *"repeat_pattern"* ]]
   then
     echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_repeats.txt
