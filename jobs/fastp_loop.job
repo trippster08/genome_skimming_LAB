@@ -10,9 +10,7 @@
 #$ -o logs/PROJECT_trim.log
 #
 # ----------------Modules------------------------- #
-module load tools/conda
-start-conda
-conda activate /scratch/nmnh_lab/envs/genome_skimming/fastp_ksm
+module load tools/fastp
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
