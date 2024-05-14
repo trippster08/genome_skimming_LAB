@@ -34,11 +34,11 @@ mkdir -p ${results}/mitofinder
 for x in ${contigs}/*_spades_contigs.fasta ; do 
     sample=`basename ${x}`
     name=`echo ${sample%_spades_contigs.fasta}`
-
+    shortname=`echo ${sample%%_*}`
     qsub -o ${results}/../../jobs/logs/${name}_mitofinder.log \
     -wd ${results}/mitofinder \
     -N ${name}_mitofinder \
-    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
+    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results} ${shortname}
 done
 
 
