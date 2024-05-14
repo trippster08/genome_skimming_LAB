@@ -3,7 +3,7 @@
 #$ -S /bin/sh
 #$ -pe mthread 2
 #$ -q sThC.q
-#$ -l mres=4G,h_data=2G,h_vmem=2G
+#$ -l mres=16G,h_data=8G,h_vmem=8G
 #$ -cwd
 #$ -j y
 #$ -N ${sample}
@@ -28,13 +28,13 @@ mitofinder \
 -o ${taxa} \
 -r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${ref}*.gb \
 -a ${contigs}/${sample} \
---new-genes -p $NSLOTS -m 16
+--new-genes -p $NSLOTS -m 4
 
 cp ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
-${results}/mitofinder_results/${name}_mitofinder_getorganelle_Final_Results
+${results}/mitofinder_results/
 
-test -d ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
-&& cp -r ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_Final_Results \
+test -d ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder_mitfi_Final_Results \
+&& cp -r ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder_mitfi_Final_Results \
 ${results}/mitofinder_results/${name}_mitofinder_getorganelle_Final_Results
 
 
