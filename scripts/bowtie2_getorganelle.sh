@@ -30,5 +30,5 @@ mkdir ${results}/bowtie2_getorganelle/${shortname}
     qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle.log \
     -wd ${results}/bowtie2_getorganelle \
     -N ${shortname}_bowtie2_getorganelle \
-    bowtie2_getorganelle_loop.job ${contigs} ${name} ${sample} ${trimmed} ${results} ${shortname}
+    bowtie2_getorganelle_loop.job ${contigs} ${sample} ${trimmed} ${results} ${shortname}
 done
