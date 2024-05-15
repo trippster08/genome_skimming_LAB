@@ -29,40 +29,44 @@ get_organelle_from_reads.py \
 -u ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
 -o ${data}/results/getorganelle/${name} \
 -F ${organelle} \
+--disentangle-time-limit 5000 \
 -t $NSLOTS
 #
 
 for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
+  cp logs/${name}_getorganelle.log \
+  ${data}/results/getorganelle_contigs/${name}_getorganelle.log
+
   if [[ ${contig} == *"repeat_pattern"* ]]
   then
     echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_repeats.txt
   elif [[ ${contig} == *"scaffold"* ]]
   then
     echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_scaffolds.txt
-    cp ${data}/results/getorganelle/${name}/*scaffold*.fasta \
+    cp ${data}/results/getorganelle/${name}/*.fasta \
     ${data}/results/getorganelle_contigs/${name}_${contig}
   elif [[ ${contig} == *"complete"* ]]
   then
-    cp ${data}/results/getorganelle/${name}/*complete*.fasta \
-    ${data}/results/getorganelle_contigs/${name}_${contig} \
-    evaluate_assembly_using_mapping.py \
-    -f ${data}/results/getorganelle_contigs/${name}_${contig} \
-    -1 ${data}/results/getorganelle/${name}/extended_1.fq \
-    -2 ${data}/results/getorganelle/${name}/extended_2.fq \
-    -o ${data}/results/getorganelle_coverage/ \
-    -c yes --draw
+    cp ${data}/results/getorganelle/${name}/*.fasta \
+    ${data}/results/getorganelle_contigs/${name}_${contig} 
   else echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_failed.txt
   fi
-done
 
 if test -f ${data}/results/getorganelle/${name}/*.path_sequence.fasta 
-  then \
+  then 
+  mkdir -p ${data}/results/getorganelle_coverage/${name}
   evaluate_assembly_using_mapping.py \
-  -f assembly.fasta \
-  -1 extended_1.fq \
-  -2 extended_2.fq \
-  -o output_dir \
-  -c yes --draw
+    -f ${data}/results/getorganelle_contigs/${name}_${contig} \
+    -1 ${data}/results/getorganelle/${name}/extended_1_paired.fq \
+    -2 ${data}/results/getorganelle/${name}/extended_2_paired.fq \
+  -u ${data}/results/getorganelle/${name}/extended_1_unpaired.fq,${data}/results/getorganelle/${name}/extended_2_unpaired.fq \
+  -o ${data}/results/getorganelle_coverage/${name} \
+  -c yes --draw \
+  -t $NSLOTS
 fi
+
+done
+
+
   echo = `date` job $JOB_NAME done  
