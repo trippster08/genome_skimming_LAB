@@ -39,7 +39,7 @@ done
 # This GetOrganelle shell requires two elements after calling the script
 # 1: path to the trimmed sequences
 # 2: the organelle you are trying to find. 
-# Orga+nelle list to use for the 2nd element passed in calling the shell script:
+# Organelle list to use for the 2nd element passed in calling the shell script:
 #   embplant_pt
 #   other_pt
 #   embplant_mt
