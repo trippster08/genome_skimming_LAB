@@ -10,18 +10,18 @@
 #$ -o logs/SRRxxxx_bowtie2_ASSEMBLY.log
 
 # ----------------Modules------------------------- #
-module load tools/bowtie2
+module load bio/bowtie2
+module load bio/samtools
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
 contigs="$1"
-name="$2"
-sample="$3"
-trimmed="$4"
-results="$5"
-shortname="$6"
+sample="$2"
+trimmed="$3"
+results="$4"
+shortname="$5"
 #
 bowtie2-build \
 ${contigs}/${sample} \
@@ -35,7 +35,7 @@ bowtie2 \
 | samtools view -F 4 -b > \
 ${results}/bowtie2_results/${shortname}_bowtie_getorganelle.bam
 
-cp ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle.log {results}/bowtie2_results/
+cp ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle.log ${results}/bowtie2_results/${shortname}_bowtie2_getorganelle.log
 #
 echo = `date` job $JOB_NAME done
 
