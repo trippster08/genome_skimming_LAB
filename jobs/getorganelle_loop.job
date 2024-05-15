@@ -27,12 +27,14 @@ get_organelle_from_reads.py \
 -u ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
 -o ${data}/results/getorganelle/${name} \
 -F ${organelle} \
+--disentangle-time-limit 5000 \
 -t $NSLOTS
 #
 
 for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
-  cp logs/${name}_getorganelle.log ${data}/results/getorganelle_contigs/
+  cp logs/${name}_getorganelle.log \
+  ${data}/results/getorganelle_contigs/${name}_getorganelle.log
 
   if [[ ${contig} == *"repeat_pattern"* ]]
   then
