@@ -2,8 +2,8 @@
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
 #$ -pe mthread 6
-#$ -q sThM.q
-#$ -l mres=72G,h_data=12G,h_vmem=12G,himem
+#$ -q sThC.q
+#$ -l mres=48G,h_data=8G,h_vmem=64G
 #$ -cwd
 #$ -j y
 #$ -N SAMPLE-NAME_getorganelle
@@ -27,7 +27,7 @@ get_organelle_from_reads.py \
 -u ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
 -o ${data}/results/getorganelle/${name} \
 -F ${organelle} \
---disentangle-time-limit 5000 \
+--disentangle-time-limit 7200 \
 -t $NSLOTS
 #
 
