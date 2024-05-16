@@ -26,6 +26,6 @@ for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do
   
     qsub -o logs/${name}_spades.log \
     -N ${name}_spades \
-    spades.job ${trimmed} ${name} ${data} ${results}
+    spades_loop.job ${trimmed} ${name} ${data} ${results}
     
 done
