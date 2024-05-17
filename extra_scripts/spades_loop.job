@@ -1,9 +1,9 @@
 # /bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 10
-#$ -q mThM.q
-#$ -l mres=200G,h_data=20G,h_vmem=20G,himem
+#$ -pe mthread 12
+#$ -q mThC.q
+#$ -l mres=96G,h_data=8G,h_vmem=64G
 #$ -l ssd_res=200G -v SSD_SAVE_MAX=0
 #$ -cwd
 #$ -j y
@@ -20,19 +20,19 @@ echo + NSLOTS = $NSLOTS
 #
 trimmed="$1"
 name="$2"
-data="$3"
-results="$4"
+results="$3"
 #
 spades.py \
--o ${data}/results/spades/${name} \
+-o ${results}/spades/${name} \
 --pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
 --pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
--t $NSLOTS  -m 200 --tmp-dir $SSD_DIR
+-t $NSLOTS  -m 96 --tmp-dir $SSD_DIR
+
+cp ${results}/../../jobs/logs/${name}_spades.log ${results}/spades_contigs/${name}_spades.log
 
 test -f ${results}/spades/${name}/contigs.fasta \
-&& cp ${results}/spades/${name}/contigs.fasta \
-${results}/spades_contigs/${name}_spades_contigs.fasta
+&& cp ${results}/spades/${name}/contigs.fasta ${results}/spades_contigs/${name}_spades_contigs.fasta
 
 
 
