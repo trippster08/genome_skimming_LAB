@@ -29,16 +29,15 @@ then
   exit
 fi
 
-mkdir -p ${results}/mitofinder
+mkdir -p ${results}/mitofinder_spades
 
 for x in ${contigs}/*_spades_contigs.fasta ; do 
     sample=`basename ${x}`
     name=`echo ${sample%_spades_contigs.fasta}`
-    shortname=`echo ${sample%%_*}`
-    qsub -o ${results}/../../jobs/logs/${name}_mitofinder.log \
-    -wd ${results}/mitofinder \
-    -N ${name}_mitofinder \
-    mitofinder_annotate_spades.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results} ${shortname}
+    qsub -o ${results}/../../jobs/logs/${name}_mitofinder_spades.log \
+    -wd ${results}/mitofinder_spades \
+    -N ${name}_mitofinder_spades \
+    mitofinder_annotate_spades_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
 done
 
 

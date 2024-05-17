@@ -31,7 +31,7 @@ mitofinder \
 --new-genes -p $NSLOTS -m 8
 
 cp ${results}/../../jobs/logs/${name}_mitofinder_spades.log \
-${results}/mitofinder_results/${shortname}_mitofinder_spades.log
+${results}/mitofinder_results/${name}_mitofinder_spades.log
 
 test -d ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder_mitfi_Final_Results \
 && cp -r ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder_mitfi_Final_Results \
