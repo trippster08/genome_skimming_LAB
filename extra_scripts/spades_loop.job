@@ -1,9 +1,9 @@
 # /bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 12
+#$ -pe mthread 10
 #$ -q mThM.q
-#$ -l mres=120G,h_data=10G,h_vmem=200G,himem
+#$ -l mres=120G,h_data=12G,h_vmem=200G,himem
 #$ -l ssd_res=200G -v SSD_SAVE_MAX=0
 #$ -cwd
 #$ -j y
