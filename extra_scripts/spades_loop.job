@@ -27,7 +27,7 @@ spades.py \
 --pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
 --pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
--t $NSLOTS  -m 120 --tmp-dir $SSD_DIR
+-t $NSLOTS --tmp-dir $SSD_DIR
 
 cp ${results}/../../jobs/logs/${name}_spades.log ${results}/spades_contigs/${name}_spades.log
 
