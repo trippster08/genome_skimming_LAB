@@ -10,7 +10,7 @@
 #$ -o logs/PROJECT_trim.log
 #
 # ----------------Modules------------------------- #
-module load tools/fastp
+module load bio/fastp
 # ----------------Your Commands------------------- #
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
