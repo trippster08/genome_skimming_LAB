@@ -18,6 +18,8 @@ for x in ${raw}/*.fastq.gz ; do
   qsub -o logs/${name}_fastqc.log \
   -N ${name}_fastqc \
   fastqc_loop.job ${raw} ${sample}
+
+  sleep 0.1
 done
 
 

@@ -32,14 +32,17 @@ fi
 mkdir -p ${results}/mitofinder_getorganelle ${results}/mitofinder_results
 
 for x in ${contigs}/*.path_sequence.fasta ; do 
-    sample=`basename ${x}`
-    name=`echo ${sample%.path_sequence.fasta}`
-    shortname=`echo ${sample%%_*}`
-echo ${name}
-    qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
-    -wd ${results}/mitofinder_getorganelle \
-    -N ${name}_mitofinder_getorganelle \
-    mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results} ${shortname}
+  sample=`basename ${x}`
+  name=`echo ${sample%.path_sequence.fasta}`
+  shortname=`echo ${sample%%_*}`
+  #echo ${name}
+  
+  qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
+  -wd ${results}/mitofinder_getorganelle \
+  -N ${name}_mitofinder_getorganelle \
+  mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results} ${shortname}
+
+  sleep 0.1
 done
 
 

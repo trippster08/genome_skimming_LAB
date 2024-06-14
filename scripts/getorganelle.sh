@@ -30,10 +30,11 @@ respective log file for further information." \
   sample=`basename ${x}`
   name=`echo ${sample%%_*}`
 
-    qsub -o logs/${name}_getorganelle.log \
-    -N ${name}_getorganelle \
-    getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
+  qsub -o logs/${name}_getorganelle.log \
+  -N ${name}_getorganelle \
+  getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
 
+  sleep 0.1
 done
 
 # This GetOrganelle shell requires two elements after calling the script

@@ -21,9 +21,11 @@ for x in ${raw}/*_R1* ; do
   # echo $name
   # echo $nameplus
 
-    qsub -o logs/${name}_fastp.log \
-    -N ${name}_fastp \
-    fastp_loop.job ${raw} ${data} ${name} ${nameplus} ${post}
+  qsub -o logs/${name}_fastp.log \
+  -N ${name}_fastp \
+  fastp_loop.job ${raw} ${data} ${name} ${nameplus} ${post}
+
+  sleep 0.1
 done
 
 # This script quality trims and removes adapters from raw reads using the program fastp. See .job file for parameter directions
