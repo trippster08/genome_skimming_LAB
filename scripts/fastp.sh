@@ -28,4 +28,4 @@ for x in ${raw}/*_R1* ; do
   sleep 0.1
 done
 
-# This script quality trims and removes adapters from raw reads using the program fastp. See .job file for parameter directions
+# This script submits the jobs to run fastp to quality trim and remove adapters from raw reads. See .job file for parameter directions
