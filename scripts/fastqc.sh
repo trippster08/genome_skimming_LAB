@@ -26,12 +26,9 @@ done
 
 # This script runs a fastqc analysis on multiple fastq sequences, either raw
 # demultiplexed sequences or trimmed sequences that that have been output using
-# either trimmomatic or fastp. It assumes the raw file names are
-# in the format output by Illumina (for example 
-# "SamplesName_Barcode_L001_R1_001.fastq.gz"), and the trimmed sequences are
-# in the format used in this pipeline as the output from trimmomatic or fastp
-# (for example: "SampleName_Barcode_R1_PE_trimmed.fastq.gz")
-# Raw sequences should be in PROJECT/data/raw/ and trimmed sequences should be in
+# either trimmomatic or fastp. 
+
+# Raw sequences should be in PROJECT/data/raw/ and trimmed sequences should be
 # PROJECT/data/trimmed_sequences/. For each sample file, it will output an html
 # file that you should transfer to your local computer. Open this file with your
 # browser and view the visual representations of your sample quality.

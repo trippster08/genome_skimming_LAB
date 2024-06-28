@@ -46,21 +46,20 @@ for x in ${contigs}/*.path_sequence.fasta ; do
 done
 
 
-# This is different from a normal mitofinder run because it doesn't use the raw
-# sequences as an input, but instead uses the contigs.fasta output from a
-# spades assembly. This is signficantly faster, and I have found that spades 
-# seems to be better at finding entire mitogenome contigs than mitofinder.
+# This script uses the contigs from a GetOrganelle output contig as a template
+# for annotation, and submits a Mitofinder job for each contig in the source
+# directory (typically results/getorganelle_contigs/).
 
 # Mitofinder defaults to put the output in the same folder from which the 
 # program was run, and there doesn't appear to be a way to change this. "-wd",
 # tells hydra to run the program in whatever directory is listed, in this case 
-# results/mitofinder_spades. Since this would also cause the log
+# results/mitofinder_getorganelle. Since this would also cause the log
 # files to be placed here, I have also changed the log output "-o" to jobs/logs/
 
 # This MitoFinder shell requires three elements after calling the script
-# 1: path to the spades contigs
-# 2: the genetic code
-# 3: taxonomic group for reference database
+# 1: path to the directory containing the GetOrganelle contigs
+# 2: the genetic code (see below)
+# 3: taxonomic group for reference database (see bottom)
 
 # The shell expects on of the following Genetic codes
 # 1. The Standard Code 

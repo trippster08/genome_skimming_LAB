@@ -25,6 +25,7 @@ for x in ${contigs}/*.path_sequence.fasta ; do
   sample=`basename ${x}`
   name=`echo ${sample%.path_sequence.fasta}`
   shortname=${name%%_*}
+  
   mkdir ${results}/bowtie2_getorganelle/${shortname}
 
   qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle.log \
@@ -34,3 +35,10 @@ for x in ${contigs}/*.path_sequence.fasta ; do
   
   sleep 0.1
 done
+
+# This script submits a bowtie2 job to assemble all trimmed-reads from a sample
+# onto all getorganelle contigs for that same sample. 
+
+# The script requires two elements after calling the script: 
+# 1 the path to the directory containing the getorganelle contigs
+# 2 the path to the directory containing the trimmed sequences

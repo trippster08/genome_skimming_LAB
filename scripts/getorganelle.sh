@@ -37,8 +37,11 @@ respective log file for further information." \
   sleep 0.1
 done
 
-# This GetOrganelle shell requires two elements after calling the script
-# 1: path to the trimmed sequences
+# This shell script submits a getorganelle job for each sample in the target
+# (typically data/trimmed_sequences/) directory
+
+# The GetOrganelle shell requires two elements after calling the script
+# 1: path to the directory containing the trimmed sequences
 # 2: the organelle you are trying to find. 
 # Organelle list to use for the 2nd element passed in calling the shell script:
 #   embplant_pt

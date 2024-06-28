@@ -34,12 +34,16 @@ for x in ${contigs}/*.path_sequence.fasta; do
   sleep 0.1
 done
 
+# This script uses the contigs from a GetOrganelle output contig as a template
+# for annotation, and submits a MITOS job for each contig in the source
+# directory (typically results/getorganelle_contigs/).
+
+
 # This MITOS shell requires two elements after calling the script
-# 1: path to the directory containing the sample-specific MitoFinder final
-# results directories
+# 1: path to the directory containing the GetOrganelle contigs
 # 2: the genetic code
 
-# The shell expects on of the following Genetic codes
+# The shell expects one of the following Genetic codes
 # 1. The Standard Code 
 # 2. The Vertebrate Mitochondrial Code 
 # 3. The Yeast Mitochondrial Code 
