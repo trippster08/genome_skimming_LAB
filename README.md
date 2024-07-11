@@ -51,7 +51,7 @@ Go to the the directory assigned to you for short-term storage of large data-set
 cd /scratch/genomics/USERNAME
 ```
 Make a project-specific directory, with the following subdirectories: `jobs/` and `data/raw/`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
-This pipeline is not dependent upon the directory tree shown, so you can set up your space differently, if you prefer. The only two directories that are required are `/data` and `/jobs` but you can name them whatever you like, and neither necessarily have to be in any particular place.This pipeline does create seveal new directories: `data/trimmed_sequences/`, `data/results/`, and within `data/results/` program-specific directories for those results, and `jobs/logs/`. If you don't want these directories created, or want them in different places, they can be changed in the shell scripts. 
+This pipeline is not dependent upon the directory tree shown, so you can set up your space differently, if you prefer. The only two directories that are required are `/data` and `/jobs` but you can name them whatever you like, and neither necessarily have to be in any particular place.This pipeline does create seveal new directories: `data/trimmed_reads/`, `data/results/`, and within `data/results/` program-specific directories for those results, and `jobs/logs/`. If you don't want these directories created, or want them in different places, they can be changed in the shell scripts. 
 ```
 mkdir -p PROJECT/data/raw PROJECT/jobs
 ```
@@ -91,23 +91,23 @@ Run the fastp shell script, including the path to the directory containing your 
 ```
 sh fastp.sh path_to_raw_sequences
 ```
-Trimmed reads will be saved in `data/trimmed_sequences/`.
+Trimmed reads will be saved in `data/trimmed_reads/`.
 
 ## FASTQC TRIMMED READS 
 We next run fastQC on all our trimmed reads to check our trimming parameters. We will run the same shell file and job file we ran the first time, just using a different target directory.
 
 ### Run FastQC
-Go to the directory containing your job files. The shell file below, and the job file that it modifies and submits to Hydra, `fastqc.job` should both be here.  Your trimmed reads should already be in `data/trimmed_sequences/`. 
+Go to the directory containing your job files. The shell file below, and the job file that it modifies and submits to Hydra, `fastqc.job` should both be here.  Your trimmed reads should already be in `data/trimmed_reads/`. 
 
 Run the fastQC shell script, including the path to the directory containing your trimmed files. For most, it should be something like: 
-`/scratch/genomics/USERNAME/PROJECT/data/trimmed_sequences/`. 
+`/scratch/genomics/USERNAME/PROJECT/data/trimmed_reads/`. 
 ```
 sh fastqc.sh path_to_raw_sequences
 ```
-The results of these analyses are saved in `data/trimmed_sequences/fastqc_analyses/`
+The results of these analyses are saved in `data/trimmed_reads/fastqc_analyses/`
 
 ### Download FastQC of Trimmed Reads
-Download the directory containing the fastQC results (it should be `data/trimmed_sequences/fastqc_analyses/`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
+Download the directory containing the fastQC results (it should be `data/trimmed_reads/fastqc_analyses/`) to your computer. Open the html files using your browser to examine how well you trimming parameters worked. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help. You may need to retrim using different parameters, depending upon the quality of the trimmed reads.
 
 ## Assemble Reads Using GetOrganelle
 
@@ -123,9 +123,9 @@ get_organelle_config.py -a animal_mt
 ```
 
 ### Run GetOrganelle
-Run the GetOrganelle shell script, including the path to the directory containing your trimmed read files followed by organelle type (one of "embplant_pt", "other_pt", "embplant_mt", "embplant_nr", "animal_mt", "fungus_mt"). For most, it should be something like: `/scratch/genomics/USERNAME/PROJECT/data/trimmed_sequences animal_mt`
+Run the GetOrganelle shell script, including the path to the directory containing your trimmed read files followed by organelle type (one of "embplant_pt", "other_pt", "embplant_mt", "embplant_nr", "animal_mt", "fungus_mt"). For most, it should be something like: `/scratch/genomics/USERNAME/PROJECT/data/trimmed_reads animal_mt`
 ```
-sh getorganelle.sh path_to_trimmed_sequences organelle
+sh getorganelle.sh path_to_trimmed_reads organelle
 ```
 GetOrganelle results will be saved in `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle/`. The results for each sample will be in a separate direcotry, named with the sample name. Unfortunately, like many of the programs in this pipeline, the resultant mitochondrial contigs that will be used for annotation are generically named, with no sample name attached. Additionally, there are a lot of files and folders in the results directory that are extremely large and largely uneccesary to keep. To simplify annotation and downloading of the most essential information, the GetOrganelle job copies resultant mitochondrial contigs to `data/results/getorganelle_contigs/` while also prepending the sample name.  the getorganelle_contigs directory also contains three text files: 'getorganelle_repeats.txt', 'getorganelle_scaffolds.txt', and 'getorganelle_failures.txt'. 'getorganelle_scaffolds.txt' contains a list of all samples for which no contig was found. 'getorganelle_repeats.txt' contains a list of samples for which multiple contigs were found, all the same except for varying repeat regions attached to one end. These contigs are not copied to `data/results/getorganelle_contigs/`.  'getorganelle_scaffolds.txt' contains a list of all samples for which one or more mitochondrial contigs were found, but these contigs were not complete and circularizable. These contigs are copies to `data/results/getorganelle_contigs/` for annotation.
 
@@ -170,7 +170,7 @@ One way to evaluate your assemblies is to map your trimmed reads to your contigs
 Run the Bowtie2 shell script, including the path to the directory containing your getorganelle contigs and the path to the directory containing your trimmed sequences.
 
 ```
-sh bowtie2_getorganelle.sh path_to_getorganelle_contigs path_to_trimmed_sequences
+sh bowtie2_getorganelle.sh path_to_getorganelle_contigs path_to_trimmed_reads
 ```
 
 Bowtie2 normally creates a SAM file, saving it (and other program-specific files) in a samples-specific directory in `/scratch/genomics/USERNAME/PROJECT/data/results/bowtie2_getorganelle/`. However, we would prefer a BAM file (a binary version of a SAM file that usually are smaller and more efficient) that also only contains assembled reads (i.e. reads from the mitochondrial genome), so we modify our bowtie2 output using samtools to output your resulting Bowtie2 BAM file to `data/results/bowtie2_results/`. 
