@@ -10,7 +10,7 @@ then
   exit
 fi
 
-mkdir -p ${data}/trimmed_sequences
+mkdir -p ${data}/trimmed_reads
 
 for x in ${raw}/*_R1* ; do 
   sample=`basename ${x}`
