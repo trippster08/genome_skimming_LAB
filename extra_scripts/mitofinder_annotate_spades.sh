@@ -29,7 +29,7 @@ then
   exit
 fi
 
-mkdir -p ${results}/mitofinder_spades
+mkdir -p ${results}/mitofinder_spades ${results}/mitofinder_results
 
 for x in ${contigs}/*_spades_contigs.fasta ; do 
     sample=`basename ${x}`
