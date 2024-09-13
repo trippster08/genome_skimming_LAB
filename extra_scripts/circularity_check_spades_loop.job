@@ -1,0 +1,53 @@
+# /bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -q sThC.q
+#$ -l mres=8G,h_data=8G,h_vmem=8G
+#$ -cwd
+#$ -j y
+#$ -N project
+#$ -o project.log
+#
+# ----------------Modules------------------------- #
+
+#
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+#
+#!/bin/bash
+contigs="$1"
+name="$2"
+sample="$3"
+results="$4"
+
+
+input_file=${sample}
+output_file=${results}"/possible_mitogenomes"${name}"_spades_contigs_possible_circular.fasta"
+
+# Clear the output file if it exists
+> "$output_file"
+# Initialize a variable to store the previous line
+previous_line=""
+while IFS= read -r line; do
+  if [ ${#line} -ge 500 ]; then
+    # Extract the first 50 chars
+    first_fifty_chars=$(echo "$line" | cut -c1-50)
+    # Extract the last 100 characters of the current line
+    last_twohundred_chars=$(echo "$line" | tail -c 201)
+    # Check if the first 50 characters are found in the last 200 characters of the line
+    if echo "$last_twohundred_chars" | grep -q "$first_fifty_chars"; then
+      # Output the previous line and the current line to the new file
+      echo "$previous_line" >> "$output_file"
+      echo "$line" >> "$output_file"
+    fi
+  fi
+    # Update the previous line
+    previous_line="$line"
+done < "$input_file"
+
+echo "Matching strings have been saved to $output_file" 
+
+
+#
+echo = `date` job $JOB_NAME done
