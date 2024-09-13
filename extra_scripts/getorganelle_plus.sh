@@ -34,6 +34,7 @@ respective log file for further information." \
     -N ${name}_getorganelle \
     getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
 
+  sleep 0.1
 done
 
 # This GetOrganelle shell requires two elements after calling the script

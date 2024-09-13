@@ -23,4 +23,5 @@ for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do
     -N ${name}_spades \
     spades_loop.job ${trimmed} ${name} ${results}
 
+  sleep 0.1
 done

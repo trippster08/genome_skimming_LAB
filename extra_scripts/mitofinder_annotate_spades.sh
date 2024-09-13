@@ -38,6 +38,7 @@ for x in ${contigs}/*_spades_contigs.fasta ; do
     -wd ${results}/mitofinder_spades \
     -N ${name}_mitofinder_spades \
     mitofinder_annotate_spades_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
+  sleep 0.1
 done
 
 

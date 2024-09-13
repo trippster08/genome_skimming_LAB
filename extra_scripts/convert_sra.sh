@@ -17,6 +17,7 @@ fi
     qsub -o logs/${sample}_fasterq-dump.log \
     -N ${sample}_fasterq-dump \
     convert_sra.job ${sra} ${data} ${sample}
+  sleep 0.1
 done
 
 # This script quality trims and removes adapters from raw reads using the program fastp. See .job file for parameter directions
