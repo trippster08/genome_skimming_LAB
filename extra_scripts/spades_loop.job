@@ -32,7 +32,8 @@ spades.py \
 cp ${results}/../../jobs/logs/${name}_spades.log ${results}/spades_contigs/${name}_spades.log
 
 test -f ${results}/spades/${name}/contigs.fasta \
-&& cp ${results}/spades/${name}/contigs.fasta ${results}/spades_contigs/${name}_spades_contigs.fasta
+&& awk '/^>/ {if (NR!=1) printf("\n"); printf("%s\n",$0); next} {printf("%s",$0);} END {printf("\n");}' \
+${results}/spades/${name}/contigs.fasta > ${results}/spades_contigs/${name}_spades_contigs.fasta
 
 
 
