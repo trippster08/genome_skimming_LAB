@@ -2,7 +2,7 @@
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
 #$ -q sThC.q
-#$ -l mres=8G,h_data=8G,h_vmem=8G
+#$ -l mres=2G,h_data=2G,h_vmem=2G
 #$ -cwd
 #$ -j y
 #$ -N project
