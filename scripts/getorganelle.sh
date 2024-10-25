@@ -28,7 +28,7 @@ respective log file for further information." \
 
  for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
   sample=`basename ${x}`
-  name=`echo ${sample%%_*}`
+  name=`echo ${sample%_R[1-2]_*}`
 
   qsub -o logs/${name}_getorganelle.log \
   -N ${name}_getorganelle \
