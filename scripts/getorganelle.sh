@@ -5,6 +5,13 @@ organelle="$2"
 data=${trimmed}/../
 
 if
+  [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]
+then
+  echo "Correct path to trimmed read files not entered (*.fastq.gz)"
+  exit
+fi
+
+if
   [[ ${2} != animal_mt && ${2} != embplant_pt && ${2} != fungus_mt && ${2} != embplant_mt && ${2} \
   != embplant_nr && ${2} != other_pt ]]
 then
