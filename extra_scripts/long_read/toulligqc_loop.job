@@ -27,20 +27,8 @@ toulligqc \
 --html-report-path ${raw}/toulligqc_analyses/${name}_report.html
 
 #
-
-
-#cp ${raw}/../../jobs/logs/${name}_nanoqc_hydra.log \
-#${raw}/nanoqc_analyses/${name}_nanoqc_hydra.log
-
-#test -f ${raw}/nanoqc_analyses/${name}/NanoQC.log \
-#&& cp  ${raw}/nanoqc_analyese/${name}/NanoQC.log \
-#${raw}/nanoqc_analyses/${name}_NanoQC.log
-
-#test -f ${raw}/nanoqc_analyses/${name}/nanoQC.html \
-#&& cp  ${raw}/nanoqc_analyese/${name}/nanoQC.html \
-#${raw}/nanoqc_analyses/${name}_NanoQC.html
-
-# This job file loads the conda module, activates the nanoqc
-# environment, and runs nanoqc on all samples.
-# -o is the path to the output directory
 echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the fastqc
+# environment, and runs fastqc on all samples.
+# -o is the path to the output directory
