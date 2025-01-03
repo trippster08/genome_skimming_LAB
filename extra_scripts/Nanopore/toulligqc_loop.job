@@ -1,0 +1,34 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -q sThC.q
+#$ -l mres=8G,h_data=8G,h_vmem=24G
+#$ -cwd
+#$ -j y
+#$ -N null
+#$ -o null
+#
+# ----------------Modules------------------------- #
+module load tools/conda
+start-conda
+source activate toulligqc
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+raw="$1"
+sample="$2"
+name="$3"
+#
+toulligqc \
+--fastq ${raw}/${sample} \
+--report-name ${name}_toulligqc \
+--html-report-path ${raw}/toulligqc_analyses/${name}_report.html
+
+#
+echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the fastqc
+# environment, and runs fastqc on all samples.
+# -o is the path to the output directory

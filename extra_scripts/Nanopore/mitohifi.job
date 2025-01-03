@@ -1,0 +1,19 @@
+# /bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -q sThC.q
+#$ -cwd
+#$ -j y
+#
+# ----------------Modules------------------------- #
+# 
+export PATH="/share/apps/bioinformatics/mitos/2.1.8/bin/:/share/apps/bioinformatics/mitofinder/1.4.1/bin/:$PATH"
+module load tools/conda
+start-conda
+source activate mitohifi_env
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+#
+#
+echo = `date` job $JOB_NAME done

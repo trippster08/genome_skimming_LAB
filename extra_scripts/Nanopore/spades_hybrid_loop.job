@@ -1,0 +1,64 @@
+# /bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 10
+#$ -q mThM.q
+#$ -l mres=160G,h_data=16G,h_vmem=16G,himem
+#$ -l ssd_res=200G -v SSD_SAVE_MAX=0
+#$ -cwd
+#$ -j y
+#$ -N PROJECT_spades
+#$ -o logs/PROJECT_spades.log
+#
+# ----------------Modules------------------------- #
+module load tools/ssd
+module load bio/spades
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+trimmed_illumina="$1"
+trimmed_nanopore="$2"
+name="$3"
+results="$4"
+#
+spades.py \
+-o ${results}/spades_hybrid/${name} \
+--pe1-1 ${trimmed_illumina}/${name}_R1_PE_trimmed.fastq.gz \
+--pe1-2 ${trimmed_illumina}/${name}_R2_PE_trimmed.fastq.gz \
+--pe1-s ${trimmed_illumina}/${name}_R0_SE_trimmed.fastq.gz \
+--nanopore ${trimmed_nanopore}/${name}_trimmed.fastq.gz \
+-t $NSLOTS --tmp-dir $SSD_DIR
+#
+cp ${results}/../../jobs/logs/${name}_spades_hybrid_hydra.log ${results}/spades_contigs/${name}_spades_hybrid_hydra.log
+
+# Here we test to see if there is the file labeled "contigs.fasta" in the spades
+# results folder, then copies them into a spades_contigs folder. However, spades
+# outputs fasta files with sequences separated by hard returns, which messes up
+# a lot of downstream programs, so the command after "&&" (starting with "awk")
+# first outputs each sequence on a single line (see copilot for a
+# description how this works).
+
+test -f ${results}/spades_hybrid/${name}/contigs.fasta \
+&& awk '/^>/ {if (NR!=1) printf("\n"); printf("%s\n",$0); next} {printf("%s",$0);} END {printf("\n");}' \
+${results}/spades_hybrid/${name}/contigs.fasta > ${results}/spades_contigs/${name}_spades_hybrid_contigs.fasta
+
+test -f ${results}/spades_hybrid/${name}/spades.log \
+&& cp ${results}/spades_hybrid/${name}/spades.log \
+${results}/spades_contigs/${name}_spades_hybrid.log
+
+#
+echo = `date` job $JOB_NAME done
+
+# -o is the path to the directory where you want your results saved
+# --pe1-1 is the path to the file of the paired R1 reads of the first paired-end 
+# library (you can have mutiple libraries as input files). --pe1-2 is the path
+# to the file of the paired R2 reads of the first paired-end library. --pe1-s
+# is the path of the unpaired reads (both R1 and R2 should be in the same file)
+# of the first paired-end library.
+# -t is the number of threads, and -m is the total amount of memory allocated 
+# --tmp-dir creates a temporary SSD to hold SPAdes temporary files. SPAdes 
+# creates a large number of temporary files, sometimes more than hydra allows.
+# This creates a temporary SSD to hold those files so hydra won't kill the
+# job. we then remove those files with rm -rf $SSD_DIR/*
