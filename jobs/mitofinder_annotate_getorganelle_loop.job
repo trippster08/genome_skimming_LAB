@@ -31,8 +31,12 @@ mitofinder \
 -a ${contigs}/${sample} \
 --new-genes -p $NSLOTS -m 4
 
-cp ${results}/../../jobs/logs/${name}_mitofinder_getorganelle.log \
-${results}/mitofinder_results/${shortname}_mitofinder_getorganelle.log
+cp ${results}/../../jobs/logs/${name}_mitofinder_getorganelle_hydra.log \
+${results}/mitofinder_results/${shortname}_mitofinder_getorganelle_hydra.log
+
+test -f ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder.log \
+&& cp ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder.log \
+${results}/mitofinder_results/${name}_mitofinder_getorganelle_MitoFinder.log
 
 test -d ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder_mitfi_Final_Results \
 && cp -r ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder_mitfi_Final_Results \
