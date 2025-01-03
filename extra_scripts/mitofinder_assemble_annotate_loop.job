@@ -35,7 +35,11 @@ mitofinder \
 --new-genes -p $NSLOTS -m 4
 
 cp ${data}/../jobs/logs/${name}_mitofinder.log \
-${data}/results/mitofinder_results/${name}_mitofinder.log
+${data}/results/mitofinder_results/${name}_mitofinder_hydra.log
+
+test -f ${results}/mitofinder_flye/${name}_mitofinder_flye/${name}_mitofinder_MitoFinder.log \
+&& cp ${results}/mitofinder_flye/${name}_mitofinder_flye/${name}_mitofinder_MitoFinder.log \
+${results}/mitofinder_results/${name}_mitofinder_MitoFinder.log
 
 test -d ${data}/results/mitofinder/${name}_mitofinder/${name}_mitofinder_MitoFinder_megahit_mitfi_Final_Results \
 && cp -r ${data}/results/mitofinder/${name}_mitofinder/${name}_mitofinder_MitoFinder_megahit_mitfi_Final_Results \

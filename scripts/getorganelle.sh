@@ -37,7 +37,7 @@ respective log file for further information." \
   sample=`basename ${x}`
   name=`echo ${sample%_R[1-2]_*}`
 
-  qsub -o logs/${name}_getorganelle.log \
+  qsub -o logs/${name}_getorganelle_hydra.log \
   -N ${name}_getorganelle \
   getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
 

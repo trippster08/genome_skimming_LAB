@@ -32,8 +32,8 @@ runmitos.py \
 #
 echo = `date` job $JOB_NAME done
 
-cp ${results}/../../jobs/logs/${name}_mitos_getorganelle.log \
-${results}/mitos_results/${shortname}_mitos_getorganelle.log
+cp ${results}/../../jobs/logs/${name}_mitos_getorganelle_hydra.log \
+${results}/mitos_results/${shortname}_mitos_getorganelle_hydra.log
 
 if
   [[ -f "${results}/mitos_getorganelle/${name}_mitos_getorganelle/result.gff" ]]

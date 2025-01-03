@@ -30,6 +30,8 @@ get_organelle_from_reads.py \
 --disentangle-time-limit 7200 \
 -t $NSLOTS
 #
+cp ${data}../jobs/logs/${name}_spades_hydra.log \
+${results}/getorganelle_contigs/${name}_spades_hydra.log
 
 for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
