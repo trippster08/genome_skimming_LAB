@@ -19,14 +19,14 @@ source activate flye
 #
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 #
-raw="$1"
+trimmed_nanopore="$1"
 sample="$2"
 name="$3"
 results="$4"
 #
 flye \
 --nano-hq \
-${raw}/${sample} \
+${trimmed_nanopore}/${sample} \
 --iterations 3 \
 --min-overlap 1000 \
 --out-dir ${results}/flye/${name} \
@@ -62,7 +62,7 @@ fi
 cat ${results}/flye_assemblies/${name}_flye_assembly.fasta | \
 seqkit \
 seq --max-len 19999 --min-len 10000 --line-width 0 | \
-sort --by-length -o ${results}/flye_assemblies/${name}_flye_assembly_sizefiltered.fasta
+sort -l -o ${results}/flye_assemblies/${name}_flye_assembly_sizefiltered.fasta
 
 
 echo = `date` job $JOB_NAME done
