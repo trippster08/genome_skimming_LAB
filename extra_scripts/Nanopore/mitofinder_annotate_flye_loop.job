@@ -30,7 +30,7 @@ mitofinder \
 -a ${contigs}/${sample} \
 --new-genes -p $NSLOTS -m 8
 
-cp ${results}/../../jobs/logs/${name}_mitofinder_flye.log \
+cp ${results}/../../jobs/logs/${name}_mitofinder_flye_hydra.log \
 ${results}/mitofinder_results/${name}_mitofinder_flye_hydra.log
 
 test -f ${results}/mitofinder_flye/${name}_mitofinder_flye/${name}_mitofinder_flye_MitoFinder.log \
