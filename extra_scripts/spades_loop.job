@@ -29,7 +29,8 @@ spades.py \
 --pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
 -t $NSLOTS --tmp-dir $SSD_DIR
 
-cp ${results}/../../jobs/logs/${name}_spades.log ${results}/spades_contigs/${name}_spades.log
+cp ${results}/../../jobs/logs/${name}_spades_hydra.log \
+${results}/spades_contigs/${name}_spades_hydra.log
 
 # Here we test to see if there is the file labeled "contigs.fasta" in the spades
 # results folder, then copies them into a spades_contigs folder. However, spades

@@ -19,7 +19,7 @@ for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do
 #  echo $sample
 #  echo $name
 
-    qsub -o logs/${name}_spades.log \
+    qsub -o logs/${name}_spades_hydra.log \
     -N ${name}_spades \
     spades_loop.job ${trimmed} ${name} ${results}
 
