@@ -34,8 +34,8 @@ mkdir -p ${results}/mitofinder_flye ${results}/mitofinder_results
 for x in ${assemblies}/*_flye_assembly_sizefiltered.fasta ; do 
     sample=`basename ${x}`
     name=`echo ${sample%_flye_assembly_sizefiltered.fasta}`
-    qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye.log \
-    -wd ${results}/mitofinder_spades \
+    qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye_hydra.log \
+    -wd ${results}/mitofinder_flye \
     -N ${name}_mitofinder_flye \
     mitofinder_annotate_flye_loop.job ${assemblies} ${name} ${taxa} ${ref} ${sample} ${results}
   sleep 0.1
