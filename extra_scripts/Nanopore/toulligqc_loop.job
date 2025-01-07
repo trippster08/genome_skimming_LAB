@@ -1,8 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -q sThC.q
-#$ -l mres=8G,h_data=8G,h_vmem=24G
+#$ -pe mthread 4
+#$ -q sThM.q
+#$ -l mres=48G,h_data=12G,h_vmem=48G,himem
 #$ -cwd
 #$ -j y
 #$ -N null
@@ -24,6 +25,7 @@ name="$3"
 toulligqc \
 --fastq ${raw}/${sample} \
 --report-name ${name}_toulligqc \
+--thread $NSLOTS \
 --html-report-path ${raw}/toulligqc_analyses/${name}_report.html
 
 #
