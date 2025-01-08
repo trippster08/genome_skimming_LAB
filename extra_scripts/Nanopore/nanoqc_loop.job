@@ -1,8 +1,8 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -q sThC.q
-#$ -l mres=8G,h_data=8G,h_vmem=24G
+#$ -q sThM.q
+#$ -l mres=24G,h_data=24G,h_vmem=48G,himem
 #$ -cwd
 #$ -j y
 #$ -N null
@@ -25,20 +25,20 @@ nanoQC \
 --outdir ${raw}/nanoqc_analyses/${name} \
 ${raw}/${sample}
 #
+cp ${raw}/../../jobs/logs/${name}_nanoqc_hydra.log \
+${raw}/nanoqc_analyses/${name}_nanoqc_hydra.log
 
+test -f ${raw}/nanoqc_analyses/${name}/NanoQC.log \
+&& cp  ${raw}/nanoqc_analyses/${name}/NanoQC.log \
+${raw}/nanoqc_analyses/${name}_NanoQC.log
 
-#cp ${raw}/../../jobs/logs/${name}_nanoqc_hydra.log \
-#${raw}/nanoqc_analyses/${name}_nanoqc_hydra.log
-
-#test -f ${raw}/nanoqc_analyses/${name}/NanoQC.log \
-#&& cp  ${raw}/nanoqc_analyese/${name}/NanoQC.log \
-#${raw}/nanoqc_analyses/${name}_NanoQC.log
-
-#test -f ${raw}/nanoqc_analyses/${name}/nanoQC.html \
-#&& cp  ${raw}/nanoqc_analyese/${name}/nanoQC.html \
-#${raw}/nanoqc_analyses/${name}_NanoQC.html
+test -f ${raw}/nanoqc_analyses/${name}/nanoQC.html \
+&& cp  ${raw}/nanoqc_analyses/${name}/nanoQC.html \
+${raw}/nanoqc_analyses/${name}_NanoQC.html
+#
+echo = `date` job $JOB_NAME done
 
 # This job file loads the conda module, activates the nanoqc
 # environment, and runs nanoqc on all samples.
-# -o is the path to the output directory
-echo = `date` job $JOB_NAME done
+# --outdir is the path to the output directory
+# the second line is the path to the sequence to be analyzed
