@@ -6,9 +6,9 @@ ref="$3"
 results=${assemblies}/../
 
 if
-  [[ -z "$(ls ${assemblies}/*_flye_assembly_sizefiltered.fasta 2>/dev/null | grep fasta)" ]] 
+  [[ -z "$(ls ${assemblies}/*_medaka_consensus.fasta 2>/dev/null | grep fasta)" ]] 
 then
-  echo "Correct path to flye results not entered (*_flye_assembly_sizefiltered.fasta)"
+  echo "Correct path to corrected flye results not entered (*_medaka_consensus.fasta)"
   exit
 fi
 
@@ -31,9 +31,9 @@ fi
 
 mkdir -p ${results}/mitofinder_flye ${results}/mitofinder_results
 
-for x in ${assemblies}/*_flye_assembly_sizefiltered.fasta ; do 
+for x in ${assemblies}/*_medaka_consensus.fasta ; do 
     sample=`basename ${x}`
-    name=`echo ${sample%_flye_assembly_sizefiltered.fasta}`
+    name=`echo ${sample%_medaka_consensus.fasta}`
     qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye_hydra.log \
     -wd ${results}/mitofinder_flye \
     -N ${name}_mitofinder_flye \
