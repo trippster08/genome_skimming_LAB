@@ -16,7 +16,7 @@ results=${data}/results/
 
  for x in ${trimmed_nanopore}/*_trimmed.fastq.gz ; do 
   sample=`basename ${x}`
-  name=`echo ${sample%.fastq.gz}`
+  name=`echo ${sample%.trimmed_fastq.gz}`
   mkdir ${results}/flye/${name}
   qsub -o logs/${name}_flye_hydra.log \
   -N ${name}_flye \
