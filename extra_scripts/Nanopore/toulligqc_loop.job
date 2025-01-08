@@ -1,9 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 4
-#$ -q sThM.q
-#$ -l mres=48G,h_data=12G,h_vmem=48G,himem
+#$ -pe mthread 8
+#$ -q sThC.q
+#$ -l mres=64G,h_data=8G,h_vmem=32G
 #$ -cwd
 #$ -j y
 #$ -N null
@@ -27,10 +27,16 @@ toulligqc \
 --report-name ${name}_toulligqc \
 --thread $NSLOTS \
 --html-report-path ${raw}/toulligqc_analyses/${name}_report.html
-
+#
+cp ${raw}/../../jobs/logs/${name}_toulligqc_hydra.log \
+${raw}/toulligqc_analyses/${name}_toulligqc_hydra.log
 #
 echo = `date` job $JOB_NAME done
 
-# This job file loads the conda module, activates the fastqc
-# environment, and runs fastqc on all samples.
-# -o is the path to the output directory
+# This job file loads the conda module, activates the toulligqc
+# environment, and runs toulligqc on all samples.
+
+# --fastq is the name of the input file, in fastq.gz format
+# --report-name the name of the report so that it isn't a generic "report.txt"
+# --thread the number of CPUs
+# --html-report-path the path to the directory for the output file
