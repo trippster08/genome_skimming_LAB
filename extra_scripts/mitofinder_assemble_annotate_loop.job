@@ -49,11 +49,6 @@ ${data}/results/mitofinder_results/${name}_mitofinder_Final_Results
 #
 echo = `date` job $JOB_NAME done
 
-
-
-
-
-
 # -1 is the path to the R1 PE trimmed file, -2 is the path to the R2 PE trimmed
 #  file. PE files come in pairs, both the R1 and R2 are present. 
 # -o is the genetic code to use. The list below is from the mitofinder
