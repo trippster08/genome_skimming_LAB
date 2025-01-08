@@ -31,7 +31,8 @@ spades.py \
 --nanopore ${trimmed_nanopore}/${name}_trimmed.fastq.gz \
 -t $NSLOTS --tmp-dir $SSD_DIR
 #
-cp ${results}/../../jobs/logs/${name}_spades_hybrid_hydra.log ${results}/spades_contigs/${name}_spades_hybrid_hydra.log
+cp ${results}/../../jobs/logs/${name}_spades_hybrid_hydra.log \
+${results}/spades_contigs/${name}_spades_hybrid_hydra.log
 
 # Here we test to see if there is the file labeled "contigs.fasta" in the spades
 # results folder, then copies them into a spades_contigs folder. However, spades
