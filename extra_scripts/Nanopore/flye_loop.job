@@ -1,9 +1,9 @@
 # /bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 12
+#$ -pe mthread 10
 #$ -q sThC.q
-#$ -l mres=12G,h_data=1G,h_vmem=1G
+#$ -l mres=10G,h_data=1G,h_vmem=1G
 #$ -cwd
 #$ -j y
 #$ -N <SAMPLE>
@@ -61,8 +61,15 @@ fi
 # programs, we set the output --line-width 0 (no wrap). 
 cat ${results}/flye_assemblies/${name}_flye_assembly.fasta | \
 seqkit \
-seq --max-len 19999 --min-len 10000 --line-width 0 | \
-sort -l -o ${results}/flye_assemblies/${name}_flye_assembly_sizefiltered.fasta
+seq --max-len 19999 --min-len 10000 --line-width 0 \
+-o ${results}/flye_assemblies/${name}_flye_assembly_sizefiltered.fasta
 
 
 echo = `date` job $JOB_NAME done
+
+# --nano-hq tells flye that these are high-quality nanopore reads (in this case
+# using Dorado basecaller: <20% error)
+# --iterations is the number of polishing iterations that are performed
+# min-overlap is the minimal amount of overlap between reads to assemble
+# -t is the number of CPUs
+# --out-dir is the path to the directory that the results will be saved
