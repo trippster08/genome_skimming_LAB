@@ -1,0 +1,49 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 8
+#$ -q sThC.q
+#$ -l mres=64G,h_data=8G,h_vmem=8G
+#$ -cwd
+#$ -j y
+#$ -N null
+#$ -o null
+#
+# ----------------Modules------------------------- #
+module load tools/conda
+start-conda
+source activate nanoplot
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+raw="$1"
+sample="$2"
+name="$3"
+#
+NanoPlot \
+--fastq ${raw}/${sample} \
+--outdir ${raw}/nanoplot_analyses/${name} \
+--no_static \
+--title ${name} \
+--threads $NSLOTS
+
+#
+cp ${raw}/../../jobs/logs/${name}_nanoplot_hydra.log \
+${raw}/nanoplot_analyses/${name}_nanoplot_hydra.log
+
+test -f ${raw}/nanoplot_analyses/${name}/NanoPlot-report.html \
+&& cp  ${raw}/nanoplot_analyses/${name}/NanoPlot-report.html \
+${raw}/nanoplot_analyses/${name}_NanoPlot-report.html
+#
+echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the nanoplot
+# environment, and runs nanoplot on all samples.
+# -outdir is the path to the output directory
+# -fastq is the path to the input file, in fastq.gz format
+# --no_static tells nanoplot not to create .png files, which are identical to
+# the .html files
+# --title adds a user-defined title to each plot
+# --threads is the number of CPUs
