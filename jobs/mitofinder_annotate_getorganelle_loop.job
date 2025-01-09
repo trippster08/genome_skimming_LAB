@@ -34,10 +34,13 @@ mitofinder \
 cp ${results}/../../jobs/logs/${name}_mitofinder_getorganelle_hydra.log \
 ${results}/mitofinder_results/${shortname}_mitofinder_getorganelle_hydra.log
 <<<<<<< Updated upstream:jobs/mitofinder_annotate_getorganelle_loop.job
+<<<<<<< Updated upstream:jobs/mitofinder_annotate_getorganelle_loop.job
 
 test -f ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder.log \
 && cp ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder.log \
 ${results}/mitofinder_results/${name}_mitofinder_getorganelle_MitoFinder.log
+=======
+>>>>>>> Stashed changes:jobs_scripts/mitofinder_annotate_getorganelle_loop.job
 =======
 >>>>>>> Stashed changes:jobs_scripts/mitofinder_annotate_getorganelle_loop.job
 
