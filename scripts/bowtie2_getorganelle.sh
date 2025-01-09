@@ -28,7 +28,7 @@ for x in ${contigs}/*.path_sequence.fasta ; do
   
   mkdir ${results}/bowtie2_getorganelle/${shortname}
 
-  qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle.log \
+  qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log \
   -wd ${results}/bowtie2_getorganelle \
   -N ${shortname}_bowtie2_getorganelle \
   bowtie2_getorganelle_loop.job ${contigs} ${sample} ${trimmed} ${results} ${shortname}

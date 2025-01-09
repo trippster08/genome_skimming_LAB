@@ -35,8 +35,8 @@ ${results}/getorganelle_contigs/${name}_spades_hydra.log
 
 for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
-  cp logs/${name}_getorganelle.log \
-  ${data}/results/getorganelle_contigs/${name}_getorganelle.log
+  cp logs/${name}_getorganelle_hydra.log \
+  ${data}/results/getorganelle_contigs/${name}_getorganelle_hydra.log
 
   if [[ ${contig} == *"repeat_pattern"* ]]
   then
