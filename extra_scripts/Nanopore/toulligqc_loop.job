@@ -26,7 +26,7 @@ toulligqc \
 --fastq ${raw}/${sample} \
 --report-name ${name}_toulligqc \
 --thread $NSLOTS \
---html-report-path ${raw}/toulligqc_analyses/${name}_report.html
+--html-report-path ${raw}/toulligqc_analyses/${name}_Toulligqc-report.html
 #
 cp ${raw}/../../jobs/logs/${name}_toulligqc_hydra.log \
 ${raw}/toulligqc_analyses/${name}_toulligqc_hydra.log
