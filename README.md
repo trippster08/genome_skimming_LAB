@@ -160,7 +160,7 @@ MitoFinder does not always do a great job of annotating all the features present
 
 Run the MITOS for annotating getorganelle contigs shell script, including the path to the directory containing your getorganelle contigs and the number representing the genetic code you wish to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/getorganelle_contigs/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list. 
 ```
-sh mitos_annotate_mitofinder.sh path_to_getorganelle_contigs genetic_code
+sh mitos_annotate_getorganelle.sh path_to_getorganelle_contigs genetic_code
 ```
 Results of these analyses are saved in `data/results/mitos_getorganelle/`. The results for each sample will be in a separate sample-specific directory. The results are labeled generically, which no sample identification. Also in these sample-specific results directories are a lot of other very large files that you do not necessarily need to download. To make downloading and identifying MITOS results easier, the job file also copies all of the most important results into sample-specific directiries to `data/results/mitos_results/`. It also prepends the sample name to the copied results files. `mitos_results/` also contains a text file called 'mitos_failures.txt'. This file contains a list of the MITOS sample runs that did not result in mitogenome annotation.
 
