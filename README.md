@@ -55,9 +55,34 @@ This pipeline is not dependent upon the directory tree shown, so you can set up 
 ```
 mkdir -p PROJECT/data/raw PROJECT/jobs
 ```
+
 ### Transfer Files to Hydra 
-You will need to transfer all the necessary files for this pipeline to your Hydra account. This includes raw read files (`*.fastq.gz`), job files (`*.job`), and shell scripts (`*.sh`).
-Your raw reads should be copied into `data/raw/`. Both job files and shell scripts should be copied into `jobs/`. I usually use scp or filezilla for file transfers. See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help with transferring files between Hydra and your computer. 
+Download the pipeline to jobs/ in your Hydra account using `wget`. This downloads a compressed file that contains all job files (\*.job), and shell scripts (\*.sh) necessary for your analysis. This command downloads a compressed file that will become a directory upon unzipping. Don't forget to move into your jobs folder first: `cd PROJECT/jobs`.
+
+```
+wget https://github.com/trippster08/Metabarcoding_on_Hydra/archive/refs/heads/main.zip
+```
+Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your newly unzipped directory into the job directory and the primer folder into the main project directory. Delete the now-empty pipeline directory and zipped download. **NOTE**: The last command (`rm -r Metabarcoding_on_Hydra-main main.zip`) will not automatically start (but the rest will), so you need to hit enter or return once to complete.
+```
+unzip main.zip
+mv Metabarcoding_on_Hydra-main/* .
+mv primers ..
+rm -r Metabarcoding_on_Hydra-main main.zip
+```
+
+### Transfer Files to Hydra 
+Download the pipeline to jobs/ in your Hydra account using `wget`. This downloads a compressed file that contains all job files (\*.job), and shell scripts (\*.sh) necessary for your analysis. This command downloads a compressed file that will become a directory upon unzipping. Don't forget to move into your jobs folder first: `cd PROJECT/jobs`.
+```
+wget https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip`
+```
+Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your newly unzipped directory into the job directory and the primer folder into the main project directory. Delete the now-empty pipeline directory and zipped download. **NOTE**: The last command (`rm -r Metabarcoding_on_Hydra-main main.zip`) will not automatically start (but the rest will), so you need to hit enter or return once to complete.
+```
+unzip main.zip
+mv genome_skimming_LAB-main/jobs/* .
+mv genome_skimming_LAB-main/scripts/* .
+rm -r genome_skimming_LAB-main main.zip
+```
+Your raw reads should be copied into `data/raw/`. Download to your local computer and use scp or filezilla to upload to `data/raw/`. See [Transferring Files to/from Hydra](https://confluence.si.edu/pages/viewpage.action?pageId=163152227) for help with transferring files between Hydra and your computer.
 
 ## Running the Pipeline
 This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/USERNAME/PROJECT/jobs/`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `jobs/logs/`. 
