@@ -60,7 +60,7 @@ Download the pipeline to jobs/ in your Hydra account using `wget`. This download
 ```
 wget https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip
 ```
-Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your newly unzipped directory into the job directory and the primer folder into the main project directory. Delete the now-empty pipeline directory and zipped download. **NOTE**: The last command (`rm -r Metabarcoding_on_Hydra-main main.zip`) will not automatically start (but the rest will), so you need to hit enter or return once to complete.
+Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your newly unzipped directory into the job directory and the primer folder into the main project directory. Delete the now-empty pipeline directory and zipped download.
 ```
 unzip main.zip
 mv genome_skimming_LAB-main/jobs/* .
