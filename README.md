@@ -66,6 +66,7 @@ unzip main.zip
 mv genome_skimming_LAB-main/jobs/* .
 mv genome_skimming_LAB-main/scripts/* .
 rm -r genome_skimming_LAB-main main.zip
+
 ```
 Your raw reads should be copied into `data/raw/`. Download to your local computer and use scp or filezilla to upload to `data/raw/`. See [Transferring Files to/from Hydra](https://confluence.si.edu/pages/viewpage.action?pageId=163152227) for help with transferring files between Hydra and your computer.
 
