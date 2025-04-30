@@ -33,7 +33,7 @@ cp ${results}/../../jobs/logs/${name}_spades_hydra.log \
 ${results}/spades_contigs/${name}_spades_hydra.log
 
 # Here we test to see if there is the file labeled "contigs.fasta" in the spades
-# results folder, then copies them into a spades_contigs folder. However, spades
+# results folder, then copy them into a spades_contigs folder. However, spades
 # outputs fasta files with sequences separated by hard returns, which messes up
 # a lot of downstream programs, so the command after "&&" (starting with "awk")
 # first outputs each sequence on a single line (see copilot for a
