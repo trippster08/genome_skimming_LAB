@@ -65,6 +65,7 @@ Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your new
 unzip main.zip
 mv genome_skimming_LAB-main/jobs/* .
 mv genome_skimming_LAB-main/scripts/* .
+mv genome_skimming_LAB-main/extra_scripts .
 rm -r genome_skimming_LAB-main main.zip
 
 ```
