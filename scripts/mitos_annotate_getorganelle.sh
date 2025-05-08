@@ -22,7 +22,7 @@ ${results}/mitos_results/mitos_failures.txt
 for x in ${contigs}/*.path_sequence.fasta; do
   sample=`basename ${x}`
   name=`echo ${sample%.path_sequence.fasta}`
-  shortname=`echo ${sample%%_*}`
+  shortname=`echo ${sample%%_animal_mt*}`
 
   mkdir -p ${results}/mitos_getorganelle/${name}_mitos_getorganelle
   mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
