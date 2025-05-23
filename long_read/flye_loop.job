@@ -53,18 +53,7 @@ then
   cp -r ${results}/flye/${name}/assembly_info.txt \
   ${results}/flye_assemblies/${name}_assembly_info.txt
   cp -r ${results}/flye/${name}/assembly_graph.gfa \
-    ${results}/flye_assemblies/${name}_assembly_graph.gfa
+    ${results}/flye_assemblies/${name}_flye_assembly_graph.gfa
 fi
-
-# Here we edit our assembly fasta files in multiple ways. First we only save
-# assembiles greather than 10000 bp and smaller than 20000 bp. We also sort
-# sequences in the fasta by size. Finally, since flye outputs fasta files with
-# sequences separated by hard returns, which messes up a lot of downstream
-# programs, we set the output --line-width 0 (no wrap). 
-cat ${results}/flye_assemblies/${name}_flye_assembly.fasta | \
-seqkit \
-seq --max-len 19999 --min-len 10000 --line-width 0 | \
-sort --by-length -o ${results}/flye_assemblies/${name}_flye_assembly_sizefiltered.fasta
-
-
+#
 echo = `date` job $JOB_NAME done
