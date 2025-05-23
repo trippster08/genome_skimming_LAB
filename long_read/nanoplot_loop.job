@@ -33,6 +33,8 @@ NanoPlot \
 #
 cp ${raw}/../../jobs/logs/${name}_nanoplot_hydra.log \
 ${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log
+cp ${data}/results/nanoplot_analyses/${name}/NanoPlot*.log \
+${data}/results/nanoplot_analyses/${name}_nanoplot.log
 
 test -f ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html \
 && cp  ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html \
