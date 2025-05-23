@@ -1,9 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 2
+#$ -pe mthread 6
 #$ -q sThC.q
-#$ -l mres=16G,h_data=8G,h_vmem=24G
+#$ -l mres=24G,h_data=4G,h_vmem=24G
 #$ -cwd
 #$ -j y
 #$ -N SAMPLE-NAME_getorganelle
@@ -30,8 +30,8 @@ get_organelle_from_assembly.py \
 --prefix ${name}_ \
 -t $NSLOTS
 #
-cp ${data}../jobs/logs/${name}_getorganelle_from_flye_assembly.log \
-${data}/results/getorganelle_from_flye_assembly/${name}/${name}_getorganelle_from_flye_assembly_hydra.log
+cp logs/${name}_getorganelle_from_flye_assembly_hydra.log \
+${data}/results/getorganelle_contigs/${name}_getorganelle_from_flye_assembly_hydra.log
 cp ${data}/results/getorganelle_from_flye_assembly/${name}/${name}_get_org.log.txt \
 ${data}/results/getorganelle_contigs/${name}_getorganelle_from_flye_assembly.log
 
