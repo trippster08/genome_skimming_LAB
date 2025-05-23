@@ -1,0 +1,39 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 8
+#$ -q sThC.q
+#$ -l mres=64G,h_data=8G,h_vmem=48G
+#$ -cwd
+#$ -j y
+#$ -N null
+#$ -o null
+#
+# ----------------Modules------------------------- #
+module load tools/conda
+start-conda
+source activate toulligqc
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+raw="$1"
+sample="$2"
+name="$3"
+data="$4"
+#
+toulligqc \
+--fastq ${raw}/${sample} \
+--report-name ${name}_toulligqc \
+--thread $NSLOTS \
+--html-report-path ${data}/results/toulligqc_analyses/${name}_toulligqc_report.html
+#
+cp ${raw}/../../jobs/logs/${name}_toulligqc_hydra.log \
+${data}/results/toulligqc_analyses/${name}_toulligqc_hydra.log
+#
+echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the toulligqc
+# environment, and runs toulligqc on all samples.
+
