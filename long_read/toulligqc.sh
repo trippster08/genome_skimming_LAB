@@ -1,7 +1,7 @@
 #!/bin/sh
 
 raw="$1"
-data=../${raw}
+data=${raw}/..
 if
   [[ -z "$(ls ${raw}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]
 then
