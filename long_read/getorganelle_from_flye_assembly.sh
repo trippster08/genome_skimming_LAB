@@ -5,7 +5,7 @@ organelle="$2"
 data=${assembly}/../../
 
 if
-  [[ -z "$(ls ${assembly}/*.fastg 2>/dev/null | grep fastg)" ]]
+  [[ -z "$(ls ${assembly}/*_assembly_graph.gfa 2>/dev/null | grep graph.gfa)" ]]
 then
   echo "Correct path to flye assembly graph not entered (*_assembly_graph.gfa)"
   exit
@@ -21,11 +21,11 @@ then
   exit
 fi
 
-mkdir -p ${data}/results/getorganelle_from_flye_assembly/
+mkdir -p ${data}/results/getorganelle_from_flye_assembly/ ${data}/results/getorganelle_contigs
 
  for x in ${assembly}/*_assembly_graph.gfa ; do 
   sample=`basename ${x}`
-  name=`echo ${sample%_assembly_graph.gfa}`
+  name=`echo ${sample%_flye_assembly_graph.gfa}`
 
   qsub -o logs/${name}_getorganelle_from_flye_assembly_hydra.log \
   -N ${name}_getorganelle_from_flye_assembly \
