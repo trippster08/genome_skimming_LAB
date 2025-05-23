@@ -1,0 +1,90 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 6
+#$ -q sThC.q
+#$ -l mres=6G,h_data=1G,h_vmem=1G
+#$ -cwd
+#$ -j y
+#$ -N PROJECT_trim
+#$ -o logs/PROJECT_trim.log
+#
+# ----------------Modules------------------------- #
+module load bio/fastp
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+raw="$1"
+data="$2"
+name="$3"
+nameplus="$4"
+post="$5"
+#
+fastp \
+-i ${raw}/${nameplus}_R1${post} \
+-I ${raw}/${nameplus}_R2${post} \
+-o ${data}/trimmed_reads/${name}_R1_PE_trimmed.fastq.gz \
+-O ${data}/trimmed_reads/${name}_R2_PE_trimmed.fastq.gz \
+--unpaired1 ${data}/trimmed_reads/${name}_R0_SE_trimmed.fastq.gz \
+--unpaired2 ${data}/trimmed_reads/${name}_R0_SE_trimmed.fastq.gz \
+-h logs/${name}_fastp.html \
+-j logs/${name}_fastp.json \
+-l 30 -f 3 -F 3 -t 2 -T 2 \
+--cut_tail --cut_tail_window_size 5 --cut_tail_mean_quality 15 \
+--trim_poly_g \
+--adapter_fasta /scratch/nmnh_lab/macdonaldk/primers/itru_adapters.fa \
+--thread $NSLOTS
+#
+echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the fastp environment,
+# and runs fastp to trim all paired raw reads.
+
+# These are the commands given to fastp, with a brief description. For 
+# more information please see the manual:
+# https://github.com/OpenGene/fastp
+
+# -i and -I are the R1 and R2 input files, respectively. These are demultiplexed
+# illumina read files
+
+# -o and -O are the output files for the trimmed R1 and R2 reads, respectively.
+# These are for paired trimmed R1 and R2 reads for which both reads have
+#  survived trimming and filtering.
+
+# --unpaired1 and --unpaired2 are for trimmed R1 and R2 reads that do not have
+# a paired read that survived trimming and filtering. NOTE: You can use the same
+# file name for both --unpaired1 and --unpaired2, which will result in a single
+# file containing all unpaired (single-end or SE) reads, so no concatenation is
+# necessary for downstream applications.
+
+# -h creates an html file that show a graphical representation of read quality
+# and base frequency pre- and post- trimming, similar to shown by FastQC.
+
+# -l <length> This is the mimimum length required to keep a read. If the
+# read is below this length it will be removed.
+
+# -f <length> This trims the user-defined number of base pairs from the 5' end
+# of all R1 reads.
+
+# -F <length> This trims the user-defined number of base pairs from the 5' end
+# of all R2 reads.
+
+# -t <length> This trims the user-defined number of base pairs from the 3' end
+# of all R1 reads.
+
+# -T <length> This trims the user-defined number of base pairs from the 3' end
+# of all R2 reads.
+
+# --cut_tail This tells fastp to quality trim the 3' end of both R1 and R2 using
+# a sliding window, similar to SLIDINGWINDOW in trimmomatic.
+
+# --cut_tail_window_size <length> This is the size of the sliding window for
+# quality trimming.
+
+# --cut_tail_mean_quality <mean_quality_score> This is the mean quality score
+#  necessary for the sliding window to reach to be kept.
+
+# --adapter_fasta <path_to_primer_file> This points fastp to the user-defined
+# adapter file.

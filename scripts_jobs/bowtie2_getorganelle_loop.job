@@ -1,0 +1,50 @@
+# /bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 12
+#$ -q sThC.q
+#$ -l mres=12G,h_data=1G,h_vmem=1G
+#$ -cwd
+#$ -j y
+#$ -N SRRxxxx_bowtie2_ASSEMBLY
+#$ -o logs/SRRxxxx_bowtie2_ASSEMBLY.log
+
+# ----------------Modules------------------------- #
+module load bio/bowtie2
+module load bio/samtools
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+contigs="$1"
+sample="$2"
+trimmed="$3"
+results="$4"
+shortname="$5"
+#
+bowtie2-build \
+${contigs}/${sample} \
+${results}/bowtie2_getorganelle/${shortname}/${shortname}_contig
+#
+bowtie2 \
+-p $NSLOTS \
+-x ${results}/bowtie2_getorganelle/${shortname}/${shortname}_contig \
+-1 ${trimmed}/${shortname}_R1_PE_trimmed.fastq.gz \
+-2 ${trimmed}/${shortname}_R2_PE_trimmed.fastq.gz \
+| samtools view -F 4 -b > \
+${results}/bowtie2_results/${shortname}_bowtie_getorganelle.bam
+
+cp ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log \
+${results}/bowtie2_results/${shortname}_bowtie2_getorganelle_hydra.log
+#
+echo = `date` job $JOB_NAME done
+
+# bowtie2-build builds an index file from your reference sequence, and saves it
+# in the bowtie2 results folder 
+
+# -1 is the path to the file of the paired R1 reads of the first paired-end 
+# library (you can have mutiple libraries as input files). 
+# -2 is the path to the file of the paired R2 reads of the first paired-end 
+# library. 
+# -p is the number of threads
