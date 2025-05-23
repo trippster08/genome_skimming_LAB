@@ -1,0 +1,63 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 2
+#$ -q sThC.q
+#$ -l mres=16G,h_data=8G,h_vmem=24G
+#$ -cwd
+#$ -j y
+#$ -N SAMPLE-NAME_getorganelle
+#$ -o logs/SAMPLE-NAME_getorganelle.log
+#
+# ----------------Modules------------------------- #
+module load bio/getorganelle
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+assembly="$1"
+organelle="$2"
+name="$3"
+data="$4"
+#
+get_organelle_from_assembly.py \
+-g ${assembly}/${name}_assembly_graph.fastg \
+-o ${data}/results/getorganelle_from_assembly/${name} \
+-F ${organelle} \
+--min-depth 10 --max-depth inf \
+--expected-max-size 25000 --expected-min-size 10000 \
+--prefix ${name}_ \
+-t $NSLOTS
+#
+cp ${data}../jobs/logs/${name}_getorganelle_from_spades_assembly_hydra.log \
+${data}/results/getorganelle_from_assembly/${name}/${name}_getorganelle_from_assembly_hydra.log
+#
+
+cp ${data}../jobs/logs/${name}_getorganelle_from_spades_assembly_hydra.log \
+${data}/results/getorganelle_from_spades_assembly/${name}/${name}_getorganelle_from_spades_assembly_hydra.log
+cp ${data}/results/getorganelle_from_spades_assembly/${name}/spades.log \
+${data}/results/getorganelle_contigs/${name}_getorganelle_from_spades_assembly.log
+
+#
+for y in ${data}/results/getorganelle_from_spades_assembly/${name}/*.path_sequence.fasta; do
+  contig=`basename ${y}`
+  if [[ ${contig} == *"repeat_pattern"* ]]
+  then
+    echo ${contig} >> ${data}/results/getorganelle_contigs/getorganelle_repeats.txt
+    cp ${data}/results/getorganelle_from_spades_assembly/${name}/*repeat_pattern*.fasta \
+    ${data}/results/getorganelle_contigs/
+  elif [[ ${contig} == *"scaffold"* ]]
+  then
+    echo ${contig} >> ${data}/results/getorganelle_contigs/getorganelle_scaffolds.txt
+    cp ${data}/results/getorganelle_from_spades_assembly/${name}/*scaffold*.fasta \
+    ${data}/results/getorganelle_contigs/
+  elif [[ ${contig} == *"animal_mt.complete"* ]]
+  then
+    cp ${data}/results/getorganelle_from_spades_assembly/${name}/*animal_mt.complete*.fasta \
+    ${data}/results/getorganelle_contigs/
+  else echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_failed.txt
+  fi
+done
+#
+echo = `date` job $JOB_NAME done  

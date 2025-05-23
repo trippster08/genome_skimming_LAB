@@ -1,0 +1,58 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 6
+#$ -q sThC.q
+#$ -l mres=48G,h_data=8G,h_vmem=64G
+#$ -cwd
+#$ -j y
+#$ -N SAMPLE-NAME_getorganelle
+#$ -o logs/SAMPLE-NAME_getorganelle.log
+#
+# ----------------Modules------------------------- #
+module load bio/getorganelle
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+trimmed="$1"
+organelle="$2"
+name="$3"
+data="$4"
+#
+get_organelle_from_reads.py \
+-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
+-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
+-u ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
+-o ${data}/results/getorganelle/${name} \
+-F ${organelle} \
+--disentangle-time-limit 7200 \
+-t $NSLOTS
+#
+cp ${data}../jobs/logs/${name}_getorganelle_hydra.log \
+${data}/results/getorganelle_contigs/${name}_getorganelle_hydra.log
+cp ${data}/results/getorganelle/${name}/${name}_get_org.log.txt \
+${data}/results/getorganelle_contigs/${name}_getorganelle.log
+
+for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
+  contig=`basename ${y}`
+  if [[ ${contig} == *"repeat_pattern"* ]]
+  then
+    echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_repeats.txt
+    cp ${data}/results/getorganelle/${name}/*repeat_pattern*.fasta \
+    ${data}/results/getorganelle_contigs/
+  elif [[ ${contig} == *"scaffold"* ]]
+  then
+    echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_scaffolds.txt
+    cp ${data}/results/getorganelle/${name}/*scaffold*.fasta \
+    ${data}/results/getorganelle_contigs/
+  elif [[ ${contig} == *"animal_mt.complete"* ]]
+  then
+    cp ${data}/results/getorganelle/${name}/*animal_mt.complete*.fasta \
+    ${data}/results/getorganelle_contigs/
+  else echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_failed.txt
+  fi
+done
+#
+  echo = `date` job $JOB_NAME done  
