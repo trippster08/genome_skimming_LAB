@@ -1,0 +1,38 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 6
+#$ -q sThC.q
+#$ -l mres=6G,h_data=1G,h_vmem=4G
+#$ -cwd
+#$ -j y
+#$ -N ${sample}
+#$ -o logs/${sample}_mitofinder.log
+#
+# ----------------Modules------------------------- #
+module load bio/minimap2
+module load bio/samtools
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+contigs="$1"
+raw_nanopore="$2"
+name="$3"
+results="$4"
+#
+minimap2 \
+-ax map-ont -t $NSLOTS \
+${contigs}/${name}_mitofinder_flye_Final_Results/${name}_mitofinder_flye_mtDNA_contig.fasta \
+${raw_nanopore}/${name}.fastq.gz | \
+
+samtools view -F 4 -b > \
+${results}/minimap_results/${name}_minimap_mitofinder.bam
+
+#
+cp ${results}/../../jobs/logs/${name}_minimap_hydra.log ${results}/minimap_results/${name}_minimap_hydra.log
+
+#
+echo = `date` job $JOB_NAME done
+
