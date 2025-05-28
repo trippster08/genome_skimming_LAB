@@ -33,27 +33,28 @@ ${raw}/${sample} \
 -t $NSLOTS
 #
 # This copies the hydra job log into the flye_assemblies directory
-cp ${results}/../../jobs/logs/${name}_flye.log ${results}/flye_assemblies/${name}_flye_hydra.log
+cp ${results}/../../jobs/logs/${name}_flye_hydra.log \
+${results}/flye_assemblies/${name}_flye_hydra.log
 
-# Here we test to see if there is the file labeled "assembly.fasta" in the flye
-# results folder, then copiy them into a flye_assemblies folder. We do the same
-# for the program log. 
 if
-  [[ -f "${results}/flye/${name}/flye.log" ]];
-then
+  [[ -f "${results}/flye/${name}/flye.log" ]]; then \
   cp -r ${results}/flye/${name}/flye.log \
   ${results}/flye_assemblies/${name}_flye.log
 fi
 
 if
-  [[ -f "${results}/flye/${name}/assembly.fasta" ]]; \
-then
-  cp -r ${results}/flye/${name}/assembly.fasta \
-  ${results}/flye_assemblies/${name}_flye_assembly.fasta
-  cp -r ${results}/flye/${name}/assembly_info.txt \
-  ${results}/flye_assemblies/${name}_assembly_info.txt
-  cp -r ${results}/flye/${name}/assembly_graph.gfa \
-    ${results}/flye_assemblies/${name}_flye_assembly_graph.gfa
+  [[ -f "${results}/flye/${name}/assembly.fasta" ]]; then \
+  cp ${results}/flye/${name}/assembly_info.txt \
+  ${results}/flye_assemblies/${name}_flye_assembly_info.txt
+  cp ${results}/flye/${name}/assembly_graph.gfa \
+  ${results}/flye_assemblies/${name}_flye_assembly_graph.gfa
+  echo ${results}/flye/${name}/assembly.fasta | \
+  seqkit seq --max-len 22000 --min-len 10000 -w 0 \
+  > ${results}/flye_assemblies/${name}_flye_assembly.fasta
 fi
+# Here we test to see if there is the file labeled "assembly.fasta" in the flye
+# results folder, then copiy them into a flye_assemblies folder. We do the same
+# for the program log. 
 #
+
 echo = `date` job $JOB_NAME done
