@@ -18,7 +18,7 @@ results=${data}/results/
   sample=`basename ${x}`
   name=`echo ${sample%.fastq.gz}`
   mkdir ${results}/flye/${name}
-  qsub -o logs/${name}_flye.log \
+  qsub -o logs/${name}_flye_hydra.log \
   -N ${name}_flye \
   flye_loop.job ${raw} ${sample} ${name} ${results}
 
