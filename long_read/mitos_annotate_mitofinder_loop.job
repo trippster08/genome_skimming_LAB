@@ -1,0 +1,138 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -q sThM.q
+#$ -l mres=48G,h_data=48G,h_vmem=48G,himem
+#$ -cwd
+#$ -j y
+#$ -N ${sample}_mitos
+#$ -o logs/${sample}_mitos.log
+#
+# ----------------Modules------------------------- #
+module load bio/mitos
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+contigs="$1"
+results="$2"
+mitofinder_final_result="$3"
+name="$4"
+taxa="$5"
+
+#
+if ls ${contigs}/${mitofinder_final_result}/${name}_mitofinder_flye_mtDNA_contig.fasta 1> /dev/null 2>&1; then
+  runmitos.py \
+  -i ${contigs}/${mitofinder_final_result}/${name}_mitofinder_flye_mtDNA_contig.fasta \
+  -c ${taxa} \
+  -o ${results}/mitos_mitofinder/${name}_mitos_mitofinder \
+  -r /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
+  -R /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
+  --debug
+elif ls ${contigs}/${mitofinder_final_result}/${name}_mitofinder_flye_mtDNA_contig_[0-9]*.fasta 1> /dev/null 2>&1; then
+  for x in ${contigs}/${mitofinder_final_result}/*mtDNA_contig_[0-9]*.fasta; do
+    multi=`basename ${x}`
+      runmitos.py \
+      -i ${contigs}/${mitofinder_final_result}/${multi} \
+      -c ${taxa} \
+      -o ${results}/mitos_mitofinder/${name}_mitos_mitofinder \
+      -r /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
+      -R /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
+      --debug
+    done
+else echo "no mitofinder contigs in sample ${name}"
+fi
+
+
+cp logs/${name}_mitos_mitofinder_hydra.log \
+${results}/mitos_results/${name}_mitos_mitofinder_hydra.log
+
+if [[ -f "${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.gff" ]]; then
+  echo "There is only a single mitochondrial contig found."
+  cp -r ${results}/mitos_mitofinder/${name}_mitos_mitofinder/plots/ \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_plots
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.bed \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.bed
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.gff \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.gff
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.fas \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.fas
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.faa \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.faa
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.mitos \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.mitos
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.seq \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.seq
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.geneorder \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.geneorder
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/result.png \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}.png
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/stst.dat \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}stst.dat
+elif ls -d [0-9] [1-9][0-9] 2>/dev/null | grep -q '.'; then
+  for x in ${results}/mitos_mitofinder/${name}_mitos_mitofinder/*/; do
+  echo "There are multiple mitochondrial contigs found."
+  contig_number=`basename ${x}`
+  cp -r ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/plots \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}_plots
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.bed \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.bed
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.gff \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.gff
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.fas \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.fas
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.faa \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.faa
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.mitos \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.mitos
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.seq \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.seq
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.geneorder \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.geneorder
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/result.png \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}.png
+  cp ${results}/mitos_mitofinder/${name}_mitos_mitofinder/${contig_number}/stst.dat \
+  ${results}/mitos_results/${name}_mitos_mitofinder/${name}_${contig_number}stst.dat
+  done
+else echo ${name} >> ${results}/mitos_results/mitos_failures.txt
+fi
+
+#
+echo = `date` job $JOB_NAME done
+
+
+
+
+
+
+
+# -c is the genetic code
+# -o is the output directory
+# -r is the directory where the reference data is found, relative to -R
+# -R is the base directory containing thd reference data
+# For -r and -R, I use the same path, and it works. Both should not be
+# necessary, but I get an error if both are not included.
+# --debug gives a better log output. Typically, little is put into the log,
+# especially when there is an error.
+
+# Genetic codes
+# 1. The Standard Code 
+# 2. The Vertebrate Mitochondrial Code 
+# 3. The Yeast Mitochondrial Code 
+# 4. The Mold, Protozoan, and Coelenterate Mitochondrial Code and the
+#     Mycoplasma/Spiroplasma Code
+# 5. The Invertebrate Mitochondrial Code
+# 6. The Ciliate, Dasycladacean and Hexamita Nuclear Code 
+# 9. The Echinoderm and Flatworm Mitochondrial Code 
+# 10. The Euplotid Nuclear Code 
+# 11. The Bacterial, Archaeal and Plant Plastid Code 
+# 12. The Alternative Yeast Nuclear Code 
+# 13. The Ascidian Mitochondrial Code 
+# 14. The Alternative Flatworm Mitochondrial Code 
+# 16. Chlorophycean Mitochondrial Code 
+# 21. Trematode Mitochondrial Code 
+# 22. Scenedesmus obliquus Mitochondrial Code 
+# 23. Thraustochytrium Mitochondrial Code 
+# 24. Pterobranchia Mitochondrial Code 
+# 25. Candidate Division SR1 and Gracilibacteria Code
