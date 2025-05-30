@@ -31,13 +31,13 @@ medaka_consensus \
 -m r1041_e82_400bps_hac_v4.3.0 \
 -t $NSLOTS
 #
-cp ${results}/../../jobs/logs/${name}_medaka_hydra.log ${results}/medaka_consensus/${name}_medaka_hydra.log
+cp ${results}/../../jobs/logs/${name}_medaka_hydra.log ${results}/medaka_corrected_assemblies/${name}_medaka_hydra.log
 #
 if
   [[ -f "${results}/medaka/${name}/consensus.fasta" ]]; \
 then
   cp -r ${results}/medaka/${name}/consensus.fasta \
-  ${results}/medaka_consensus/${name}_medaka_consensus.fasta
+  ${results}/medaka_corrected_assemblies/${name}_medaka_consensus.fasta
 fi
 
 #
