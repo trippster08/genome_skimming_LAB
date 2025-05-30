@@ -25,64 +25,65 @@ shortname="$6"
 runmitos.py \
 -i ${contigs}/${sample} \
 -c ${taxa} \
--o ${results}/mitos_getorganelle/${name}_mitos_getorganelle \
+-o ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle \
 -r /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
 -R /scratch/nmnh_lab/macdonaldk/ref/refseq89m \
 --debug
 #
 
 
-cp ${results}/../../jobs/logs/${name}_mitos_getorganelle_hydra.log \
+cp ${results}/../../jobs/logs/${shortname}_mitos_getorganelle_hydra.log \
 ${results}/mitos_results/${shortname}_mitos_getorganelle_hydra.log
 
-if [[ -f "${results}/mitos_flye/${name}_mitos_flye/result.gff" ]]; then
+if [[ -f "${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.gff" ]]; then
   echo "There is only a single mitochondrial contig found."
-  cp -r ${results}/mitos_flye/${name}_mitos_flye/plots/ \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_plots
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.bed \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.bed
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.gff \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.gff
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.fas \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.fas
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.faa \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.faa
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.mitos \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.mitos
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.seq \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.seq
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.geneorder \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.geneorder
-  cp ${results}/mitos_flye/${name}_mitos_flye/result.png \
-  ${results}/mitos_results/${name}_mitos_flye/${name}.png
-  cp ${results}/mitos_flye/${name}_mitos_flye/stst.dat \
-  ${results}/mitos_results/${name}_mitos_flye/${name}stst.dat
+  cp -r ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/plots/ \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}_plots
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.bed \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.bed
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.gff \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.gff
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.fas \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.fas
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.faa \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.faa
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.mitos \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.mitos
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.seq \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.seq
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.geneorder \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.geneorder
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/result.png \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.png
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/stst.dat \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}stst.dat
 elif ls -d [0-9] [1-9][0-9] 2>/dev/null | grep -q '.'; then
-  for x in ${results}/mitos_flye/${name}_mitos_flye/*/
   echo "There are multiple mitochondrial contigs found."
+  for x in ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/*/; do
   contig_number=`basename ${x}`
-  cp -r ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/plots \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}_plots
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.bed \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.bed
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.gff \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.gff
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.fas \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.fas
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.faa \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.faa
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.mitos \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.mitos
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.seq \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.seq
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.geneorder \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.geneorder
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/result.png \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}.png
-  cp ${results}/mitos_flye/${name}_mitos_flye/${contig_number}/stst.dat \
-  ${results}/mitos_results/${name}_mitos_flye/${name}_${contig_number}stst.dat
+  cp -r ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/plots \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}_plots
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.bed \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.bed
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.gff \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.gff
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.fas \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.fas
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.faa \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.faa
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.mitos \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.mitos
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.seq \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.seq
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.geneorder \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.geneorder
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/result.png \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}.png
+  cp ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle/${contig_number}/stst.dat \
+  ${results}/mitos_results/${shortname}_mitos_getorganelle/${contig_number}stst.dat
   done
-else echo ${name} >> ${results}/mitos_results/mitos_failures.txt
+else echo ${shortname} >> ${results}/mitos_results/mitos_failures.txt
+     echo "There were no mitochondrial contigs found."
 fi
 #
 echo = `date` job $JOB_NAME done

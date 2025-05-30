@@ -3,9 +3,7 @@
 contigs="$1" 
 taxa="$2"
 
-if
-  [[ -z $2 ]]
-then
+if [[ -z $2 ]]; then
   echo "Genetic code not entered (should be a number between 1 and 25)"
   exit
 fi
@@ -24,11 +22,11 @@ for x in ${contigs}/*.path_sequence.fasta; do
   name=`echo ${sample%.path_sequence.fasta}`
   shortname=`echo ${sample%%_animal_mt*}`
 
-  mkdir -p ${results}/mitos_getorganelle/${name}_mitos_getorganelle
+  mkdir -p ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle
   mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
   
-  qsub -o logs/${name}_mitos_getorganelle_hydra.log \
-  -N ${name}_mitos_getorganelle \
+  qsub -o logs/${shortname}_mitos_getorganelle_hydra.log \
+  -N ${shortname}_mitos_getorganelle \
   mitos_annotate_getorganelle_loop.job ${contigs} ${results} ${sample} ${name} ${taxa} ${shortname}
 
   sleep 0.1
