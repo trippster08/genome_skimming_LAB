@@ -5,16 +5,12 @@ taxa="$2"
 ref="$3"
 results=${assemblies}/../
 
-if
-  [[ -z "$(ls ${assemblies}/*_medaka_consensus.fasta 2>/dev/null | grep fasta)" ]] 
-then
+if [[ -z "$(ls ${assemblies}/*_medaka_consensus.fasta 2>/dev/null | grep fasta)" ]]; then
   echo "Correct path to corrected flye results not entered (*_medaka_consensus.fasta)"
   exit
 fi
 
-if
-  [[ -z $2 ]]
-then
+if [[ -z $2 ]]; then
   echo "Genetic code not entered (should be a number between 1 and 25)"
   exit
 fi
@@ -22,8 +18,7 @@ fi
 if
   [[ ${ref} != Annelida && ${ref} != Arthropoda && ${ref} != Bryozoa && ${ref} != Cnidaria && ${ref} \
   != Ctenophora && ${ref} != Echinodermata && ${ref} != Mollusca && ${ref} != Nemertea && \
-  ${ref} != Porifera && ${ref} != Tunicata && ${ref} != Vertebrata && ${ref} != Metazoa ]]
-then
+  ${ref} != Porifera && ${ref} != Tunicata && ${ref} != Vertebrata && ${ref} != Metazoa ]]; then
   echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria", \
    "Ctenophora", "Echinodermata", "Mollusca", "Nemertea", "Porifera", "Tunicata", "Vertebrata" or , "Metazoa"'
   exit

@@ -7,9 +7,7 @@ data=${sra}/../
 for x in ${sra}/*/ ; do 
   sample=`basename ${x}`
 
-if
-  [[ -z "$(ls ${sra}/${sample}/*.sra 2>/dev/null | grep sra)" ]]  
-then  
+if [[ -z "$(ls ${sra}/${sample}/*.sra 2>/dev/null | grep sra)" ]]; then  
   echo "Correct path to sra file not entered (*.sra)"
   exit
 fi

@@ -5,16 +5,12 @@ taxa="$2"
 ref="$3"
 data=${trimmed}/../
 
-if
-  [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]] 
-then
+if [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to trimmed reads not entered (*.fastq.gz)"
   exit
 fi
 
-if
-  [[ -z $2 ]]
-then
+if [[ -z $2 ]]; then
   echo "Genetic code not entered (should be a number between 1 and 25)"
   exit
 fi
@@ -22,8 +18,7 @@ fi
 if
   [[ ${ref} != Annelida && ${ref} != Arthropoda && ${ref} != Bryozoa && ${ref} != Cnidaria && ${ref} \
   != Ctenophora && ${ref} != Echinodermata && ${ref} != Mollusca && ${ref} != Nemertea && \
-  ${ref} != Porifera && ${ref} != Tunicata && ${ref} != Vertebrata && ${ref} != Metazoa ]]
-then
+  ${ref} != Porifera && ${ref} != Tunicata && ${ref} != Vertebrata && ${ref} != Metazoa ]]; then
   echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria", \
    "Ctenophora", "Echinodermata", "Mollusca", "Nemertea", "Porifera", "Tunicata", "Vertebrata" or , "Metazoa"'
   exit

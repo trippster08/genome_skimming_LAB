@@ -2,9 +2,7 @@
 
 raw="$1"
 data=${raw}/..
-if
-  [[ -z "$(ls ${raw}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]
-then
+if [[ -z "$(ls ${raw}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to read files not entered (*.fastq.gz)"
   exit
 fi

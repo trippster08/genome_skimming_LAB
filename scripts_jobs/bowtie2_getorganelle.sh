@@ -4,16 +4,12 @@ contigs="$1"
 trimmed="$2"
 results=${contigs}/../
 
-if
-  [[ -z "$(ls ${contigs}/*.path_sequence.fasta 2>/dev/null | grep fasta)" ]] 
-then
+if [[ -z "$(ls ${contigs}/*.path_sequence.fasta 2>/dev/null | grep fasta)" ]]; then
   echo "Correct path to GetOrganelle results not entered (*.path_sequence.fasta)"
   exit
 fi
 
-if
-  [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]  
-then
+if [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to trimmed read files not entered (*.fastq.gz)"
   exit
 fi

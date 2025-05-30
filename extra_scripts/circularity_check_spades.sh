@@ -3,9 +3,7 @@
 contigs="$1"
 results=${contigs}/../
 
-if
-  [[ -z "$(ls ${contigs}/*_spades_contigs.fasta 2>/dev/null | grep fasta)" ]] 
-then
+if [[ -z "$(ls ${contigs}/*_spades_contigs.fasta 2>/dev/null | grep fasta)" ]]; then
   echo "Correct path to SPAdes results not entered (*_spades_contigs.fasta)"
   exit
 fi
