@@ -55,4 +55,4 @@ for y in ${data}/results/getorganelle/${name}/*.path_sequence.fasta; do
   fi
 done
 #
-  echo = `date` job $JOB_NAME done  
+  echo = `date` job $JOB_NAME done
