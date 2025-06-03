@@ -1,9 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 10
+#$ -pe mthread 16
 #$ -q mThC.q
-#$ -l mres=40G,h_data=4G,h_vmem=48G
+#$ -l mres=32G,h_data=2G,h_vmem=48G
 #$ -cwd
 #$ -j y
 #$ -N ${sample}
