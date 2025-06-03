@@ -33,14 +33,35 @@ respective log file for further information." \
  for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
   sample=`basename ${x}`
   name=`echo ${sample%_R[1-2]_*}`
-
+  if [ ${data}/results/getorganelle_contigs/${name}*path_sequence.fasta ]; then
+    echo "SPAdes assemblies for ${name} have already been analyzed by GetOrganelle"
+  elif [ -f logs/${name}_getorganelle_hydra.log ]; then
+    if [ -d ${data}/results/getorganelle/${name} ]; then
+      if [ -f ${data}/results/getorganelle_contigs/${name}_getorganelle_hydra.log ]; then
+        rm -r ${data}/results/getorganelle/${name} logs/${name}_getorganelle_hydra.log ${data}/results/getorganelle_contigs/${name}_getorganelle_hydra.log
+        qsub -o logs/${name}_getorganelle_hydra.log \
+        -N ${name}_getorganelle \
+        getorganelle_loop.job ${assembly} ${organelle} ${name} ${data}
+      else
+        rm -r ${data}/results/getorganelle/${name} logs/${name}_getorganelle_hydra.log
+        qsub -o logs/${name}_getorganelle_hydra.log \
+        -N ${name}_getorganelle \
+        getorganelle_loop.job ${assembly} ${organelle} ${name} ${data}
+      fi
+    else 
+      rm logs/${name}_getorganelle_hydra.log
+      qsub -o logs/${name}_getorganelle_hydra.log \
+      -N ${name}_getorganelle \
+      getorganelle_loop.job ${assem bly} ${organelle} ${name} ${data}
+    fi
+  else
   qsub -o logs/${name}_getorganelle_hydra.log \
   -N ${name}_getorganelle \
   getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
-
+  fi
   sleep 0.1
 done
-
+ 
 # This shell script submits a getorganelle job for each sample in the target
 # (typically data/trimmed_sequences/) directory
 

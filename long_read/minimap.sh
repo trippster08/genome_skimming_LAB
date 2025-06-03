@@ -5,7 +5,7 @@ raw_nanopore="$2"
 results=${contigs}/../
 
 if
-  [[ -z "$(find ${contigs}/ -name '*_contig.fasta' 2>/dev/null | grep fasta)" ]] 
+  [[ -z "$(find ${contigs}/ -name '*.fasta' 2>/dev/null | grep fasta)" ]] 
 then
   echo "Correct path to mitofinder contig not entered (*_mtDNA_contig.fasta)"
   exit
@@ -24,6 +24,9 @@ mkdir -p ${results}/minimap_results
  for x in ${contigs}/*/; do 
   mitofinder_final_results=`basename ${x}`
   name=`echo ${mitofinder_final_results%_mitofinder_flye_Final_Results}`
+  if [ -s ${results}/minimap_results/*.bam ]; then
+    echo "Reads have already been mapped to mitofinder contigs for ${name}"
+  else 
   qsub -o logs/${name}_minimap_hydra.log \
   -N ${name}_minimap \
   minimap_loop.job ${contigs} ${raw_nanopore} ${name} ${results}

@@ -12,17 +12,26 @@ mkdir -p ${data}/trimmed_reads
 
 for x in ${raw}/*_R1* ; do 
   sample=`basename ${x}`
-  name=`echo ${sample%%_*}`
+  name=$(echo ${sample} | awk -F'_S[0-9]{1,3}_' '{print $1}') 
   nameplus=`echo ${sample%_R*}`
   post=`echo ${sample#*_R[1-2]*}`
   # echo $sample
   # echo $name
   # echo $nameplus
 
-  qsub -o logs/${name}_fastp.log \
-  -N ${name}_fastp \
-  fastp_loop.job ${raw} ${data} ${name} ${nameplus} ${post}
 
+  if [ -f ${data}/trimmed_reads/${name}_R1_PE_trimmed.fastq.gz ]; then
+    echo "Reads for ${name} have already been trimmed by fastp"
+  elif [ -f logs/${name}_fastp.log ]; then
+    rm logs/${name}_fastp.log logs/${name}_fastp.json logs/${name}_fastp.html
+    qsub -o logs/${name}_fastp.log \
+    -N ${name}_fastp \
+    fastp_loop.job ${raw} ${data} ${name} ${nameplus} ${post}
+  else
+    qsub -o logs/${name}_fastp.log \
+    -N ${name}_fastp \
+    fastp_loop.job ${raw} ${data} ${name} ${nameplus} ${post}
+  fi
   sleep 0.1
 done
 

@@ -18,16 +18,38 @@ if
   exit
 fi
 
-mkdir -p ${data}/results/getorganelle_from_flye_assembly/ ${data}/results/getorganelle_contigs
+mkdir -p ${data}/results/getorganelle_from_flye_assembly/ ${data}/results/getorganelle_from_flye_contigs/
 
  for x in ${assembly}/*_assembly_graph.gfa ; do 
   sample=`basename ${x}`
   name=`echo ${sample%_flye_assembly_graph.gfa}`
 
-  qsub -o logs/${name}_getorganelle_from_flye_assembly_hydra.log \
-  -N ${name}_getorganelle_from_flye_assembly \
-  getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
-
+  if [ ${data}/results/getorganelle_from_flye_contigs/${name}*path_sequence.fasta ]; then
+    echo "SPAdes assemblies for ${name} have already been analyzed by GetOrganelle"
+  elif [ -f logs/${name}_getorganelle_from_flye_assembly_hydra.log ]; then
+    if [ -d ${data}/results/getorganelle_from_flye_assembly/${name} ]; then
+      if [ -f ${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly_hydra.log ]; then
+        rm -r ${data}/results/getorganelle_from_flye_assembly/${name} logs/${name}_getorganelle_from_flye_assembly_hydra.log ${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly_hydra.log
+        qsub -o logs/${name}_getorganelle_from_flye_assembly_hydra.log \
+        -N ${name}_getorganelle_from_flye_assembly \
+        getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
+      else
+        rm -r ${data}/results/getorganelle_from_flye_assembly/${name} logs/${name}_getorganelle_from_flye_assembly_hydra.log
+        qsub -o logs/${name}_getorganelle_from_flye_assembly_hydra.log \
+        -N ${name}_getorganelle_from_flye_assembly \
+        getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
+      fi
+    else 
+      rm logs/${name}_getorganelle_from_flye_assembly_hydra.log
+      qsub -o logs/${name}_getorganelle_from_flye_assembly_hydra.log \
+      -N ${name}_getorganelle_from_flye_assembly \
+      getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
+    fi
+  else
+    qsub -o logs/${name}_getorganelle_from_flye_assembly_hydra.log \
+    -N ${name}_getorganelle_from_flye_assembly \
+    getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
+  fi
   sleep 0.1
 done
 
