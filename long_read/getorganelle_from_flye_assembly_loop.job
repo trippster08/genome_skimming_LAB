@@ -31,28 +31,28 @@ get_organelle_from_assembly.py \
 -t $NSLOTS
 #
 cp logs/${name}_getorganelle_from_flye_assembly_hydra.log \
-${data}/results/getorganelle_contigs/${name}_getorganelle_from_flye_assembly_hydra.log
+${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly_hydra.log
 cp ${data}/results/getorganelle_from_flye_assembly/${name}/${name}_get_org.log.txt \
-${data}/results/getorganelle_contigs/${name}_getorganelle_from_flye_assembly.log
+${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly.log
 
 #
 for y in ${data}/results/getorganelle_from_flye_assembly/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
   if [[ ${contig} == *"repeat_pattern"* ]]
   then
-    echo ${contig} >> ${data}/results/getorganelle_contigs/getorganelle_repeats.txt
+    echo ${contig} >> ${data}/results/getorganelle_from_flye_contigs/getorganelle_repeats.txt
     cp ${data}/results/getorganelle_from_flye_assembly/${name}/*repeat_pattern*.fasta \
-    ${data}/results/getorganelle_contigs/
+    ${data}/results/getorganelle_from_flye_contigs/
   elif [[ ${contig} == *"scaffold"* ]]
   then
-    echo ${contig} >> ${data}/results/getorganelle_contigs/getorganelle_scaffolds.txt
+    echo ${contig} >> ${data}/results/getorganelle_from_flye_contigs/getorganelle_scaffolds.txt
     cp ${data}/results/getorganelle_from_flye_assembly/${name}/*scaffold*.fasta \
-    ${data}/results/getorganelle_contigs/
+    ${data}/results/getorganelle_from_flye_contigs/
   elif [[ ${contig} == *"animal_mt.complete"* ]]
   then
     cp ${data}/results/getorganelle_from_flye_assembly/${name}/*animal_mt.complete*.fasta \
-    ${data}/results/getorganelle_contigs/
-  else echo ${name} >> ${data}/results/getorganelle_contigs/getorganelle_failed.txt
+    ${data}/results/getorganelle_from_flye_contigs/
+  else echo ${name} >> ${data}/results/getorganelle_from_flye_contigs/getorganelle_failed.txt
   fi
 done
 #
