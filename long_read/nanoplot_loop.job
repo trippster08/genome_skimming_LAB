@@ -33,12 +33,11 @@ NanoPlot \
 #
 cp ${raw}/../../jobs/logs/${name}_nanoplot_hydra.log \
 ${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log
-cp ${data}/results/nanoplot_analyses/${name}/NanoPlot*.log \
-${data}/results/nanoplot_analyses/${name}_nanoplot.log
 
 test -f ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html \
-&& cp  ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html \
-${data}/results/nanoplot_analyses/${name}_NanoPlot-report.html
+&& cp  ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html ${data}/results/nanoplot_analyses/${name}_NanoPlot-report.html \
+&& cp ${data}/results/nanoplot_analyses/${name}/*.log ${data}/results/nanoplot_analyses/${name}_nanoplot.log \
+&& cp ${data}/results/nanoplot_analyses/${name}/NanoStats.txt ${data}/results/${name}_nanoplot_stats.txt 
 #
 echo = `date` job $JOB_NAME done
 
