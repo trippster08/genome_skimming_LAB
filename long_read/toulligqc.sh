@@ -13,11 +13,18 @@ mkdir -p ${data}/results/toulligqc_analyses
 for x in ${raw}/*.fastq.gz ; do 
   sample=`basename ${x}`
   name=`echo ${sample%.fastq.gz}`
-  
-  qsub -o logs/${name}_toulligqc_hydra.log \
-  -N ${name}_toulligqc \
-  toulligqc_loop.job ${raw} ${sample} ${name} ${data}
-
+  if [ -f ${data}/results/toulligqc_analyses/${name}_toulligqc_report.html ]; then
+    echo "Toulligqc has already analyzed ${name}"
+  elif [ -f logs/${name}_toulligzc_hydra.log ]; then
+    rm logs/${name}_toulligzc_hydra.log
+    qsub -o logs/${name}_toulligqc_hydra.log \
+    -N ${name}_toulligqc \
+    toulligqc_loop.job ${raw} ${sample} ${name} ${data}
+  else
+    qsub -o logs/${name}_toulligqc_hydra.log \
+    -N ${name}_toulligqc \
+    toulligqc_loop.job ${raw} ${sample} ${name} ${data}
+  fi
   sleep 0.1
 done
 

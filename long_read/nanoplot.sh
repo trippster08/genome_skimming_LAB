@@ -12,12 +12,29 @@ mkdir -p .
 for x in ${raw}/*.fastq.gz ; do 
   sample=`basename ${x}`
   name=`echo ${sample%.fastq.gz}`
-  mkdir -p ${data}/results/nanoplot_analyses/${name}
-  
-  qsub -o logs/${name}_nanoplot_hydra.log \
-  -N ${name}_nanoplot \
-  nanoplot_loop.job ${raw} ${sample} ${name} ${data}
-
+  if [ -f ${data}/results/nanoplot_analyses/${name}_NanoPlot-report.html ]; then
+    echo "Nanoplot has already analyzed ${name}"
+  elif [ -f logs/${name}_nanoplot_hydra.log ]; then
+    if [ -f ${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log ]; then
+      rm -r ${data}/results/nanoplot_analyses/${name} ${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log \
+      logs/${name}_nanoplot_hydra.log
+      mkdir -p ${data}/results/nanoplot_analyses/${name}
+      qsub -o logs/${name}_nanoplot_hydra.log \
+      -N ${name}_nanoplot \
+      nanoplot_loop.job ${raw} ${sample} ${name} ${data} 
+    else  
+      rm -r ${data}/results/nanoplot_analyses/${name} logs/${name}_nanoplot_hydra.log
+      mkdir -p ${data}/results/nanoplot_analyses/${name}
+      qsub -o logs/${name}_nanoplot_hydra.log \
+      -N ${name}_nanoplot \
+      nanoplot_loop.job ${raw} ${sample} ${name} ${data}
+    fi
+  else
+    mkdir -p ${data}/results/nanoplot_analyses/${name}
+    qsub -o logs/${name}_nanoplot_hydra.log \
+    -N ${name}_nanoplot \
+    nanoplot_loop.job ${raw} ${sample} ${name} ${data}
+  fi
   sleep 0.1
 done
 

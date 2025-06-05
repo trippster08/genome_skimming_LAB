@@ -24,12 +24,13 @@ mkdir -p ${data}/results/getorganelle_from_flye_assembly/ ${data}/results/getorg
   sample=`basename ${x}`
   name=`echo ${sample%_flye_assembly_graph.gfa}`
 
-  if [ ${data}/results/getorganelle_from_flye_contigs/${name}*path_sequence.fasta ]; then
+  if [ -f ${data}/results/getorganelle_from_flye_contigs/${name}*path_sequence.fasta ]; then
     echo "SPAdes assemblies for ${name} have already been analyzed by GetOrganelle"
   elif [ -f logs/${name}_getorganelle_from_flye_assembly_hydra.log ]; then
     if [ -d ${data}/results/getorganelle_from_flye_assembly/${name} ]; then
       if [ -f ${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly_hydra.log ]; then
-        rm -r ${data}/results/getorganelle_from_flye_assembly/${name} logs/${name}_getorganelle_from_flye_assembly_hydra.log ${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly_hydra.log
+        rm -r ${data}/results/getorganelle_from_flye_assembly/${name} logs/${name}_getorganelle_from_flye_assembly_hydra.log \
+        ${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly_hydra.log
         qsub -o logs/${name}_getorganelle_from_flye_assembly_hydra.log \
         -N ${name}_getorganelle_from_flye_assembly \
         getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}

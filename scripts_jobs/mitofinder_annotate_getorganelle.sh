@@ -30,13 +30,38 @@ for x in ${contigs}/*.path_sequence.fasta ; do
   sample=`basename ${x}`
   name=`echo ${sample%.path_sequence.fasta}`
   shortname=`echo ${sample%%_animal_mt*}`
-  #echo ${name}
-  
-  qsub -o ${results}/../../jobs/logs/${shortname}_mitofinder_getorganelle_hydra.log \
-  -wd ${results}/mitofinder_getorganelle \
-  -N ${shortname}_mitofinder_getorganelle \
-  mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results} ${shortname}
-
+  if [ -f ${results}/mitofinder_results/${shortname}_mitofinder_getorganelle_Final_Results/${shortname}*.fasta ]; then
+    echo "MitoFinder has already annotated getorganelle contigs for ${shortname}"
+  elif [ -f logs/${shortname}_mitofinder_getorganelle_hydra.log ]; then
+    if [ -d ${results}/mitofinder_getorganelle/${shortname}_mitofinder_getorganelle ]; then
+      if [ -f ${results}/mitofinder_results/${shortname}_mitofinder_getorganelle_hydra.log ]; then
+        rm -r ${results}/mitofinder_getorganelle/${shortname}_mitofinder_getorganelle ${results}/mitofinder_results/${shortname}_mitofinder_getorganelle_hydra.log \
+        ${results}/mitofinder_getorganelle/${shortname}_mitofinder_getorganelle_MitoFinder.log logs/${shortname}_mitofinder_getorganelle_hydra.log
+        qsub -o ${results}/../../jobs/logs/${shortname}_mitofinder_getorganelle_hydra.log \
+        -wd ${results}/mitofinder_getorganelle \
+        -N ${shortname}_mitofinder_getorganelle \
+        mitofinder_annotate_getorganelle_loop.job ${contigs} ${shortname} ${taxa} ${ref} ${sample} ${results}
+      else
+        rm -r ${results}/mitofinder_getorganelle/${shortname}_mitofinder_getorganelle ${results}/mitofinder_getorganelle/${shortname}_mitofinder_getorganelle_MitoFinder.log \
+        logs/${shortname}_mitofinder_getorganelle_hydra.log
+        qsub -o ${results}/../../jobs/logs/${shortname}_mitofinder_getorganelle_hydra.log \
+        -wd ${results}/mitofinder_getorganelle \
+        -N ${shortname}_mitofinder_getorganelle \
+        mitofinder_annotate_getorganelle_loop.job ${contigs} ${shortname} ${taxa} ${ref} ${sample} ${results}
+      fi
+    else
+      rm logs/${shortname}_mitofinder_getorganelle_hydra.log
+      qsub -o ${results}/../../jobs/logs/${shortname}_mitofinder_getorganelle_hydra.log \
+      -wd ${results}/mitofinder_getorganelle \
+      -N ${shortname}_mitofinder_getorganelle \
+      mitofinder_annotate_getorganelle_loop.job ${contigs} ${shortname} ${taxa} ${ref} ${sample} ${results}
+    fi
+  else
+    qsub -o ${results}/../../jobs/logs/${shortname}_mitofinder_getorganelle_hydra.log \
+    -wd ${results}/mitofinder_getorganelle \
+    -N ${shortname}_mitofinder_getorganelle \
+    mitofinder_annotate_getorganelle_loop.job ${contigs} ${shortname} ${taxa} ${ref} ${sample} ${results}
+  fi
   sleep 0.1
 done
 

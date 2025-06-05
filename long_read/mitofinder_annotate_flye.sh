@@ -29,10 +29,38 @@ mkdir -p ${results}/mitofinder_flye ${results}/mitofinder_results
 for x in ${assemblies}/*_medaka_consensus.fasta ; do 
     sample=`basename ${x}`
     name=`echo ${sample%_medaka_consensus.fasta}`
-    qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye.log \
-    -wd ${results}/mitofinder_flye \
-    -N ${name}_mitofinder_flye \
-    mitofinder_annotate_flye_loop.job ${assemblies} ${name} ${taxa} ${ref} ${sample} ${results}
+    if [ -f ${results}/mitofinder_results/${name}_mitofinder_flye_Final_Results/${name}*.fasta ]; then
+      echo "MitoFinder has already annotated flye assemblies for ${name}"
+    elif [ -f logs/${name}_mitofinder_flye_hydra.log ]; then
+      if [ -d ${results}/mitofinder_flye/${name}_mitofinder_flye ]; then
+        if [ -f ${results}/mitofinder_results/${name}_mitofinder_flye_hydra.log ]; then
+          rm -r ${results}/mitofinder_flye/${name}_mitofinder_flye ${results}/mitofinder_results/${name}_mitofinder_flye_hydra.log \
+          ${results}/mitofinder_flye/${name}_mitofinder_flye_MitoFinder.log logs/${name}_mitofinder_flye_hydra.log
+          qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye_hydra.log \
+          -wd ${results}/mitofinder_flye \
+          -N ${name}_mitofinder_flye \
+          mitofinder_annotate_flye_loop.job ${assemblies} ${name} ${taxa} ${ref} ${sample} ${results}
+        else
+          rm -r ${results}/mitofinder_flye/${name}_mitofinder_flye ${results}/mitofinder_flye/${name}_mitofinder_flye_MitoFinder.log \
+          logs/${name}_mitofinder_flye_hydra.log
+          qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye_hydra.log \
+          -wd ${results}/mitofinder_flye \
+          -N ${name}_mitofinder_flye \
+          mitofinder_annotate_flye_loop.job ${assemblies} ${name} ${taxa} ${ref} ${sample} ${results}
+        fi
+      else
+        rm logs/${name}_mitofinder_flye_hydra.log
+        qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye_hydra.log \
+        -wd ${results}/mitofinder_flye \
+        -N ${name}_mitofinder_flye \
+        mitofinder_annotate_flye_loop.job ${assemblies} ${name} ${taxa} ${ref} ${sample} ${results}
+      fi
+    else
+      qsub -o ${results}/../../jobs/logs/${name}_mitofinder_flye_hydra.log \
+      -wd ${results}/mitofinder_flye \
+      -N ${name}_mitofinder_flye \
+      mitofinder_annotate_flye_loop.job ${assemblies} ${name} ${taxa} ${ref} ${sample} ${results}
+    fi
   sleep 0.1
 done
 

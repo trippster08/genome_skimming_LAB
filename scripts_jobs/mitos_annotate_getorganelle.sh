@@ -21,14 +21,33 @@ for x in ${contigs}/*.path_sequence.fasta; do
   sample=`basename ${x}`
   name=`echo ${sample%.path_sequence.fasta}`
   shortname=`echo ${sample%%_animal_mt*}`
-
-  mkdir -p ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle
-  mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
-  
-  qsub -o logs/${shortname}_mitos_getorganelle_hydra.log \
-  -N ${shortname}_mitos_getorganelle \
-  mitos_annotate_getorganelle_loop.job ${contigs} ${results} ${sample} ${name} ${taxa} ${shortname}
-
+  if [ -f ${results}/mitos_results/${shortname}_mitos_getorganelle_Final_Results/${shortname}*.fasta ]; then
+    echo "MITOS has already annotated getorganelle contigs for ${shortname}"
+  elif [ -f logs/${shortname}_mitos_getorganelle_hydra.log ]; then
+    if [ -f ${results}/mitos_results/${shortname}_mitos_getorganelle_hydra.log ]; then
+      rm -r ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle ${results}/mitos_results/${name}_mitos_getorganelle \
+      ${results}/mitos_results/${shortname}_mitos_getorganelle_hydra.log logs/${shortname}_mitos_getorganelle_hydra.log
+      mkdir -p ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle
+      mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
+      qsub -o logs/${shortname}_mitos_getorganelle_hydra.log \
+      -N ${shortname}_mitos_getorganelle \
+      mitos_annotate_getorganelle_loop.job ${contigs} ${results} ${sample} ${shortname} ${taxa} 
+    else
+      rm -r ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle ${results}/mitos_results/${name}_mitos_getorganelle  \
+      logs/${shortname}_mitos_getorganelle_hydra.log
+      mkdir -p ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle
+      mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
+      qsub -o logs/${shortname}_mitos_getorganelle_hydra.log \
+      -N ${shortname}_mitos_getorganelle \
+      mitos_annotate_getorganelle_loop.job  ${contigs} ${results} ${sample} ${shortname} ${taxa}
+    fi
+  else
+    mkdir -p ${results}/mitos_getorganelle/${shortname}_mitos_getorganelle
+    mkdir -p ${results}/mitos_results/${shortname}_mitos_getorganelle
+    qsub -o logs/${shortname}_mitos_getorganelle_hydra.log \
+    -N ${shortname}_mitos_getorganelle \
+    mitos_annotate_getorganelle_loop.job  ${contigs} ${results} ${sample} ${shortname} ${taxa}
+  fi
   sleep 0.1
 done
 

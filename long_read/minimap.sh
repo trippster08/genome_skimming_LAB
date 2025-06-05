@@ -26,10 +26,20 @@ mkdir -p ${results}/minimap_results
   name=`echo ${mitofinder_final_results%_mitofinder_flye_Final_Results}`
   if [ -s ${results}/minimap_results/*.bam ]; then
     echo "Reads have already been mapped to mitofinder contigs for ${name}"
-  else 
-  qsub -o logs/${name}_minimap_hydra.log \
-  -N ${name}_minimap \
-  minimap_loop.job ${contigs} ${raw_nanopore} ${name} ${results}
-
+  elif [ -f ${results}minimap_results/${name}_minimap_hydra.log ]; then
+    rm ${results}minimap_results/${name}_minimap_hydra.log logs/${name}_minimap_hydra.log
+    qsub -o logs/${name}_minimap_hydra.log \
+    -N ${name}_minimap \
+    minimap_loop.job ${contigs} ${raw_nanopore} ${name} ${results}     
+  elif [ -f logs/${name}_minimap_hydra.log ]; then
+    rm logs/${name}_minimap_hydra.log
+    qsub -o logs/${name}_minimap_hydra.log \
+    -N ${name}_minimap \
+    minimap_loop.job ${contigs} ${raw_nanopore} ${name} ${results}
+  else
+    qsub -o logs/${name}_minimap_hydra.log \
+    -N ${name}_minimap \
+    minimap_loop.job ${contigs} ${raw_nanopore} ${name} ${results}
+  fi
   sleep 0.1
 done
