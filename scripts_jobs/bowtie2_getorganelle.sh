@@ -15,20 +15,37 @@ if [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
 fi
 
 mkdir -p ${results}/bowtie2_getorganelle
-mkdir -p ${results}/bowtie2_results
+mkdir -p ${results}/bowtie2_getorganelle_results
 
 for x in ${contigs}/*.path_sequence.fasta ; do 
   sample=`basename ${x}`
   name=`echo ${sample%.path_sequence.fasta}`
-  shortname=${name%%_*}
-  
-  mkdir ${results}/bowtie2_getorganelle/${shortname}
-
-  qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log \
-  -wd ${results}/bowtie2_getorganelle \
-  -N ${shortname}_bowtie2_getorganelle \
-  bowtie2_getorganelle_loop.job ${contigs} ${sample} ${trimmed} ${results} ${shortname}
-  
+  shortname=${name%%_animal_mt*}
+  if [ -f ${results}/bowtie2_getorganelle_results/${shortname}_bowtie_getorganelle.bam ]; then
+    echo "Reads for ${shortname} have already been mapped to GetOrganelle contigs"
+  elif [ -d ${results}/bowtie2_getorganelle/${shortname} ]; then
+    if [ -f ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log ]; then
+      rm -r ${results}/bowtie2_getorganelle/${shortname} ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log
+      mkdir ${results}/bowtie2_getorganelle/${shortname}
+      qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log \
+      -wd ${results}/bowtie2_getorganelle \
+      -N ${shortname}_bowtie2_getorganelle \
+      bowtie2_getorganelle_loop.job ${contigs} ${sample} ${trimmed} ${results} ${shortname}
+    else
+      rm -r ${results}/bowtie2_getorganelle/${shortname}
+      mkdir ${results}/bowtie2_getorganelle/${shortname}
+      qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log \
+      -wd ${results}/bowtie2_getorganelle \
+      -N ${shortname}_bowtie2_getorganelle \
+      bowtie2_getorganelle_loop.job ${contigs} ${sample} ${trimmed} ${results} ${shortname}
+    fi
+  else
+    mkdir ${results}/bowtie2_getorganelle/${shortname}
+    qsub -o ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log \
+    -wd ${results}/bowtie2_getorganelle \
+    -N ${shortname}_bowtie2_getorganelle \
+    bowtie2_getorganelle_loop.job ${contigs} ${sample} ${trimmed} ${results} ${shortname}
+  fi
   sleep 0.1
 done
 

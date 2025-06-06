@@ -20,18 +20,36 @@ ${results}/mitos_results/mitos_failures.txt
 for x in ${contigs}/*/; do
   mitofinder_final_result=`basename ${x}`
   name=`echo ${mitofinder_final_result%_mitofinder_flye_Final_Results}`
-  mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder \
-  ${results}/mitos_results/${name}_mitos_mitofinder
-  qsub -o logs/${name}_mitos_mitofinder_hydra.log \
-  -N ${name}_mitos_mitofinder \
-  mitos_annotate_mitofinder_loop.job ${contigs} ${results} ${mitofinder_final_result} ${name} ${taxa}
-
+  if [ -f ${results}/mitos_results/${name}_mitos_mitofinder/${name}.fas ]; then
+    echo "MITOS has already annotated mitofinder contigs for ${name}"
+  elif [ -f logs/${name}_mitos_mitofinder_hydra.log ]; then
+    if [ -f ${results}/mitos_results/${name}_mitos_mitofinder_hydra.log ]; then
+      rm -r ${results}/mitos_mitofinder/${name}_mitos_mitofinder ${results}/mitos_results/${name}_mitos_mitofinder \
+      ${results}/mitos_results/${name}_mitos_mitofinder_hydra.log logs/${name}_mitos_mitofinder_hydra.log
+      mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder ${results}/mitos_results/${name}_mitos_mitofinder
+      qsub -o logs/${name}_mitos_mitofinder_hydra.log \
+      -N ${name}_mitos_mitofinder \
+      mitos_annotate_mitofinder_loop.job ${contigs} ${results} ${mitofinder_final_result} ${name} ${taxa} 
+    else
+      rm -r ${results}/mitos_mitofinder/${name}_mitos_mitofinder ${results}/mitos_results/${name}_mitos_mitofinder  \
+      logs/${name}_mitos_mitofinder_hydra.log
+      mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder ${results}/mitos_results/${name}_mitos_mitofinder
+      qsub -o logs/${name}_mitos_mitofinder_hydra.log \
+      -N ${name}_mitos_mitofinder \
+      mitos_annotate_mitofinder_loop.job  ${contigs} ${results} ${mitofinder_final_result} ${name} ${taxa}
+    fi
+  else
+    mkdir -p ${results}/mitos_mitofinder/${name}_mitos_mitofinder ${results}/mitos_results/${name}_mitos_mitofinder
+    qsub -o logs/${name}_mitos_mitofinder_hydra.log \
+    -N ${name}_mitos_mitofinder \
+    mitos_annotate_mitofinder_loop.job  ${contigs} ${results} ${mitofinder_final_result} ${name} ${taxa}
+  fi
   sleep 0.1
 done
 
 # This script uses the contigs from a GetOrganelle output contig as a template
 # for annotation, and submits a MITOS job for each contig in the source
-# directory (typically results/getorganelle_contigs/).
+# directory (typically results/mitofinder_contigs/).
 
 
 # This MITOS shell requires two elements after calling the script
