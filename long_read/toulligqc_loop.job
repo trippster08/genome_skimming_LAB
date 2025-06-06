@@ -29,7 +29,7 @@ toulligqc \
 --thread $NSLOTS \
 --html-report-path ${data}/results/toulligqc_analyses/${name}_toulligqc_report.html
 #
-cp ${raw}/../../jobs/logs/${name}_toulligqc_hydra.log \
+cp logs/${name}_toulligqc_hydra.log \
 ${data}/results/toulligqc_analyses/${name}_toulligqc_hydra.log
 #
 echo = `date` job $JOB_NAME done

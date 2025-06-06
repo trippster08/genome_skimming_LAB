@@ -31,7 +31,7 @@ NanoPlot \
 --threads $NSLOTS
 
 #
-cp ${raw}/../../jobs/logs/${name}_nanoplot_hydra.log \
+cp logs/${name}_nanoplot_hydra.log \
 ${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log
 
 test -f ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html \
