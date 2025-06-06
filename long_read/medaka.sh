@@ -40,7 +40,6 @@ for x in ${assemblies}/*flye_assembly.fasta ; do
         medaka_loop.job ${assemblies} ${raw_nanopore} ${sample} ${name} ${results}
       fi
     else
-    mkdir ${results}/medaka/${name}
     qsub -o logs/${name}_medaka_hydra.log \
     -N ${name}_medaka \
     medaka_loop.job ${assemblies} ${raw_nanopore} ${sample} ${name} ${results}
