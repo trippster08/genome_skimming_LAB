@@ -49,7 +49,7 @@ if
   cp ${results}/flye/${name}/assembly_graph.gfa \
   ${results}/flye_assemblies/${name}_flye_assembly_graph.gfa
   seqkit seq ${results}/flye/${name}/assembly.fasta \
-  --max-len 22000 --min-len 3000 -w 0 \
+  --max-len 22000 --min-len 10000 -w 0 \
   -o ${results}/flye_assemblies/${name}_flye_assembly.fasta
 fi
 # Here we test to see if there is the file labeled "assembly.fasta" in the flye
