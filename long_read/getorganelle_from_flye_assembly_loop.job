@@ -23,34 +23,34 @@ data="$4"
 #
 get_organelle_from_assembly.py \
 -g ${assembly}/${name}_flye_assembly_graph.gfa \
--o ${data}/results/getorganelle_from_flye_assembly/${name} \
+-o ${data}/results/getorganelle_from_flye/${name} \
 -F ${organelle} \
 --min-depth 10 --max-depth inf \
 --expected-max-size 25000 --expected-min-size 10000 \
 --prefix ${name}_ \
 -t $NSLOTS
 #
-cp logs/${name}_getorganelle_from_flye_assembly_hydra.log \
-${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly_hydra.log
-cp ${data}/results/getorganelle_from_flye_assembly/${name}/${name}_get_org.log.txt \
-${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_assembly.log
+cp logs/${name}_getorganelle_from_flye_hydra.log \
+${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_hydra.log
+cp ${data}/results/getorganelle_from_flye/${name}/${name}_get_org.log.txt \
+${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye.log
 
 #
-for y in ${data}/results/getorganelle_from_flye_assembly/${name}/*.path_sequence.fasta; do
+for y in ${data}/results/getorganelle_from_flye/${name}/*.path_sequence.fasta; do
   contig=`basename ${y}`
   if [[ ${contig} == *"repeat_pattern"* ]]
   then
     echo ${contig} >> ${data}/results/getorganelle_from_flye_contigs/getorganelle_repeats.txt
-    cp ${data}/results/getorganelle_from_flye_assembly/${name}/*repeat_pattern*.fasta \
+    cp ${data}/results/getorganelle_from_flye/${name}/*repeat_pattern*.fasta \
     ${data}/results/getorganelle_from_flye_contigs/
   elif [[ ${contig} == *"scaffold"* ]]
   then
     echo ${contig} >> ${data}/results/getorganelle_from_flye_contigs/getorganelle_scaffolds.txt
-    cp ${data}/results/getorganelle_from_flye_assembly/${name}/*scaffold*.fasta \
+    cp ${data}/results/getorganelle_from_flye/${name}/*scaffold*.fasta \
     ${data}/results/getorganelle_from_flye_contigs/
   elif [[ ${contig} == *"animal_mt.complete"* ]]
   then
-    cp ${data}/results/getorganelle_from_flye_assembly/${name}/*animal_mt.complete*.fasta \
+    cp ${data}/results/getorganelle_from_flye/${name}/*animal_mt.complete*.fasta \
     ${data}/results/getorganelle_from_flye_contigs/
   else echo ${name} >> ${data}/results/getorganelle_from_flye_contigs/getorganelle_failed.txt
   fi
