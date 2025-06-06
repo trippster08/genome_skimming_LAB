@@ -33,10 +33,10 @@ bowtie2 \
 -1 ${trimmed}/${shortname}_R1_PE_trimmed.fastq.gz \
 -2 ${trimmed}/${shortname}_R2_PE_trimmed.fastq.gz \
 | samtools view -F 4 -b > \
-${results}/bowtie2_results/${shortname}_bowtie_getorganelle.bam
-
+${results}/bowtie2_getorganelle_results/${shortname}_bowtie_getorganelle.bam
+#
 cp ${results}/../../jobs/logs/${shortname}_bowtie2_getorganelle_hydra.log \
-${results}/bowtie2_results/${shortname}_bowtie2_getorganelle_hydra.log
+${results}/bowtie2_getorganelle_results/${shortname}_bowtie2_getorganelle_hydra.log
 #
 echo = `date` job $JOB_NAME done
 
