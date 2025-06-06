@@ -15,13 +15,16 @@ module load bio/fastqc
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
-raw="$1"
+reads="$1"
 sample="$2"
+read_type="$3"
 #
 fastqc \
--o ${raw}/fastqc_analyses \
-${raw}/${sample}
+-o ${reads}/fastqc_analyses \
+${reads}/${sample}
 #
+cp logs/${name}_fastqc_hydra.log \
+${results}/${read_type}_fastqc_analyses/${name}_fastqc_hydra.log
 echo = `date` job $JOB_NAME done
 
 # This job file loads the conda module, activates the fastqc
