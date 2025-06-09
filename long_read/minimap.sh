@@ -21,7 +21,7 @@ fi
 mkdir -p ${results}/minimap_results
 
 
- for x in ${contigs}/*/; do 
+for x in ${contigs}/*_mitofinder_flye_Final_Results/; do
   mitofinder_final_results=`basename ${x}`
   name=`echo ${mitofinder_final_results%_mitofinder_flye_Final_Results}`
   if [ -s ${results}/minimap_results/*.bam ]; then
