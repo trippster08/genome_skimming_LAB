@@ -2,8 +2,8 @@
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
 #$ -pe mthread 12
-#$ -q sThC.q
-#$ -l mres=96G,h_data=8G,h_vmem=8G
+#$ -q mThM.q
+#$ -l mres=120G,h_data=10G,h_vmem=10G,himem
 #$ -cwd
 #$ -j y
 #$ -N <SAMPLE>
