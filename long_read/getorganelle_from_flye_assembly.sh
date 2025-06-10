@@ -32,24 +32,24 @@ mkdir -p ${data}/results/getorganelle_from_flye/ ${data}/results/getorganelle_fr
         rm -r ${data}/results/getorganelle_from_flye/${name} logs/${name}_getorganelle_from_flye_hydra.log \
         ${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_hydra.log
         qsub -o logs/${name}_getorganelle_from_flye_hydra.log \
-        -N ${name}_getorganelle_from_flye \
+        -N ${name}_getorganelle_from_assembly_flye \
         getorganelle_from_flye_loop.job ${assembly} ${organelle} ${name} ${data}
       else
         rm -r ${data}/results/getorganelle_from_flye/${name} logs/${name}_getorganelle_from_flye_hydra.log
         qsub -o logs/${name}_getorganelle_from_flye_hydra.log \
         -N ${name}_getorganelle_from_flye \
-        getorganelle_from_flye_loop.job ${assembly} ${organelle} ${name} ${data}
+        getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
       fi
     else 
       rm logs/${name}_getorganelle_from_flye_hydra.log
       qsub -o logs/${name}_getorganelle_from_flye_hydra.log \
       -N ${name}_getorganelle_from_flye \
-      getorganelle_from_flye_loop.job ${assembly} ${organelle} ${name} ${data}
+      getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
     fi
   else
     qsub -o logs/${name}_getorganelle_from_flye_hydra.log \
     -N ${name}_getorganelle_from_flye \
-    getorganelle_from_flye_loop.job ${assembly} ${organelle} ${name} ${data}
+    getorganelle_from_flye_assembly_loop.job ${assembly} ${organelle} ${name} ${data}
   fi
   sleep 0.1
 done
