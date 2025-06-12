@@ -30,7 +30,7 @@ if [ -f ${contigs}/${name}_mitofinder_flye_Final_Results/${name}_mitofinder_flye
 else
   minimap2 \
   -ax map-ont -t $NSLOTS \
-  ${contigs}/${name}_mitofinder_flye_Final_Results/${name}_mitofinder_flye_mtDNA_contig_1.fasta \
+  ${contigs}/${name}_mitofinder_flye_Final_Results/${name}_mitofinder_flye_mtDNA_contig.fasta \
   ${raw_nanopore}/${name}.fastq.gz
 fi | \
 samtools view -F 4 -b > \
