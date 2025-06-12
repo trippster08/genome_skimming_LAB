@@ -21,6 +21,8 @@
 
 This protocol is to analyze paired-end or single-read demultiplexed illumina sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed run multiple samples simultanteously on [Hydra](https://confluence.si.edu/display/HPC/High+Performance+Computing), Smithsonian's HPC, using [fastQC](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/), [fastp](https://github.com/OpenGene/fastp), [GetOrganelle](https://github.com/Kinggerm/GetOrganelle), [MitoFinder](https://github.com/RemiAllio/MitoFinder), [MITOS](https://gitlab.com/Bernt/MITOS/), and [Bowtie2](https://github.com/BenLangmead/bowtie2). The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See [Hydra on Windows PCs](https://confluence.si.edu/display/HPC/Logging+into+Hydra) for differences between MacOS and Windows in accessing Hydra.
 
+I also have a pipeline for obtaining mitogenomes from Nanopore long reads, see [Long_Read.md](https://xxxxxxxxx). Hybrid (Nanopore/Illumina) analyses are coming. 
+
 This protocol currently includes methods to quality and adapter trim and filter raw reads, error-correct and assemble trimmed reads, annotate assemblies, and map reads to those assemblies. It does not yet include what to do with your assembled mitogenome, including checking for compelete annotation, quality of assembly and annotation, submission to GenBank, etc. I hope to add many of these steps soon. You can download this entire repository, including all `.job` and `.sh` files using this link: [Genome Skimming @ LAB](https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip).
 
 ## Local Computer Configuration 
@@ -51,7 +53,6 @@ Go to the the directory assigned to you for short-term storage of large data-set
 cd /scratch/genomics/USERNAME
 ```
 Make a project-specific directory, with the following subdirectories: `jobs/` and `data/raw/`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
-This pipeline is not dependent upon the directory tree shown, so you can set up your space differently, if you prefer. The only two directories that are required are `/data` and `/jobs` but you can name them whatever you like, and neither necessarily have to be in any particular place.This pipeline does create seveal new directories: `data/trimmed_reads/`, `data/results/`, and within `data/results/` program-specific directories for those results, and `jobs/logs/`. If you don't want these directories created, or want them in different places, they can be changed in the shell scripts. 
 ```
 mkdir -p PROJECT/data/raw PROJECT/jobs
 ```
@@ -84,7 +85,7 @@ Run the fastQC shell script, including the path to the directory containing your
 ```
 sh fastqc.sh path_to_raw_sequences
 ```
-The results of these analyses are saved in `data/raw/fastqc_analyses/`
+The results of these analyses are saved in `data/results/raw_fastqc_analyses/`
 
 ### Download Raw-Reads FastQC Results
 Download the directory containing the fastQC results (it should be `data/raw/fastqc_analyses/`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
