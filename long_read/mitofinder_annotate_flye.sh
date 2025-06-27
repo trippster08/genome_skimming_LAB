@@ -29,7 +29,7 @@ mkdir -p ${results}/mitofinder_flye ${results}/mitofinder_results
 for x in ${assemblies}/*_medaka_consensus.fasta ; do 
     sample=`basename ${x}`
     name=`echo ${sample%_medaka_consensus.fasta}`
-    if [ -f ${results}/mitofinder_results/${name}_mitofinder_flye_Final_Results/${name}*.fasta ]; then
+    if [ -d ${results}/mitofinder_results/${name}_mitofinder_flye_Final_Results ]; then
       echo "MitoFinder has already annotated flye assemblies for ${name}"
     elif [ -f logs/${name}_mitofinder_flye_hydra.log ]; then
       if [ -d ${results}/mitofinder_flye/${name}_mitofinder_flye ]; then
