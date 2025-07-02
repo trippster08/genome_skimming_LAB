@@ -16,15 +16,17 @@ echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
 reads="$1"
-sample="$2"
-read_type="$3"
+data="$2"
+sample="$3"
+read_type="$4"
+name="$5"
 #
 fastqc \
--o ${reads}/fastqc_analyses \
+-o ${data}/results/${read_type}_fastqc_analyses \
 ${reads}/${sample}
 #
 cp logs/${name}_fastqc_hydra.log \
-${results}/${read_type}_fastqc_analyses/${name}_fastqc_hydra.log
+${data}/results/${read_type}_fastqc_analyses/${name}_fastqc_hydra.log
 echo = `date` job $JOB_NAME done
 
 # This job file loads the conda module, activates the fastqc
