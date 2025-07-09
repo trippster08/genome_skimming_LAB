@@ -14,7 +14,7 @@ if
   [[ ${2} != animal_mt && ${2} != embplant_pt && ${2} != fungus_mt && ${2} != embplant_mt && ${2} \
   != embplant_nr && ${2} != other_pt ]]; then
   echo 'Correct organelle not entered. Please enter "animal_mt", "embplant_pt", "fungus_mt", "embplant_mt", \
-   "embplant_nr", or "other_pt" after path to SPAdes results.'
+   "embplant_nr", or "other_pt" after path to Flye results.'
   exit
 fi
 
@@ -25,7 +25,7 @@ mkdir -p ${data}/results/getorganelle_from_flye/ ${data}/results/getorganelle_fr
   name=`echo ${sample%_flye_assembly_graph.gfa}`
 
   if [ -f ${data}/results/getorganelle_from_flye_contigs/${name}*path_sequence.fasta ]; then
-    echo "SPAdes assemblies for ${name} have already been analyzed by GetOrganelle"
+    echo "Flye assemblies for ${name} have already been analyzed by GetOrganelle"
   elif [ -f logs/${name}_getorganelle_from_flye_hydra.log ]; then
     if [ -d ${data}/results/getorganelle_from_flye/${name} ]; then
       if [ -f ${data}/results/getorganelle_from_flye_contigs/${name}_getorganelle_from_flye_hydra.log ]; then
