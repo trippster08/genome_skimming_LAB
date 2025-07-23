@@ -11,6 +11,7 @@
 #
 # ----------------Modules------------------------- #
 # 
+module load module-verbose
 module load bio/seqkit
 module load tools/conda
 start-conda

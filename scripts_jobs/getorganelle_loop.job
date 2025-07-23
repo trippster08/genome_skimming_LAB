@@ -10,6 +10,7 @@
 #$ -o logs/SAMPLE-NAME_getorganelle.log
 #
 # ----------------Modules------------------------- #
+module load module-verbose
 module load bio/getorganelle
 # ----------------Your Commands------------------- #
 #

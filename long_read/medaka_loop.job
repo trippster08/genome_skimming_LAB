@@ -10,6 +10,7 @@
 #$ -o logs/${sample}_mitofinder.log
 #
 # ----------------Modules------------------------- #
+module load module-verbose
 module load tools/conda
 start-conda
 source activate medaka

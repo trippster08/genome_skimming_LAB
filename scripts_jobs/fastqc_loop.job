@@ -9,6 +9,7 @@
 #$ -o null
 #
 # ----------------Modules------------------------- #
+module load module-verbose
 module load bio/fastqc
 # ----------------Your Commands------------------- #
 #

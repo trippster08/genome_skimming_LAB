@@ -10,6 +10,7 @@
 #$ -o logs/SRRxxxx_bowtie2_ASSEMBLY.log
 
 # ----------------Modules------------------------- #
+module load module-verbose
 module load bio/bowtie2
 module load bio/samtools
 # ----------------Your Commands------------------- #

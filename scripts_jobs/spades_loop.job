@@ -11,6 +11,7 @@
 #$ -o logs/PROJECT_spades.log
 #
 # ----------------Modules------------------------- #
+module load module-verbose
 module load tools/ssd
 module load bio/spades
 # ----------------Your Commands------------------- #

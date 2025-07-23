@@ -10,6 +10,7 @@
 #$ -o null
 #
 # ----------------Modules------------------------- #
+module load module-verbose
 module load tools/conda
 start-conda
 source activate toulligqc

@@ -9,6 +9,7 @@
 #$ -o logs/${sample}_mitos.log
 #
 # ----------------Modules------------------------- #
+module load module-verbose
 module load bio/mitos
 # ----------------Your Commands------------------- #
 #

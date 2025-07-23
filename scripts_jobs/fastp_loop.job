@@ -10,6 +10,7 @@
 #$ -o logs/PROJECT_trim.log
 #
 # ----------------Modules------------------------- #
+module load module-verbose
 module load bio/fastp
 # ----------------Your Commands------------------- #
 #
