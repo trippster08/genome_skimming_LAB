@@ -1,0 +1,35 @@
+# /bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -q sThC.q
+#$ -l mres=4G,h_data=4G,h_vmem=12G
+#$ -cwd
+#$ -j y
+#$ -N <SAMPLE>
+#$ -o logs/<SAMPLE>.log
+#
+# ----------------Modules------------------------- #
+# 
+module load module-verbose
+module load bio/dorado
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+#
+raw="$1"
+sample="$2"
+name="$3"
+data="$4"
+#
+dorado \
+trim \
+${raw}/${sample} \
+--sequencing-kit SQK-RPB114.24 \
+-t $NSLOTS  --emit-fastq \
+> ${data}/trimmed_reads/${name}_trimmed.fastq
+#
+gzip -2 ${data}/trimmed_reads/${name}_trimmed.fastq
+#
+
+
+echo = `date` job $JOB_NAME done
