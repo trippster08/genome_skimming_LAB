@@ -23,15 +23,16 @@ raw="$1"
 sample="$2"
 name="$3"
 data="$4"
+toulligqc_results="$5"
 #
 toulligqc \
 --fastq ${raw}/${sample} \
 --report-name ${name}_toulligqc \
 --thread $NSLOTS \
---html-report-path ${data}/results/toulligqc_analyses/${name}_toulligqc_report.html
+--html-report-path ${toulligqc_results}/${name}_toulligqc_report.html
 #
 cp logs/${name}_toulligqc_hydra.log \
-${data}/results/toulligqc_analyses/${name}_toulligqc_hydra.log
+${toulligqc_results}/${name}_toulligqc_hydra.log
 #
 echo = `date` job $JOB_NAME done
 

@@ -1,29 +1,33 @@
 #!/bin/sh
 
-raw="$1"
-data=${raw}/..
-if [[ -z "$(ls ${raw}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
+reads="$1"
+read_type=$(basename ${reads})
+read_type_short=`echo ${read_type%_reads}`
+data=${reads}/..
+if [[ -z "$(ls ${reads}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to read files not entered (*.fastq.gz)"
   exit
 fi
 
 
-mkdir -p ${data}/results/toulligqc_analyses
+mkdir -p ${data}/results/${read_type_short}_toulligqc_analyses
+results=${data}/results/${read_type_short}_toulligqc_analyses
+toulligqc_results=${results}/${read_type_short}_toulligqc_analyses
 
-for x in ${raw}/*.fastq.gz ; do 
+for x in ${reads}/*.fastq.gz ; do 
   sample=`basename ${x}`
   name=`echo ${sample%.fastq.gz}`
-  if [ -f ${data}/results/toulligqc_analyses/${name}_toulligqc_report.html ]; then
+  if [ -f ${toulligqc_results}/${name}_toulligqc_report.html ]; then
     echo "Toulligqc has already analyzed ${name}"
   elif [ -f logs/${name}_toulligzc_hydra.log ]; then
     rm logs/${name}_toulligzc_hydra.log
     qsub -o logs/${name}_toulligqc_hydra.log \
     -N ${name}_toulligqc \
-    toulligqc_loop.job ${raw} ${sample} ${name} ${data}
+    toulligqc_loop.job ${reads} ${sample} ${name} ${data} ${toulligqc_results}
   else
     qsub -o logs/${name}_toulligqc_hydra.log \
     -N ${name}_toulligqc \
-    toulligqc_loop.job ${raw} ${sample} ${name} ${data}
+    toulligqc_loop.job ${reads} ${sample} ${name} ${data} ${toulligqc_results}
   fi
   sleep 0.1
 done

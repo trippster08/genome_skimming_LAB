@@ -1,39 +1,43 @@
 #!/bin/sh
 
-raw="$1"
-data=${raw}/..
-if [[ -z "$(ls ${raw}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
+reads="$1"
+read_type=$(basename ${reads})
+read_type_short=`echo ${read_type%_reads}`
+data=${reads}/..
+if [[ -z "$(ls ${reads}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to read files not entered (*.fastq.gz)"
   exit
 fi
 
-mkdir -p .
+mkdir -p ${data}/results/${read_type_short}_nanoplot_analyses
+results=${data}/results/${read_type_short}_nanoplot_analyses
+nanoplot_results=${results}/${read_type_short}_nanoplot_analyses
 
-for x in ${raw}/*.fastq.gz ; do 
+for x in ${reads}/*.fastq.gz ; do 
   sample=`basename ${x}`
   name=`echo ${sample%.fastq.gz}`
-  if [ -f ${data}/results/nanoplot_analyses/${name}_NanoPlot-report.html ]; then
+  if [ -f ${nanoplot_results}/${name}_NanoPlot-report.html ]; then
     echo "Nanoplot has already analyzed ${name}"
   elif [ -f logs/${name}_nanoplot_hydra.log ]; then
-    if [ -f ${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log ]; then
-      rm -r ${data}/results/nanoplot_analyses/${name} ${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log \
+    if [ -f ${nanoplot_results}/${name}_nanoplot_hydra.log ]; then
+      rm -r ${nanoplot_results}/${name} ${nanoplot_results}/${name}_nanoplot_hydra.log \
       logs/${name}_nanoplot_hydra.log
-      mkdir -p ${data}/results/nanoplot_analyses/${name}
+      mkdir -p ${nanoplot_results}/${name}
       qsub -o logs/${name}_nanoplot_hydra.log \
       -N ${name}_nanoplot \
-      nanoplot_loop.job ${raw} ${sample} ${name} ${data} 
+      nanoplot_loop.job ${reads} ${sample} ${name} ${data} ${nanoplot_results}
     else  
-      rm -r ${data}/results/nanoplot_analyses/${name} logs/${name}_nanoplot_hydra.log
-      mkdir -p ${data}/results/nanoplot_analyses/${name}
+      rm -r ${nanoplot_results}/${name} logs/${name}_nanoplot_hydra.log
+      mkdir -p ${nanoplot_results}/${name}
       qsub -o logs/${name}_nanoplot_hydra.log \
       -N ${name}_nanoplot \
-      nanoplot_loop.job ${raw} ${sample} ${name} ${data}
+      nanoplot_loop.job ${reads} ${sample} ${name} ${data} ${nanoplot_results}
     fi
   else
-    mkdir -p ${data}/results/nanoplot_analyses/${name}
+    mkdir -p ${nanoplot_results}/${name}
     qsub -o logs/${name}_nanoplot_hydra.log \
     -N ${name}_nanoplot \
-    nanoplot_loop.job ${raw} ${sample} ${name} ${data}
+    nanoplot_loop.job ${reads} ${sample} ${name} ${data} ${nanoplot_results}
   fi
   sleep 0.1
 done

@@ -19,26 +19,27 @@ source activate nanoplot
 echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
-raw="$1"
+reads="$1"
 sample="$2"
 name="$3"
 data="$4"
+nanoplot_results="$5"
 #
 NanoPlot \
---fastq ${raw}/${sample} \
---outdir ${data}/results/nanoplot_analyses/${name} \
+--fastq ${reads}/${sample} \
+--outdir ${nanoplot_results}/${name} \
 --no_static \
 --title ${name} \
 --threads $NSLOTS
 
 #
 cp logs/${name}_nanoplot_hydra.log \
-${data}/results/nanoplot_analyses/${name}_nanoplot_hydra.log
+${nanoplot_results}/${name}_nanoplot_hydra.log
 
-test -f ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html \
-&& cp  ${data}/results/nanoplot_analyses/${name}/NanoPlot-report.html ${data}/results/nanoplot_analyses/${name}_NanoPlot-report.html \
-&& cp ${data}/results/nanoplot_analyses/${name}/*.log ${data}/results/nanoplot_analyses/${name}_nanoplot.log \
-&& cp ${data}/results/nanoplot_analyses/${name}/NanoStats.txt ${data}/results/nanoplot_analyses/${name}_nanoplot_stats.txt 
+test -f ${nanoplot_results}/${name}/NanoPlot-report.html \
+&& cp  ${nanoplot_results}/${name}/NanoPlot-report.html ${nanoplot_results}/${name}_NanoPlot-report.html \
+&& cp ${nanoplot_results}/${name}/*.log ${nanoplot_results}/${name}_nanoplot.log \
+&& cp ${nanoplot_results}/${name}/NanoStats.txt ${nanoplot_results}/${name}_nanoplot_stats.txt 
 #
 echo = `date` job $JOB_NAME done
 
