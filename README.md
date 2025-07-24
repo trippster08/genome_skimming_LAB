@@ -30,9 +30,9 @@ Make a project directory, and mulitple subdirectories on your local computer. Ma
 
 Make sure to replace "PROJECT" with your project name throughout.
 ```
-mkdir -p PROJECT/data/raw PROJECT/jobs
+mkdir -p PROJECT/data/raw_reads PROJECT/jobs
 ```
-Your raw reads should be in `data/raw/`. 
+Your raw reads should be in `data/raw_reads/`. 
 NOTE: As currently designed, this pipeline has a few naming requirements for raw reads. Reads should be `fastq.gz` or `fastq` formated, and needs to start with a unique sample name (that contains no underscores) and read number (either R1 or R2) later in the filename. Both sample name and read number must be separated from the remainder of the filename with underscores. Also, Hydra does not allow jobs names to start with a number, so if your sample names start with a number, change the name by adding at least one letter to the beginning of the filename (I usually use the initials of the researcher) before running this pipeline.
 
 ## Hydra Configuration 
@@ -52,9 +52,9 @@ Go to the the directory assigned to you for short-term storage of large data-set
 ```
 cd /scratch/genomics/USERNAME
 ```
-Make a project-specific directory, with the following subdirectories: `jobs/` and `data/raw/`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
+Make a project-specific directory, with the following subdirectories: `jobs/` and `data/raw_reads/`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
 ```
-mkdir -p PROJECT/data/raw PROJECT/jobs
+mkdir -p PROJECT/data/raw_reads PROJECT/jobs
 ```
 ### Transfer Files to Hydra 
 Download the pipeline to jobs/ in your Hydra account using `wget`. This downloads a compressed file that contains all job files (\*.job), and shell scripts (\*.sh) necessary for your analysis. This command downloads a compressed file that will become a directory upon unzipping. Don't forget to move into your jobs folder first: `cd PROJECT/jobs`.
@@ -69,7 +69,7 @@ mv genome_skimming_LAB-main/scripts_jobs/* genome_skimming_LAB-main/extra_script
 rm -r genome_skimming_LAB-main main.zip
 
 ```
-Your raw reads should be copied into `data/raw/`. Download to your local computer and use scp or filezilla to upload to `data/raw/`. See [Transferring Files to/from Hydra](https://confluence.si.edu/pages/viewpage.action?pageId=163152227) for help with transferring files between Hydra and your computer.
+Your raw reads should be copied into `data/raw_reads/`. Download to your local computer and use scp or filezilla to upload to `data/raw_reads/`. See [Transferring Files to/from Hydra](https://confluence.si.edu/pages/viewpage.action?pageId=163152227) for help with transferring files between Hydra and your computer.
 
 ## Running the Pipeline
 This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/USERNAME/PROJECT/jobs/`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `jobs/logs/`. 
@@ -81,14 +81,14 @@ We first run fastQC on all our reads to check their quality and help determine o
 
 ### Run FastQC
 Run the fastQC shell script, including the path to the directory containing your raw read files. For most, it should be something like: 
-`/scratch/genomics/USERNAME/PROJECT/data/raw/`. 
+`/scratch/genomics/USERNAME/PROJECT/data/raw_reads/`. 
 ```
 sh fastqc.sh path_to_raw_sequences
 ```
-The results of these analyses are saved in `data/results/raw_fastqc_analyses/`
+The results of these analyses are saved in `data/results/raw_reads_fastqc_analyses/`
 
 ### Download Raw-Reads FastQC Results
-Download the directory containing the fastQC results (it should be `data/raw/fastqc_analyses/`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
+Download the directory containing the fastQC results (it should be `data/results/raw_reads_fastqc_analyses/`) to your computer. Open the html files using your browser to examine your read quality. Interpreting fastQC results can be tricky, and will not be discussed here. See LAB staff or others familiar with fastQC for help.
 
 ## Trimming and Filtering Raw Reads with fastp
 We are going to trim all our reads to remove poor quality basepairs and residual adapter sequences, and filter out poor-quality or exceptionally short reads using the program fastp.  
@@ -98,7 +98,7 @@ fastp does not require an illumina adapter to remove adapter sequences, but you 
 Based on the quality of your reads (as determined by fastQC), you may want to edit the parameters in  `fastp.job`. The job file contains descriptions and suggestions for each parameter. 
 
 Run the fastp shell script, including the path to the directory containing your raw read files. For most, it should be something like: 
-`/scratch/genomics/USERNAME/PROJECT/data/raw/`. 
+`/scratch/genomics/USERNAME/PROJECT/data/raw_reads/`. 
 
 ```
 sh fastp.sh path_to_raw_sequences
@@ -114,7 +114,7 @@ Go to the directory containing your job files. The shell file below, and the job
 Run the fastQC shell script, including the path to the directory containing your trimmed files. For most, it should be something like: 
 `/scratch/genomics/USERNAME/PROJECT/data/trimmed_reads/`. 
 ```
-sh fastqc.sh path_to_raw_sequences
+sh fastqc.sh path_to_trimmed_sequences
 ```
 The results of these analyses are saved in `data/trimmed_reads/fastqc_analyses/`
 
