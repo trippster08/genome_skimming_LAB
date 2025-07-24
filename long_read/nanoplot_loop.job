@@ -3,7 +3,7 @@
 #$ -S /bin/sh
 #$ -pe mthread 4
 #$ -q sThC.q
-#$ -l mres=16G,h_data=4G,h_vmem=16G
+#$ -l mres=24G,h_data=6G,h_vmem=32G
 #$ -cwd
 #$ -j y
 #$ -N null
