@@ -22,8 +22,7 @@ echo + NSLOTS = $NSLOTS
 raw="$1"
 sample="$2"
 name="$3"
-data="$4"
-toulligqc_results="$5"
+toulligqc_results="$4"
 #
 toulligqc \
 --fastq ${raw}/${sample} \

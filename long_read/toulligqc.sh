@@ -9,10 +9,8 @@ if [[ -z "$(ls ${reads}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   exit
 fi
 
-
-mkdir -p ${data}/results/${read_type_short}_toulligqc_analyses
-results=${data}/results/${read_type_short}_toulligqc_analyses
-toulligqc_results=${results}/${read_type_short}_toulligqc_analyses
+toulligqc_results=${data}/results/${read_type_short}_toulligqc_analyses/
+mkdir -p ${toulligqc_results}
 
 for x in ${reads}/*.fastq.gz ; do 
   sample=`basename ${x}`
@@ -23,25 +21,24 @@ for x in ${reads}/*.fastq.gz ; do
     rm logs/${name}_toulligzc_hydra.log
     qsub -o logs/${name}_toulligqc_hydra.log \
     -N ${name}_toulligqc \
-    toulligqc_loop.job ${reads} ${sample} ${name} ${data} ${toulligqc_results}
+    toulligqc_loop.job ${reads} ${sample} ${name} ${toulligqc_results}
   else
     qsub -o logs/${name}_toulligqc_hydra.log \
     -N ${name}_toulligqc \
-    toulligqc_loop.job ${reads} ${sample} ${name} ${data} ${toulligqc_results}
+    toulligqc_loop.job ${reads} ${sample} ${name} ${toulligqc_results}
   fi
   sleep 0.1
 done
 
 
 
-# This script runs a fastqc analysis on multiple fastq sequences, either raw
-# demultiplexed sequences or trimmed sequences that that have been output using
-# either trimmomatic or fastp. 
+# This script runs a toulligqc analysis on multiple fastq nanopore sequences, it can
+# work with raw, trimmed, or trimmed and filtered sequences. 
 
-# Raw sequences should be in PROJECT/data/raw/ and trimmed sequences should be
-# PROJECT/data/trimmed_sequences/. For each sample file, it will output an html
-# file that you should transfer to your local computer. Open this file with your
+# Raw sequences should be in PROJECT/data/raw/, trimmed sequences should be
+# PROJECT/data/trimmed_reads/, and filtered sequences should be in PROJECT/data/filtered_reads/. 
+# For each sample file, it will output html and log files into the folder 
+# results/<read type>_toulligqc_analyses/ You can download this entire folder 
+# to your local computer. Open this file with your
 # browser and view the visual representations of your sample quality.
-# It will also output a .zip file that contains text summaries of read quality.  
-# See https://confluence.si.edu/pages/viewpage.action?pageId=163152227 for help
-# with transferring files between Hydra and your computer.
+
