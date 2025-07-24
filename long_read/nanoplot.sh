@@ -1,17 +1,16 @@
 #!/bin/sh
 
 reads="$1"
-read_type=$(basename ${reads})
-read_type_short=`echo ${read_type%_reads}`
+read_type=$(basename ${reads} | sed 's/_reads$//')
+
 data=${reads}/..
 if [[ -z "$(ls ${reads}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to read files not entered (*.fastq.gz)"
   exit
 fi
 
-mkdir -p ${data}/results/${read_type_short}_nanoplot_analyses
-results=${data}/results/${read_type_short}_nanoplot_analyses
-nanoplot_results=${results}/${read_type_short}_nanoplot_analyses
+nanoplot_results=${data}/results/${read_type}_nanoplot_analyses/
+mkdir -p ${nanoplot_results}
 
 for x in ${reads}/*.fastq.gz ; do 
   sample=`basename ${x}`

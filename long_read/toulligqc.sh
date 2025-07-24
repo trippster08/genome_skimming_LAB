@@ -1,15 +1,14 @@
 #!/bin/sh
 
 reads="$1"
-read_type=$(basename ${reads})
-read_type_short=`echo ${read_type%_reads}`
+read_type=$(basename ${reads} | sed 's/_reads$//')
 data=${reads}/..
 if [[ -z "$(ls ${reads}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to read files not entered (*.fastq.gz)"
   exit
 fi
 
-toulligqc_results=${data}/results/${read_type_short}_toulligqc_analyses/
+toulligqc_results=${data}/results/${read_type}_toulligqc_analyses/
 mkdir -p ${toulligqc_results}
 
 for x in ${reads}/*.fastq.gz ; do 

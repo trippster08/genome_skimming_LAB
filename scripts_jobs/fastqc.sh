@@ -1,30 +1,31 @@
 #!/bin/sh
 
 reads="$1"
-read_type=$(basename ${reads})
-results=${reads}/../results
+read_type=$(basename ${reads} | sed 's/_reads$//')
+
 data=${reads}/..
 if [[ -z "$(ls ${reads}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to read files not entered (*.fastq.gz)"
   exit
 fi
 
-mkdir -p ${results}/${read_type}_fastqc_analyses
+fastqc_results=${data}/results/${read_type}_fastqc_analyses/
+mkdir -p ${fastqc_results}
 
 for x in ${reads}/*.fastq.gz ; do 
   sample=`basename ${x}`
   name=`echo ${sample%.fastq.gz}`
-  if [ -f ${results}/${read_type}_fastqc_analyses/${name}_*.html ]; then
+  if [ -f ${fastqc_results}/${name}_*.html ]; then
     echo "QC for ${name} has already been performed"
   elif [ -f logs/${name}_fastqc_hydra.log ]; then
     rm logs/${name}_fastqc_hydra.log
     qsub -o logs/${name}_fastqc_hydra.log \
     -N ${name}_fastqc \
-    fastqc_loop.job ${reads} ${sample} ${read_type}
+    fastqc_loop.job ${reads} ${sample}
   else
     qsub -o logs/${name}_fastqc_hydra.log \
     -N ${name}_fastqc \
-    fastqc_loop.job ${reads} ${data} ${sample} ${read_type} ${name}
+    fastqc_loop.job ${reads} ${data} ${sample} ${name}
   fi
   sleep 0.1
 done
