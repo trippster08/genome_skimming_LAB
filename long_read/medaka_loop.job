@@ -27,7 +27,7 @@ results="$5"
 #
 medaka_consensus \
 -d ${assemblies}/${sample} \
--i ${raw_nanopore}/${name}.fastq.gz \
+-i ${raw_nanopore}/${name}_trimmed_filtered.fastq.gz \
 -o ${results}/medaka/${name} \
 -m r1041_e82_400bps_hac_v4.3.0 \
 -t $NSLOTS
