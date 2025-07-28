@@ -19,7 +19,7 @@ for x in ${trimmed}/*.fastq.gz ; do
   # echo $sample
   # echo $name
 
-  qsub -o logs/${name}_chopper.log \
+  qsub -o logs/${name}_chopper_hydra.log \
   -N ${name}_chopper \
   chopper_loop.job ${trimmed} ${sample} ${name} ${data}
 
