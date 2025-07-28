@@ -25,7 +25,7 @@ dorado \
 trim \
 ${raw}/${sample} \
 --sequencing-kit SQK-RPB114.24 \
--t $NSLOTS  --emit-fastq \
+-t $NSLOTS  --emit-fastq --verbose \
 > ${data}/trimmed_reads/${name}_trimmed.fastq
 #
 gzip -2 ${data}/trimmed_reads/${name}_trimmed.fastq
