@@ -19,14 +19,15 @@ echo + NSLOTS = $NSLOTS
 assemblies="$1"
 name="$2"
 mito_code="$3"
-ref="$4"
+ref_database="$4"
 sample="$5"
 results="$6"
+path_to_ref="$7"
 #
 mitofinder \
 -j ${name}_mitofinder_medaka \
 -o ${mito_code} \
--r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${ref}_*.gb \
+-r ${path_to_ref}/mito_reference_${ref_database}* \
 -a ${assemblies}/${sample} \
 --new-genes -p $NSLOTS -m 8
 
