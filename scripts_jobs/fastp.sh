@@ -11,7 +11,7 @@ fi
 mkdir -p ${data}/trimmed_reads
 
 for x in ${raw}/*_R1* ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=$(echo ${sample} | awk -F'_S[0-9]{1,3}_' '{print $1}') 
   nameplus=`echo ${sample%_R*}`
   post=`echo ${sample#*_R[1-2]*}`

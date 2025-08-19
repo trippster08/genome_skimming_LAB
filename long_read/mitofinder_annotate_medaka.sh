@@ -8,7 +8,7 @@ path_to_ref="/scratch/nmnh_lab/macdonaldk/ref/"
 
 avail_ref=()
 for file in ${path_to_ref}/mito_reference_*.gb; do
-  ref_file=$(basename ${file})
+  ref_file=${x##*/}
   taxon=$(echo ${ref_file} | sed -E 's/^mito_reference_([A-Za-z]+)_[0-9]{2}[A-Za-z]{3}[0-9]{2}\.gb$/\1/')
   avail_ref+=(${taxon})
 done

@@ -13,7 +13,7 @@ fi
 mkdir -p ${data}/filtered_reads
 
 for x in ${trimmed}/*.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%%_trimmed.fastq.gz}`
 
   # echo $sample

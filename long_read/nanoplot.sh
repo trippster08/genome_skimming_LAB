@@ -13,7 +13,7 @@ nanoplot_results=${data}/results/${read_type}_nanoplot_analyses/
 mkdir -p ${nanoplot_results}
 
 for x in ${reads}/*.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%.fastq.gz}`
   if [ -f ${nanoplot_results}/${name}_NanoPlot-report.html ]; then
     echo "Nanoplot has already analyzed ${name}"

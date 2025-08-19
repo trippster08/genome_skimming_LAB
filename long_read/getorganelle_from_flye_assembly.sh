@@ -21,7 +21,7 @@ fi
 mkdir -p ${data}/results/getorganelle_from_flye/ ${data}/results/getorganelle_from_flye_contigs/
 
  for x in ${assembly}/*_assembly_graph.gfa ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%_flye_assembly_graph.gfa}`
 
   if [ -f ${data}/results/getorganelle_from_flye_contigs/${name}*path_sequence.fasta ]; then

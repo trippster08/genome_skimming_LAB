@@ -18,7 +18,7 @@ the problem, see LAB staff for help troubleshooting" > \
 ${results}/mitos_results/mitos_failures.txt
 
 for x in ${contigs}/*_mitofinder_flye_Final_Results/; do
-  mitofinder_final_result=`basename ${x}`
+  mitofinder_final_result=${x##*/}
   name=`echo ${mitofinder_final_result%_mitofinder_flye_Final_Results}`
   if [ -f ${results}/mitos_results/${name}_mitos_mitofinder/${name}.fas ]; then
     echo "MITOS has already annotated mitofinder contigs for ${name}"

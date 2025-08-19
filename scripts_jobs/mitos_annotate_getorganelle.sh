@@ -18,7 +18,7 @@ the problem, see LAB staff for help troubleshooting" > \
 ${results}/mitos_results/mitos_failures.txt
 
 for x in ${contigs}/*.path_sequence.fasta; do
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%.path_sequence.fasta}`
   shortname=`echo ${sample%%_animal_mt*}`
   if [ -f ${results}/mitos_results/${shortname}_mitos_getorganelle/${shortname}.fas ]; then

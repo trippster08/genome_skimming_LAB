@@ -31,7 +31,7 @@ respective log file for further information." \
 >  ${data}/results/getorganelle_contigs/getorganelle_failed.txt
 
  for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%_R[1-2]_*}`
   if [ ${data}/results/getorganelle_contigs/${name}*path_sequence.fasta ]; then
     echo "SPAdes assemblies for ${name} have already been analyzed by GetOrganelle"

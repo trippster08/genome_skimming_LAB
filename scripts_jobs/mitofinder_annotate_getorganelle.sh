@@ -27,7 +27,7 @@ fi
 mkdir -p ${results}/mitofinder_getorganelle ${results}/mitofinder_results
 
 for x in ${contigs}/*.path_sequence.fasta ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%%_animal_mt*}`
   if [ -d ${results}/mitofinder_results/${name}_mitofinder_getorganelle_Final_Results ]; then
     echo "MitoFinder has already annotated getorganelle contigs for ${name}"

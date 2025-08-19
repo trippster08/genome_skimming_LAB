@@ -12,7 +12,7 @@ fi
 mkdir -p ${results}/spades ${results}/spades_contigs
 
 for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%_R[1-2]_*}`
 #  echo $sample
 #  echo $name

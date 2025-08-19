@@ -13,7 +13,7 @@ fastqc_results=${data}/results/${read_type}_fastqc_analyses/
 mkdir -p ${fastqc_results}
 
 for x in ${reads}/*.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%.fastq.gz}`
   if [ -f ${fastqc_results}/${name}_*.html ]; then
     echo "QC for ${name} has already been performed"

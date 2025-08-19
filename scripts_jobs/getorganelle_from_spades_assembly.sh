@@ -21,7 +21,7 @@ fi
 mkdir -p ${data}/results/getorganelle_from_spades_assembly/ ${data}/results/getorganelle_from_spades_contigs/
 
  for x in ${assembly}/*_assembly_graph.fastg ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%_assembly_graph.fastg}`
   if [ ${data}/results/getorganelle_from_spades_contigs/${name}*path_sequence.fasta ]; then
     echo "SPAdes assemblies for ${name} have already been analyzed by GetOrganelle"

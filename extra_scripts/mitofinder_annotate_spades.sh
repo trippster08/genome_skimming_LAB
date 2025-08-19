@@ -27,7 +27,7 @@ fi
 mkdir -p ${results}/mitofinder_spades ${results}/mitofinder_results
 
 for x in ${contigs}/*_spades_contigs.fasta ; do 
-    sample=`basename ${x}`
+    sample=${x##*/}
     name=`echo ${sample%_spades_contigs.fasta}`
     
     qsub -o ${results}/../../jobs/logs/${name}_mitofinder_spades.log \

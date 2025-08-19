@@ -27,7 +27,7 @@ fi
 mkdir -p ${data}/results/mitofinder ${data}/results/mitofinder_results
 
 for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%_R1_*}`
   #echo ${name}
   

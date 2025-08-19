@@ -12,7 +12,7 @@ fi
 mkdir -p ${data}/trimmed_reads/ 
 
 for x in ${raw}/*.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%.fastq.gz}`
   if [ -f ${trimmed_reads}/${name}_trimmed.fastq.gz ]; then
     echo "Primer/adapter trimming for ${name} has already been completed"

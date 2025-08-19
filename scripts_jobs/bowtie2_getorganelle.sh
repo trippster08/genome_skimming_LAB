@@ -18,7 +18,7 @@ mkdir -p ${results}/bowtie2_getorganelle
 mkdir -p ${results}/bowtie2_getorganelle_results
 
 for x in ${contigs}/*.path_sequence.fasta ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%.path_sequence.fasta}`
   shortname=${name%%_animal_mt*}
   if [ -f ${results}/bowtie2_getorganelle_results/${shortname}_bowtie_getorganelle.bam ]; then

@@ -12,7 +12,7 @@ toulligqc_results=${data}/results/${read_type}_toulligqc_analyses/
 mkdir -p ${toulligqc_results}
 
 for x in ${reads}/*.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%.fastq.gz}`
   if [ -f ${toulligqc_results}/${name}_toulligqc_report.html ]; then
     echo "Toulligqc has already analyzed ${name}"

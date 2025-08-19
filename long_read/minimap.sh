@@ -22,7 +22,7 @@ mkdir -p ${results}/minimap_results
 
 
 for x in ${contigs}/*_mitofinder_flye_Final_Results/; do
-  mitofinder_final_results=`basename ${x}`
+  mitofinder_final_results=${x##*/}
   name=`echo ${mitofinder_final_results%_mitofinder_flye_Final_Results}`
   if [ -s ${results}/minimap_results/${name}_minimap_mitofinder.bam ]; then
     echo "Reads have already been mapped to mitofinder contigs for ${name}"

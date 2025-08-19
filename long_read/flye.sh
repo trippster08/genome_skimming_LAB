@@ -13,7 +13,7 @@ mkdir -p ${data}/results/flye ${data}/results/flye_assemblies
 results=${data}/results/
 
 for x in ${reads}/*.fastq.gz ; do 
-  sample=`basename ${x}`
+  sample=${x##*/}
   name=`echo ${sample%_trimmed_filtered.fastq.gz}`
   if [ -f ${results}/flye_assemblies/${name}_flye.log ]; then
     echo "Flye assemblies for ${name} have already been completed"
