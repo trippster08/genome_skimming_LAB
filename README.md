@@ -60,6 +60,7 @@ mkdir -p PROJECT/data/raw_reads PROJECT/jobs
 Download the pipeline to jobs/ in your Hydra account using `wget`. This downloads a compressed file that contains all job files (\*.job), and shell scripts (\*.sh) necessary for your analysis. This command downloads a compressed file that will become a directory upon unzipping. Don't forget to move into your jobs folder first: `cd PROJECT/jobs`.
 ```
 wget https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip
+
 ```
 Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your newly unzipped directory into the job directory and the primer folder into the main project directory. Delete the now-empty pipeline directory and zipped download. This also places a directory filled with additional scripts (SPAdes and associated annotation scripts, flye, downloading SRA data, etc) into jobs/. If you want to run any of these scripts, move them from jobs/extra_scripts/ to jobs/.
 ```
