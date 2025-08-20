@@ -49,9 +49,11 @@ if
   ${results}/flye_assemblies/${name}_flye_assembly_info.txt
   cp ${results}/flye/${name}/assembly_graph.gfa \
   ${results}/flye_assemblies/${name}_flye_assembly_graph.gfa
+  cp ${results}/flye/${name}/assembly.fasta \
+  ${results}/flye_assemblies/${name}_flye_assembly.fasta
   seqkit seq ${results}/flye/${name}/assembly.fasta \
-  --max-len 22000 --min-len 10000 -w 0 \
-  -o ${results}/flye_assemblies/${name}_flye_assembly.fasta
+  --max-len 22000 --min-len 1000 -w 0 \
+  -o ${results}/flye_assemblies/${name}_flye_assembly_mito_filtered.fasta
 fi
 # Here we test to see if there is the file labeled "assembly.fasta" in the flye
 # results folder, then copiy them into a flye_assemblies folder. We do the same
