@@ -1,0 +1,45 @@
+#!/bin/sh
+# ----------------Parameters---------------------- #
+#$ -S /bin/sh
+#$ -pe mthread 6
+#$ -q sThC.q
+#$ -l mres=36G,h_data=6G,h_vmem=32G
+#$ -cwd
+#$ -j y
+#$ -N null
+#$ -o null
+#
+# ----------------Modules------------------------- #
+module load module-verbose
+module load tools/mamba
+start-mamba
+source activate nextpolish 
+# ----------------Your Commands------------------- #
+#
+echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
+echo + NSLOTS = $NSLOTS
+#
+
+name="$1"
+results="$2"
+
+#
+nextPolish \
+${results}/nextpolish/${name}_run.cfg
+
+#
+cp ${results}/../../jobs/logs/${name}_nextpolish_hydra.log \
+${results}/nextpolished_assemblies/${name}_nextpolish_hydra.log
+
+if [ -f ${results}/nextpolish/${name}/genome.nextpolish.fasta ]; then
+  cp ${results}/nextpolish/${name}/genome.nextpolish.fasta \
+  ${results}/nextpolished_assemblies/${name}_nextpolished.fasta
+  cp ${results}/nextpolish/${name}/genome.nextpolish.fasta.stat \
+  ${results}/nextpolished_assemblies/${name}_genome_nextpolish_fasta.stat
+fi
+
+echo = `date` job $JOB_NAME done
+
+# This job file loads the conda module, activates the nanoplot
+# environment, and runs nanoplot on all samples.
+# -o is the path to the output directory
