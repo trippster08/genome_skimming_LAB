@@ -38,14 +38,14 @@ mitofinder \
 cp ${data}/../jobs/logs/${name}_mitofinder.log \
 ${data}/results/mitofinder_results/${name}_mitofinder_hydra.log
 
-test -f ${results}/mitofinder_flye/${name}_mitofinder_flye/${name}_mitofinder_MitoFinder.log \
-&& cp ${results}/mitofinder_flye/${name}_mitofinder_flye/${name}_mitofinder_MitoFinder.log \
-${results}/mitofinder_results/${name}_mitofinder_MitoFinder.log
-
-test -d ${data}/results/mitofinder/${name}_mitofinder/${name}_mitofinder_MitoFinder_megahit_mitfi_Final_Results \
-&& cp -r ${data}/results/mitofinder/${name}_mitofinder/${name}_mitofinder_MitoFinder_megahit_mitfi_Final_Results \
-${data}/results/mitofinder_results/${name}_mitofinder_Final_Results
-
+if [ -f ${results}/mitofinder_flye/${name}_mitofinder_flye/${name}_mitofinder_MitoFinder.log ]; then
+  cp ${results}/mitofinder_flye/${name}_mitofinder_flye/${name}_mitofinder_MitoFinder.log \
+  ${results}/mitofinder_results/${name}_mitofinder_MitoFinder.log
+fi
+if [ -d ${data}/results/mitofinder/${name}_mitofinder/${name}_mitofinder_MitoFinder_megahit_mitfi_Final_Results ]; then
+  cp -r ${data}/results/mitofinder/${name}_mitofinder/${name}_mitofinder_MitoFinder_megahit_mitfi_Final_Results \
+  ${data}/results/mitofinder_results/${name}_mitofinder_Final_Results
+fi
 
 #
 echo = `date` job $JOB_NAME done

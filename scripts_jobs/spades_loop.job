@@ -40,14 +40,15 @@ ${results}/spades_contigs/${name}_spades_hydra.log
 # first outputs each sequence on a single line (see copilot for a
 # description how this works).
 
-test -f ${results}/spades/${name}/contigs.fasta \
-&& awk '/^>/ {if (NR!=1) printf("\n"); printf("%s\n",$0); next} {printf("%s",$0);} END {printf("\n");}' \
-${results}/spades/${name}/contigs.fasta > ${results}/spades_contigs/${name}_spades_contigs.fasta
+if [ -f ${results}/spades/${name}/contigs.fasta ]; then
+  awk '/^>/ {if (NR!=1) printf("\n"); printf("%s\n",$0); next} {printf("%s",$0);} END {printf("\n");}' \
+  ${results}/spades/${name}/contigs.fasta > ${results}/spades_contigs/${name}_spades_contigs.fasta
+fi
 
-test -f ${results}/spades/${name}/spades.log \
-&& cp ${results}/spades/${name}/spades.log \
-${results}/spades_contigs/${name}_spades.log
-
+if [ test -f ${results}/spades/${name}/spades.log ]; then
+  cp ${results}/spades/${name}/spades.log \
+  ${results}/spades_contigs/${name}_spades.log
+fi
 #
 echo = `date` job $JOB_NAME done
 

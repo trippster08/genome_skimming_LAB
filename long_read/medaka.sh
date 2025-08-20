@@ -5,15 +5,13 @@ raw_nanopore="$2"
 results=${assemblies}/../
 
 if
-  [[ -z "$(ls ${assemblies}/*_flye_assembly.fasta 2>/dev/null | grep fasta)" ]] 
-then
+  [[ -z "$(ls ${assemblies}/*_flye_assembly.fasta 2>/dev/null | grep fasta)" ]]; then
   echo "Correct path to flye results not entered (*_flye_assembly.fasta)"
   exit
 fi
 
 if
-  [[ -z "$(ls ${raw_nanopore}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]
-then
+  [[ -z "$(ls ${raw_nanopore}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to trimmed read files not entered (*trimmed.fastq.gz)"
   exit
 fi

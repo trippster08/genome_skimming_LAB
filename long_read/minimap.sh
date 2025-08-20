@@ -5,15 +5,13 @@ raw_nanopore="$2"
 results=${contigs}/../
 
 if
-  [[ -z "$(find ${contigs}/ -name '*.fasta' 2>/dev/null | grep fasta)" ]] 
-then
+  [[ -z "$(find ${contigs}/ -name '*.fasta' 2>/dev/null | grep fasta)" ]]; then
   echo "Correct path to mitofinder contig not entered (*_mtDNA_contig.fasta)"
   exit
 fi
 
 if
-  [[ -z "$(ls ${raw_nanopore}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]
-then
+  [[ -z "$(ls ${raw_nanopore}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to raw nanopore read files not entered (*.fastq.gz)"
   exit
 fi

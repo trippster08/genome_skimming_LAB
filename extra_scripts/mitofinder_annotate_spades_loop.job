@@ -34,14 +34,14 @@ mitofinder \
 cp ${results}/../../jobs/logs/${name}_mitofinder_spades_hydra.log \
 ${results}/mitofinder_results/${name}_mitofinder_spades_hydra.log
 
-test -f ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder.log \
-&& cp ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder.log \
-${results}/mitofinder_results/${name}_mitofinder_spades_MitoFinder.log
-
-test -d ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder_mitfi_Final_Results \
-&& cp -r ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder_mitfi_Final_Results \
-${results}/mitofinder_results/${name}_mitofinder_spades_Final_Results
-
+if [ -f ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder.log ]; then
+  cp ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder.log \
+  ${results}/mitofinder_results/${name}_mitofinder_spades_MitoFinder.log
+fi
+if [ -d ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder_mitfi_Final_Results ]; then
+  cp -r ${results}/mitofinder_spades/${name}_mitofinder_spades/${name}_mitofinder_spades_MitoFinder_mitfi_Final_Results \
+  ${results}/mitofinder_results/${name}_mitofinder_spades_Final_Results
+fi
 #
 echo = `date` job $JOB_NAME done
 

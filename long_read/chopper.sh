@@ -4,8 +4,7 @@ trimmed="$1"
 data=${trimmed}/../
 
 if
-  [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]  
-then  
+  [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then  
   echo "Correct path to read files not entered (*.fastq.gz)"
   exit
 fi

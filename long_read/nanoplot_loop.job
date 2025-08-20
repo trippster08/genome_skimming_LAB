@@ -36,10 +36,11 @@ NanoPlot \
 cp logs/${name}_nanoplot_hydra.log \
 ${nanoplot_results}/${name}_nanoplot_hydra.log
 
-test -f ${nanoplot_results}/${name}/NanoPlot-report.html \
-&& cp  ${nanoplot_results}/${name}/NanoPlot-report.html ${nanoplot_results}/${name}_NanoPlot-report.html \
-&& cp ${nanoplot_results}/${name}/*.log ${nanoplot_results}/${name}_nanoplot.log \
-&& cp ${nanoplot_results}/${name}/NanoStats.txt ${nanoplot_results}/${name}_nanoplot_stats.txt 
+if [ -f ${nanoplot_results}/${name}/NanoPlot-report.html ]; then
+  cp  ${nanoplot_results}/${name}/NanoPlot-report.html ${nanoplot_results}/${name}_NanoPlot-report.html
+  cp ${nanoplot_results}/${name}/*.log ${nanoplot_results}/${name}_nanoplot.log
+  cp ${nanoplot_results}/${name}/NanoStats.txt ${nanoplot_results}/${name}_nanoplot_stats.txt 
+fi
 #
 echo = `date` job $JOB_NAME done
 

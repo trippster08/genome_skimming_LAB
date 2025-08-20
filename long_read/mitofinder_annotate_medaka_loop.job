@@ -34,14 +34,14 @@ mitofinder \
 cp ${results}/../../jobs/logs/${name}_mitofinder_medaka_hydra.log \
 ${results}/mitofinder_results/
 
-test -f ${results}/mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder.log \
-&& cp ${results}/mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder.log \
-${results}/mitofinder_results/${name}_mitofinder_medaka.log
-
-test -d ${results}/mitofinder_medaka/${name}_mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder_mitfi_Final_Results \
-&& cp -r ${results}/mitofinder_medaka/${name}_mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder_mitfi_Final_Results \
-${results}/mitofinder_results/${name}_mitofinder_medaka_Final_Results
-
+if [ -f ${results}/mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder.log ]; then
+  cp ${results}/mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder.log \
+  ${results}/mitofinder_results/${name}_mitofinder_medaka.log
+fi
+if [ -d ${results}/mitofinder_medaka/${name}_mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder_mitfi_Final_Results ]; then
+  cp -r ${results}/mitofinder_medaka/${name}_mitofinder_medaka/${name}_mitofinder_medaka_MitoFinder_mitfi_Final_Results \
+  ${results}/mitofinder_results/${name}_mitofinder_medaka_Final_Results
+fi
 #
 echo = `date` job $JOB_NAME done
 
