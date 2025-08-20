@@ -9,7 +9,7 @@ if [[ -z "$(ls ${reads}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
 fi
 
 
-mkdir -p ${data}/results/flye ${data}/results/flye_assemblies 
+mkdir -p ${data}/results/flye ${data}/results/flye_assemblies
 results=${data}/results/
 
 for x in ${reads}/*.fastq.gz ; do 
