@@ -38,7 +38,7 @@ for x in ${trimmed_illumina_reads}/*R1_PE_trimmed.fastq.gz ; do
         genome_path="${medaka_corrected_assemblies}/${name}_medaka_consensus.fasta"
         cfg_path="${results}/nextpolish/${name}_run.cfg"
 
-  cat > "$cfg_path" <<EOF
+        cat > "$cfg_path" <<EOF
 [General]
 job_type = local
 job_prefix = nextPolish
@@ -56,10 +56,6 @@ polish_options = -p {multithread_jobs} -u -debug
 sgs_fofn=${results}/nextpolish/${name}.fofn
 sgs_options = -max_depth 100 -bwa
 EOF
-
-        genome_path=${medaka_corrected_assemblies}/${name}_medaka_consensus.fasta
-        cfg_path=${results}/nextpolish/${name}_run.cfg
-
         qsub -o logs/${name}_nextpolish_hydra.log \
         -N ${name}_nextpolish \
         nextpolish_loop.job ${name} ${results}
@@ -91,10 +87,6 @@ polish_options = -p {multithread_jobs} -u -debug
 sgs_fofn=${results}/nextpolish/${name}.fofn
 sgs_options = -max_depth 100 -bwa
 EOF
-
-        genome_path=${medaka_corrected_assemblies}/${name}_medaka_consensus.fasta
-        cfg_path=${results}/nextpolish/${name}_run.cfg
-
         qsub -o logs/${name}_nextpolish_hydra.log \
         -N ${name}_nextpolish \
         nextpolish_loop.job ${name} ${results}
@@ -125,10 +117,6 @@ polish_options = -p {multithread_jobs} -u -debug
 sgs_fofn=${results}/nextpolish/${name}.fofn
 sgs_options = -max_depth 100 -bwa
 EOF
-
-      genome_path=${medaka_corrected_assemblies}/${name}_medaka_consensus.fasta
-      cfg_path=${results}/nextpolish/${name}_run.cfg
-
       qsub -o logs/${name}_nextpolish_hydra.log \
       -N ${name}_nextpolish \
       nextpolish_loop.job ${name} ${results}
