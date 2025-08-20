@@ -26,9 +26,9 @@ for x in ${trimmed_illumina_reads}/*R1_PE_trimmed.fastq.gz ; do
   if [ -f ${results}/nextpolished_assemblies/${name}_genome_nextpolished.fasta ]; then
     echo "Assemblies for ${name} have already benn polished by nextPolish"
   else
-    if [ -d ${results}/nextpolish/${names} ]; then
+    if [ -d ${results}/nextpolish/${name} ]; then
       if [ -f ${results}/nextpolished_assemblies/${name}_nextpolish_hydra.log ]; then
-        rm -r ${results}/nextpolish/${names} logs/${name}_nextpolish_hydra.log \
+        rm -r ${results}/nextpolish/${name} logs/${name}_nextpolish_hydra.log \
         ${results}/nextpolished_assemblies/${name}_nextpolish_hydra.log \
         ${results}/nextpolish/${name}.fofn ${results}/nextpolish/${name}_run.cfg
         # Create .fofn file
@@ -64,7 +64,7 @@ EOF
         -N ${name}_nextpolish \
         nextpolish_loop.job ${name} ${results}
       else
-        rm -r ${results}/nextpolish/${names} logs/${name}_nextpolish_hydra.log \
+        rm -r ${results}/nextpolish/${name} logs/${name}_nextpolish_hydra.log \
         ${results}/nextpolish/${name}.fofn ${results}/nextpolish/${name}_run.cfg
         # Create .fofn file
         echo ${trimmed_illumina_reads}/${name}_R1_PE_trimmed.fastq.gz > ${results}/nextpolish/${name}.fofn
