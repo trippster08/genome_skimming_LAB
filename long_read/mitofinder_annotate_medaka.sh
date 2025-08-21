@@ -33,8 +33,8 @@ fi
 mkdir -p ${results}/mitofinder_medaka ${results}/mitofinder_results
 
 for x in ${assemblies}/*_medaka_consensus.fasta ; do 
-    sample=`basename ${x}`
-    name=`echo ${sample%_medaka_consensus.fasta}`
+    sample=${x##*/}
+    name=${sample%_medaka_consensus.fasta}
     if [ -d ${results}/mitofinder_results/${name}_mitofinder_medaka_Final_Results ]; then
       echo "MitoFinder has already annotated medaka assemblies for ${name}"
     elif [ -f logs/${name}_mitofinder_medaka_hydra.log ]; then
@@ -72,7 +72,7 @@ done
 
 
 # This is different from a normal mitofinder run because it doesn't use the raw
-# sequences as an input, but instead uses the medaak_consensus.fasta output from a
+# sequences as an input, but instead uses the medaka_consensus.fasta output from a
 # medaka-corrected flye assembly. 
 
 # Mitofinder defaults to put the output in the same folder from which the 
