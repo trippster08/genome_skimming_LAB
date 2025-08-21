@@ -53,7 +53,7 @@ if
   ${results}/flye_assemblies/${name}_flye_assembly.fasta
   seqkit seq ${results}/flye/${name}/assembly.fasta \
   --max-len 22000 --min-len 1000 -w 0 \
-  -o ${results}/flye_assemblies/${name}_flye_assembly_mito_filtered.fasta
+  -o ${results}/flye_assemblies/${name}_mito_filtered_flye_assembly.fasta
 fi
 # Here we test to see if there is the file labeled "assembly.fasta" in the flye
 # results folder, then copiy them into a flye_assemblies folder. We do the same
