@@ -1,9 +1,9 @@
 #!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
-#$ -pe mthread 4
+#$ -pe mthread 8
 #$ -q sThC.q
-#$ -l mres=8G,h_data=2G,h_vmem=32G
+#$ -l mres=64G,h_data=8G,h_vmem=32G
 #$ -cwd
 #$ -j y
 #$ -N null
@@ -26,10 +26,10 @@ trimmed_illumina_reads="$3"
 medaka_corrected_assemblies="$4"
 #
 # Create .fofn file
-echo ${trimmed_illumina_reads}/${name}_R1_PE_trimmed.fastq.gz > ${results}/nextpolish/${name}.fofn
-echo ${trimmed_illumina_reads}/${name}_R2_PE_trimmed.fastq.gz >> ${results}/nextpolish/${name}.fofn
+echo ${trimmed_illumina_reads}/${name}_R1_PE_trimmed.fastq.gz > ${results}/nextpolish/${name}/${name}.fofn
+echo ${trimmed_illumina_reads}/${name}_R2_PE_trimmed.fastq.gz >> ${results}/nextpolish/${name}/${name}.fofn
 # Create run.cfg file
-cat > "${results}/nextpolish/${name}_run.cfg" <<EOF
+cat > "${results}/nextpolish/${name}/${name}_run.cfg" <<EOF
 [General]
 job_type = local
 job_prefix = nextPolish
@@ -44,12 +44,12 @@ workdir = ${results}/nextpolish/${name}
 polish_options = -p {multithread_jobs} -u -debug
 
 [sgs_option]
-sgs_fofn = ${results}/nextpolish/${name}.fofn
+sgs_fofn = ${results}/nextpolish/${name}/${name}.fofn
 sgs_options = -max_depth 100 -bwa
 EOF
 #
 nextPolish \
-${results}/nextpolish/${name}_run.cfg
+${results}/nextpolish/${name}/${name}_run.cfg
 
 #
 cp ${results}/../../jobs/logs/${name}_nextpolish_hydra.log \

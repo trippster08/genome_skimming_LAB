@@ -24,6 +24,7 @@ for x in ${trimmed_illumina_reads}/*R1_PE_trimmed.fastq.gz ; do
   name=${sample%_R1_PE_trimmed.fastq.gz}
   # echo ${sample}
   # echo ${name}
+  mkdir -p ${results}/nextpolish/${name}
   if [ -f ${results}/nextpolished_assemblies/${name}_genome_nextpolished.fasta ]; then
     echo "Assemblies for ${name} have already benn polished by nextPolish"
   else
