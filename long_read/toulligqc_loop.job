@@ -28,7 +28,8 @@ toulligqc \
 --fastq ${raw}/${sample} \
 --report-name ${name}_toulligqc \
 --thread $NSLOTS \
---html-report-path ${toulligqc_results}/${name}_toulligqc_report.html
+--html-report-path ${toulligqc_results}/${name}_toulligqc_report.html \
+--images-directory ${toulligqc_results}/${name}_images
 #
 cp logs/${name}_toulligqc_hydra.log \
 ${toulligqc_results}/${name}_toulligqc_hydra.log
