@@ -19,9 +19,9 @@ fi
 mkdir -p ${results}/medaka ${results}/medaka_corrected_assemblies
 
 
-for x in ${assemblies}/*flye_assembly.fasta ; do 
+for x in ${assemblies}/*flye_assembly*.fasta ; do 
   sample=${x##*/}
-  name=`echo ${sample%_flye_assembly.fasta}`
+  name=`echo ${sample%_flye_assembly*}`
   if [ -f ${results}/medaka_corrected_assemblies/${name}_medaka_consensus.fasta ]; then
     echo "Assemblies for ${name} have already been corrected by medaka"
   else
