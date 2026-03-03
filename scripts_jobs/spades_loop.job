@@ -13,7 +13,6 @@
 # ----------------Modules------------------------- #
 module load module-verbose
 module load bio/seqkit
-module load tools/ssd
 module load bio/spades
 # ----------------Your Commands------------------- #
 #
@@ -29,7 +28,7 @@ spades.py \
 --pe1-1 ${trimmed}/${name}_R1_PE_trimmed.fastq.gz \
 --pe1-2 ${trimmed}/${name}_R2_PE_trimmed.fastq.gz \
 --pe1-s ${trimmed}/${name}_R0_SE_trimmed.fastq.gz \
--t $NSLOTS --tmp-dir $SSD_DIR
+-t $NSLOTS
 
 cp ${results}/../../jobs/logs/${name}_spades_hydra.log \
 ${results}/spades_contigs/${name}_spades_hydra.log
@@ -58,12 +57,17 @@ echo = `date` job $JOB_NAME done
 
 # -o is the path to the directory where you want your results saved
 # --pe1-1 is the path to the file of the paired R1 reads of the first paired-end 
-# library (you can have mutiple libraries as input files). --pe1-2 is the path
+# library (you can have multiple libraries as input files). --pe1-2 is the path
 # to the file of the paired R2 reads of the first paired-end library. --pe1-s
 # is the path of the unpaired reads (both R1 and R2 should be in the same file)
 # of the first paired-end library.
 # -t is the number of threads, and -m is the total amount of memory allocated 
-# --tmp-dir creates a temporary SSD to hold SPAdes temporary files. SPAdes 
+ 
+# This next command is only necessary if you are using the -careful option in SPades.
+# Ths option causes SPAdes to create a large number of temporary files, 
+# which can cause hydra to kill the job. 
+# you also need to enable the SSD module: module load tools/ssd
+#--tmp-dir creates a temporary SSD to hold SPAdes temporary files. SPAdes 
 # creates a large number of temporary files, sometimes more than hydra allows.
 # This creates a temporary SSD to hold those files so hydra won't kill the
 # job. we then remove those files with rm -rf $SSD_DIR/*
