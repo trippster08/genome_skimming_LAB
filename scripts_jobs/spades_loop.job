@@ -63,7 +63,7 @@ echo = `date` job $JOB_NAME done
 # of the first paired-end library.
 # -t is the number of threads, and -m is the total amount of memory allocated 
  
-# This next command is only necessary if you are using the -careful option in SPades.
+# This next command is only necessary if you are using the --careful option in SPades.
 # Ths option causes SPAdes to create a large number of temporary files, 
 # which can cause hydra to kill the job. 
 # you also need to enable the SSD module: module load tools/ssd
