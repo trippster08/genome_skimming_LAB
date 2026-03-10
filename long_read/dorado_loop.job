@@ -1,4 +1,4 @@
-# /bin/sh
+#!/bin/sh
 # ----------------Parameters---------------------- #
 #$ -S /bin/sh
 #$ -q sThC.q
