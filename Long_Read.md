@@ -6,23 +6,26 @@
   2.3. [Transfer files to hydra](#transfer-files-to-hydra) </br>
 3. [Running the Pipeline](#running-the-pipeline) </br>
 4. [QC Raw Reads](#qc-raw-reads) </br>
-5. 
+5. [Filter and Trim](#filter-and-trim) </br>
+6. [Assembly](#assembly) </br>
+7. [Error Correction](#error-correction) </br>
+8. [Short Read Polishing](#short-read-polishing) </br>
+9. [Annotation](#annotation)
+10. [Mapping Reads](#mapping-reads) </br>
+11. [Download Results](#download-results) </br>
 
-This protocol is to analyze [Oxford Nanopore](https://nanoporetech.com/) long read sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed run multiple samples simultanteously on [Hydra](https://confluence.si.edu/display/HPC/High+Performance+Computing), Smithsonian's HPC, using [flye](https://github.com/mikolmogorov/Flye) for assembly, [Medaka](https://github.com/nanoporetech/medaka) for sequence correction, [GetOrganelle](https://github.com/Kinggerm/GetOrganelle) and [MitoFinder](https://github.com/RemiAllio/MitoFinder) for mitochondrial genome detection from assemblies, [MITOS](https://gitlab.com/Bernt/MITOS/) and [MitoFinder](https://github.com/RemiAllio/MitoFinder) for mitogenome annotation, and [Minimap2](https://github.com/lh3/minimap2) for mapping reads to mitogenomes. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See [Hydra on Windows PCs](https://confluence.si.edu/display/HPC/Logging+into+Hydra) for differences between MacOS and Windows in accessing Hydra.
-
-I also have a pipeline for obtaining mitogenomes from Nanopore long reads, see [Long_Read.md](https://xxxxxxxxx). Hybrid (Nanopore/Illumina) analyses are coming. 
+This protocol is to analyze [Oxford Nanopore](https://nanoporetech.com/) long read sequences for the purpose of recovering mitochondrial genomes from genomic DNA libraries. This pipeline is designed run multiple samples simultanteously on [Hydra](https://confluence.si.edu/display/HPC/High+Performance+Computing), Smithsonian's HPC, using [Flye](https://github.com/mikolmogorov/Flye) for assembly, [Medaka](https://github.com/nanoporetech/medaka) for sequence correction, [MitoFinder](https://github.com/RemiAllio/MitoFinder) for mitochondrial genome detection from assemblies, [MITOS](https://gitlab.com/Bernt/MITOS/) and [MitoFinder](https://github.com/RemiAllio/MitoFinder) for mitogenome annotation, and [Minimap2](https://github.com/lh3/minimap2) for mapping reads to mitogenomes. The pipeline assumes you have a current hydra account and are capable of accessing the SI network, either in person or through VPN. Our pipeline is specifically written for MacOS, but is compatible with Windows. See [Hydra on Windows PCs](https://confluence.si.edu/display/HPC/Logging+into+Hydra) for differences between MacOS and Windows in accessing Hydra.
 
 Much of this pipeline is run similarly to the short-read version, therefore much of the directions below are identical. You do not need to read the short-read directions found in the [README.md](xxxxxxx).
 
 ## Local Computer Configuration 
-Make a project directory, and mulitple subdirectories on your local computer. Make this wherever you want to store your projects. Hydra is not made for long-term storage, so raw sequences, jobs, results, etc should all be kept here when your analyses are finished. Although it is not necessary, I use the same directory pattern locally as I use in Hydra. 
+Make a project directory, and multiple subdirectories on your local computer. Make this wherever you want to store your projects. Hydra is not made for long-term storage, so raw sequences, jobs, results, etc should all be kept here when your analyses are finished. Although it is not necessary, I use the same directory pattern locally as I use in Hydra. 
 
 Make sure to replace "PROJECT" with your project name throughout.
 ```
 mkdir -p PROJECT/data/raw PROJECT/jobs
 ```
 Your raw reads should be in `data/raw/`. 
-NOTE: As currently designed, this pipeline has a few naming requirements for raw reads. Reads should be `fastq.gz` or `fastq` formated, and needs to start with a unique sample name (that contains no underscores) and read number (either R1 or R2) later in the filename. Both sample name and read number must be separated from the remainder of the filename with underscores. Also, Hydra does not allow jobs names to start with a number, so if your sample names start with a number, change the name by adding at least one letter to the beginning of the filename (I usually use the initials of the researcher) before running this pipeline.
 
 ## Hydra Configuration 
 All programs will be run through shared conda environments, so there is no need for the user to change any Hydra configurations or install any programs.
@@ -46,22 +49,27 @@ Make a project-specific directory, with the following subdirectories: `jobs/` an
 mkdir -p PROJECT/data/raw PROJECT/jobs
 ```
 ### Transfer Files to Hydra 
-Download the pipeline to jobs/ in your Hydra account using `wget`. This downloads a compressed file that contains all job files (\*.job), and shell scripts (\*.sh) necessary for your analysis. This command downloads a compressed file that will become a directory upon unzipping. Don't forget to move into your jobs folder first: `cd PROJECT/jobs`.
+Download the pipeline to jobs/ in your Hydra account using `wget`. This downloads a compressed file that contains all job files (\*.job), and shell scripts (\*.sh) necessary for your analysis.
 ```
 wget https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip
 ```
-Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your newly unzipped directory into the job directory and the primer folder into the main project directory. Delete the now-empty pipeline directory and zipped download. This also places a directory filled with additional scripts (SPAdes and associated annotation scripts, flye, downloading SRA data, etc) into jobs/. If you want to run any of these scripts, move them from jobs/extra_scripts/ to jobs/.
+Unzip the pipeline, and move all the job and shell script files from your newly unzipped directory into the job directory. Delete the now-empty pipeline directory and zipped download. 
 ```
 unzip main.zip
 
-mv genome_skimming_LAB-main/scripts_jobs/* genome_skimming_LAB-main/extra_scripts/* genome_skimming_LAB-main/long_read/* .
+mv genome_skimming_LAB-main/scripts_jobs/* genome_skimming_LAB-main/extra_scripts/* genome_skimming_LAB-main/long_read/* jobs/
 rm -r genome_skimming_LAB-main main.zip
 
 ```
 Your raw reads should be copied into `data/raw/`. Download to your local computer and use scp or filezilla to upload to `data/raw/`. See [Transferring Files to/from Hydra](https://confluence.si.edu/pages/viewpage.action?pageId=163152227) for help with transferring files between Hydra and your computer.
 
 ## Running the Pipeline
-This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/USERNAME/PROJECT/jobs/`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `jobs/logs/`. 
+This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typically `/scratch/genomics/USERNAME/PROJECT/jobs/`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `jobs/logs/`. 
+
+Go to the jobs folder before running the scripts described below.
+```
+cd jobs/
+```
 
 NOTE: Additional information for each program can be found in the `.job` file for each specific program. Included is program and parameter descriptions, including recommendations for alternative parameter settings. 
 
@@ -77,4 +85,55 @@ sh nanoplot.sh path_to_raw_sequences
 ```
 sh toulligQC.sh path_to_raw_sequences
 ```
-The results of these analyses are saved in `data/results/nanpore_analyses/` and `data/results/toulligqc_analyses
+The results of these analyses are saved in `data/results/nanpore_analyses/` and `data/results/toulligqc_analyses`
+
+## Filter and Trim
+We next trim adapter sequences and poor quality ends, as well as filter short and poor quality reads using two programs, [Dorado](https://github.com/nanoporetech/dorado/) and [Chopper](https://github.com/wdecoster/chopper/) 
+### Remove Adapters with Dorado
+Dorado is a program for analyzing Oxford Nanopore reads. It can demultiplex indices, call basepairs from Raw data, correct errors, and trim adapters. We will be using if for trimming adapters.  Reads are output into `data/trimmed_reads`. 
+```
+sh dorado.sh path_to_raw_sequences
+```
+### Quality Trim and Filter with Chopper
+Chopper is a new implementation of the depreciated [NanoFilt](https://github.com/wdecoster/nanofilt). We will use it to remove any reads shorter than 100 bp and reads that have an average quality score less than 8. Chopper can also crop ends (either a fixed amount or based on quality score), can extract high-quality reads from full reads, and can split reads into high- and low-quality subreads. Output is saved in `data/filtered_reads`.
+```
+sh dorado.sh path_to_raw_sequences
+```
+## Assembly
+We assemble trimmed and filtered reads using [Flye](https://github.com/mikolmogorov/Flye). Flye is a de novo long-read assembler. The fly_loop.job will output two sets of assemblies, one unedited, and one winnowed down to only include contigs that are sized appropriately for mitogenomes (1000-25000 bp) to reduce computation effort in mitogenome identification. Assembly results (fasta of contigs, assembly graph and assembly info) will be saved in `data/results/flye_assembiles/` as "SAMPLENAME_flye_assembly" "SAMPLENAME_flye_assembly_mitofiltered".
+```
+sh flye.sh path_to_trimmed_filtered_sequences
+```
+## Error Correction
+We will error-correct (also called polishing) our assemblies using the program [Medaka](https://github.com/nanoporetech/medaka). Medaka uses the raws reads against a reference (in our case, the contigs assembled by Flye). In general, this should reduce our sequencing error from ~0.3% from our Flye assemblies to ~0.04%. Medaka needs both the path to your raw reads as well as the path to your Flye assemblies. Medaka-corrected assemblies are saved to `results/medaka_corrected_assemblies`.
+```
+sh medaka.sh path_to_flye_assemblies path_to_raw_reads
+```
+## Short Read Polishing
+If you also have short reads, you can polish your corrected assemblies using Illumina short reads and the program [NextPolish](https://github.com/Nextomics/NextPolish). Polishing your short reads can reduce your error rates furthur, from ~0.04% to 0.0001%. Nor NextPolish you need the path to your Medaka-corrected assemblies and the path to your trimmed Illumina short reads.  
+```
+sh nextpolish.sh path_to_medaka_corrrecte_assemblies path_to_trimmed_illumina_reads
+```
+## Annotation
+We identify potential mitogenomes from corrected (and polished, if available) "mitofiltered" assemblies using MitoFinder, then annotate those identified mitogenomes using MitoFinder and MITOS 
+
+Identify and Annotate medaka-corrected assemblies using MitoFinder. MitoFinder results will be saved in `results/mitofinder_results/SAMPLENAME_mitofinder_medaka_Final_Results/`.
+```
+sh mitofinder_annotate_medaka.sh path_to_medaka_corrrected_assemblies
+```
+Identify and Annotate shortread-polished assemblies using MitoFinder. MitoFinder results will be saved in `results/mitofinder_results/SAMPLENAME_mitofinder_polished_Final_Results/`.
+```
+sh mitofinder_annotate_polished.sh path_to_polished_assemblies
+```
+Annotate assemblies from MitoFinder using MITOS. MitoFinder assemblies can be either corrected or polished, depending upon the path selected. Results will be saved in `results/mitos_results/SAMPLENAME_mitos_mitofinder/`.
+```
+sh mitos_annotate_mitofinder.sh path_to_mitofinder_final_results
+```
+
+## Mapping Reads
+We can examine read coverage by mapping our Nanopore Reads to our finished assemblies using [Minimap2}](https://github.com/lh3/minimap2). Minimap2 normally creates a SAM files. However, we would prefer a BAM file (a binary version of a SAM file that usually are smaller and more efficient) that also only contains mapped reads, so we modify our bowtie2 output using samtools to output your resulting Minimap2 BAM file to `data/results/minimap_results/`. 
+```
+sh minimap.sh path_to_mitofinder_results
+```
+## Download Results
+Finally, download your results of interest. The main three directories to download would be `results/MitoFinder_results/`, `results/MITOS_results/`, and `results/Minimap2_results/`.  These directories contain all the files you need for evaluation of your mitogenomes. You may want to download additional files depending upon what you or your group need for futher investigation, or what you decide to keep for archival purposes.
