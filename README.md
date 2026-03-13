@@ -26,7 +26,7 @@ I also have a pipeline for obtaining mitogenomes from Nanopore long reads, see [
 This protocol currently includes methods to quality and adapter trim and filter raw reads, error-correct and assemble trimmed reads, annotate assemblies, and map reads to those assemblies. It does not yet include what to do with your assembled mitogenome, including checking for compelete annotation, quality of assembly and annotation, submission to GenBank, etc. I hope to add many of these steps soon. You can download this entire repository, including all `.job` and `.sh` files using this link: [Genome Skimming @ LAB](https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip).
 
 ## Local Computer Configuration 
-Make a project directory, and mulitple subdirectories on your local computer. Make this wherever you want to store your projects. Hydra is not made for long-term storage, so raw sequences, jobs, results, etc should all be kept here when your analyses are finished. Although it is not necessary, I use the same directory pattern locally as I use in Hydra. 
+Make a project directory, and multiple subdirectories on your local computer. Make this wherever you want to store your projects. Hydra is not made for long-term storage, so raw sequences, jobs, results, etc should all be kept here when your analyses are finished. Although it is not necessary, I use the same directory pattern locally as I use in Hydra. 
 
 Make sure to replace "PROJECT" with your project name throughout.
 ```
@@ -62,18 +62,23 @@ Download the pipeline to jobs/ in your Hydra account using `wget`. This download
 wget https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip
 
 ```
-Unzip the pipeline, and move all the \*.sh, \*.job, and \*.R files from your newly unzipped directory into the job directory and the primer folder into the main project directory. Delete the now-empty pipeline directory and zipped download. This also places a directory filled with additional scripts (SPAdes and associated annotation scripts, flye, downloading SRA data, etc) into jobs/. If you want to run any of these scripts, move them from jobs/extra_scripts/ to jobs/.
+Unzip the pipeline, and move all the job and shell script files from your newly unzipped directory into the job directory. Delete the now-empty pipeline directory and zipped download. 
 ```
 unzip main.zip
 
-mv genome_skimming_LAB-main/scripts_jobs/* genome_skimming_LAB-main/extra_scripts/* genome_skimming_LAB-main/long_read/* .
+mv genome_skimming_LAB-main/scripts_jobs/* genome_skimming_LAB-main/extra_scripts/* genome_skimming_LAB-main/long_read/* jobs/
 rm -r genome_skimming_LAB-main main.zip
 
 ```
 Your raw reads should be copied into `data/raw_reads/`. Download to your local computer and use scp or filezilla to upload to `data/raw_reads/`. See [Transferring Files to/from Hydra](https://confluence.si.edu/pages/viewpage.action?pageId=163152227) for help with transferring files between Hydra and your computer.
 
 ## Running the Pipeline
-This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transeferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typcially `/scratch/genomics/USERNAME/PROJECT/jobs/`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `jobs/logs/`. 
+This pipeline is designed to run each program on multiple samples simultaneously. For each program, the user runs a shell script that includes a path to the directory containing your input files. This shell script creates and submits a job file to Hydra for each sample in the targeted directory. After transferring files to Hydra, the user should navigate to their jobs directory, which contains both job files and shell scripts, typically `/scratch/genomics/USERNAME/PROJECT/jobs/`. All shell scripts should be run from this directory. Log files for each submitted job are saved in `jobs/logs/`. 
+
+Go to the jobs folder before running the scripts described below.
+```
+cd jobs/
+```
 
 NOTE: Additional information for each program can be found in the `.job` file for each specific program. Included is program and parameter descriptions, including recommendations for alternative parameter settings. 
 
@@ -186,7 +191,7 @@ Run the Bowtie2 shell script, including the path to the directory containing you
 sh bowtie2_getorganelle.sh path_to_getorganelle_contigs path_to_trimmed_reads
 ```
 
-Bowtie2 normally creates a SAM file, saving it (and other program-specific files) in a samples-specific directory in `/scratch/genomics/USERNAME/PROJECT/data/results/bowtie2_getorganelle/`. However, we would prefer a BAM file (a binary version of a SAM file that usually are smaller and more efficient) that also only contains assembled reads (i.e. reads from the mitochondrial genome), so we modify our bowtie2 output using samtools to output your resulting Bowtie2 BAM file to `data/results/bowtie2_results/`. 
+Bowtie2 normally creates a SAM file, saving it (and other program-specific files) in a samples-specific directory in `/scratch/genomics/USERNAME/PROJECT/data/results/bowtie2_getorganelle/`. However, we would prefer a BAM file (a binary version of a SAM file that usually are smaller and more efficient) that also only contains mapped reads, so we modify our bowtie2 output using samtools to output your resulting Bowtie2 BAM file to `data/results/bowtie2_results/`. 
 
 ## Download Results
 Finally, we download all the directories containing our results. There should be one for GetOrganelle contigs (`data/results/getorganelle_contigs`), one for MitoFinder results (`data/results/mitofinder_results`), one for MITOS results (`data/results/mitos_results`) and one for Bowtie2 results (`data/results/bowtie2_results`). These directories contain all the files you need for evaluation of your mitogenomes. You may want to download additional files depending upon what you or your group decides to keep for archival purposes.
