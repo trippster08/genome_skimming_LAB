@@ -55,9 +55,10 @@ Go to the the directory assigned to you for short-term storage of large data-set
 ```
 cd /scratch/genomics/USERNAME
 ```
-Make a project-specific directory, with the following subdirectories: `jobs/` and `data/raw_reads/`. -p allows you to create subdirectories and any parental ones that don't already exist (in this case, PROJECT). I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name.
+Make a project-specific directory. I use the same directory tree here as on my local computer, to lessen confusion. Again, replace PROJECT with your project name. Move into the newly formed project-specific directory
 ```
-mkdir -p PROJECT/data/raw_reads PROJECT/jobs
+mkdir PROJECT
+cd PROJECT
 ```
 ### Transfer Files to Hydra 
 Download the pipeline to jobs/ in your Hydra account using `wget`. This downloads a compressed file that contains all job files (\*.job), and shell scripts (\*.sh) necessary for your analysis. This command downloads a compressed file that will become a directory upon unzipping. Don't forget to move into your jobs folder first: `cd PROJECT/jobs`.
@@ -65,11 +66,12 @@ Download the pipeline to jobs/ in your Hydra account using `wget`. This download
 wget https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.zip
 
 ```
+Make the necessary subdirectories.
 Unzip the pipeline, and move all the job and shell script files from your newly unzipped directory into the job directory. Delete the now-empty pipeline directory and zipped download. 
 ```
+mkdir -p data/raw jobs
 unzip main.zip
-
-mv genome_skimming_LAB-main/scripts_jobs/* genome_skimming_LAB-main/extra_scripts/* genome_skimming_LAB-main/long_read/* jobs/
+mv genome_skimming_LAB-main/Illumina/* genome_skimming_LAB-main/extra_scripts/* genome_skimming_LAB-main/Nanopore/* jobs/
 rm -r genome_skimming_LAB-main main.zip
 
 ```
