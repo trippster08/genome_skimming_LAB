@@ -4,7 +4,6 @@
 #$ -pe mthread 10
 #$ -q mThM.q
 #$ -l mres=160G,h_data=16G,h_vmem=16G,himem
-#$ -l ssd_res=200G -v SSD_SAVE_MAX=0
 #$ -cwd
 #$ -j y
 #$ -N PROJECT_spades
