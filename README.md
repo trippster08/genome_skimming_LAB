@@ -1,5 +1,5 @@
 ![GitHub Release](https://img.shields.io/github/v/release/trippster08/genome_skimming_LAB?color=green)
-[![DOI](https://zenodo.org/badge/558466703.svg)](https://doi.org/10.5281/zenodo.19051758)
+[![DOI](https://zenodo.org/badge/558466703.svg)](https://doi.org/10.5281/zenodo.19051759)
 
 # Genome Skimming Pipeline for LAB
 1. [Local Computer Configuration](#local-computer-configuration) </br>
