@@ -97,7 +97,7 @@ sh dorado.sh path_to_raw_sequences
 ### Quality Trim and Filter with Chopper
 Chopper is a new implementation of the depreciated [NanoFilt](https://github.com/wdecoster/nanofilt). We will use it to remove any reads shorter than 100 bp and reads that have an average quality score less than 8. Chopper can also crop ends (either a fixed amount or based on quality score), can extract high-quality reads from full reads, and can split reads into high- and low-quality subreads. Output is saved in `data/filtered_reads`.
 ```
-sh dorado.sh path_to_raw_sequences
+sh chopper.sh path_to_dorado_trimmed_sequences
 ```
 ## Assembly
 We assemble trimmed and filtered reads using [Flye](https://github.com/mikolmogorov/Flye). Flye is a de novo long-read assembler. The fly_loop.job will output two sets of assemblies, one unedited, and one winnowed down to only include contigs that are sized appropriately for mitogenomes (1000-25000 bp) to reduce computation effort in mitogenome identification. Assembly results (fasta of contigs, assembly graph and assembly info) will be saved in `data/results/flye_assembiles/` as "SAMPLENAME_flye_assembly" "SAMPLENAME_flye_assembly_mitofiltered".
