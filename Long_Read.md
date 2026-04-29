@@ -117,11 +117,28 @@ sh nextpolish.sh path_to_medaka_corrrecte_assemblies path_to_trimmed_illumina_re
 ## Annotation
 We identify potential mitogenomes from corrected (and polished, if available) "mitofiltered" assemblies using MitoFinder, then annotate those identified mitogenomes using MitoFinder and MITOS 
 
-Identify and Annotate medaka-corrected assemblies using MitoFinder. MitoFinder results will be saved in `results/mitofinder_results/SAMPLENAME_mitofinder_medaka_Final_Results/`.
+Identify and Annotate medaka-corrected assemblies using MitoFinder. As with MitoFinder in the Illumina analyses, the shell script must be followed by the path to the Medata-corrected assemblies, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/medaka_corrected_assemblies/`. The genetic code will most likely be either "2" (for vertebrate mitochondrial DNA) or "5" (for invertebrate mitochondrial DNA). For other taxa, see the `.sh` or `.job ` file for a complete list of genetic codes available.  
+The reference database should be one of:  
+"Metazoa" (for the entire database)  
+"Annelida"  
+"Arthropoda"  
+"Bryozoa"  
+"Cnidaria"  
+"Ctenophora"  
+"Echinodermata"  
+"Mollusca"  
+"Nemertea"  
+"Porifera"  
+"Tunicata"  
+"Vertebrata"  
+Analysis time is highly dependent on the size of the reference database used, so if possible it is recommended you use a taxon-specific one instead of "Metazoa".
+MitoFinder results will be saved in `results/mitofinder_results/SAMPLENAME_mitofinder_medaka_Final_Results/`.
 ```
 sh mitofinder_annotate_medaka.sh path_to_medaka_corrrected_assemblies
 ```
-Identify and Annotate shortread-polished assemblies using MitoFinder. MitoFinder results will be saved in `results/mitofinder_results/SAMPLENAME_mitofinder_polished_Final_Results/`.
+Identify and Annotate shortread-polished assemblies using MitoFinder. As with other MitoFinder analyses, the shell script must be followed by the path to the polished assemblies, the number representing the genetic code you wish to use, and the reference database to use. For most, the path should be something like: `/scratch/genomics/USERNAME/PROJECT/data/results/nexpolished_assemblies/`.
+
+MitoFinder results will be saved in `results/mitofinder_results/SAMPLENAME_mitofinder_polished_Final_Results/`.
 ```
 sh mitofinder_annotate_polished.sh path_to_polished_assemblies
 ```
@@ -132,8 +149,9 @@ sh mitos_annotate_mitofinder.sh path_to_mitofinder_final_results
 
 ## Mapping Reads
 We can examine read coverage by mapping our Nanopore Reads to our finished assemblies using [Minimap2}](https://github.com/lh3/minimap2). Minimap2 normally creates a SAM files. However, we would prefer a BAM file (a binary version of a SAM file that usually are smaller and more efficient) that also only contains mapped reads, so we modify our bowtie2 output using samtools to output your resulting Minimap2 BAM file to `data/results/minimap_results/`. 
+Run the shell script for minimap, followed by the path to your mitochondrial-identified contigs (typically your MitoFinder results), and the path to your trimmed and filtered reads.
 ```
-sh minimap.sh path_to_mitofinder_results
+sh minimap.sh path_to_mitofinder_results path_to_filtered_reads
 ```
 ## Download Results
 Finally, download your results of interest. The main three directories to download would be `results/MitoFinder_results/`, `results/MITOS_results/`, and `results/Minimap2_results/`.  These directories contain all the files you need for evaluation of your mitogenomes. You may want to download additional files depending upon what you or your group need for futher investigation, or what you decide to keep for archival purposes.
