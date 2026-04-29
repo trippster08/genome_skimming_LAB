@@ -3,7 +3,7 @@
 medaka_corrected_assemblies="$1"
 trimmed_illumina_reads="$2"
 
-results=${medaka_corrected_assemblies}/../results
+results=${medaka_corrected_assemblies}/..
 
 if
   [[ -z "$(ls ${medaka_corrected_assemblies}/*_medaka_consensus.fasta 2>/dev/null | grep fasta)" ]]; then
