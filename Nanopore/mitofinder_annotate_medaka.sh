@@ -6,28 +6,43 @@ ref_database="$3"
 results=${assemblies}/../
 path_to_ref="/scratch/nmnh_lab/macdonaldk/ref/"
 
-avail_ref=()
-for file in ${path_to_ref}/mito_reference_*.gb; do
-  ref_file=${file##file/}
-  taxon=$(echo ${ref_file} | sed -E 's/^mito_reference_([A-Za-z]+)_[0-9]{2}[A-Za-z]{3}[0-9]{2}\.gb$/\1/')
-  avail_ref+=(${taxon})
-done
-
 if [[ -z "$(ls ${assemblies}/*_medaka_consensus.fasta 2>/dev/null | grep fasta)" ]]; then
   echo "Correct path to the medaka-corrected flye results not entered (*_medaka_consensus.fasta)"
   exit
 fi
 
-if (( $2 < 1 || $2 > 25 )); then
-  echo "Genetic code must be a number between 1 and 25"
-  exit 1
-fi
+case $mito_code in
+    ''|*[!0-9]*)
+        echo "Genetic code must be a number between 1 and 25"
+        exit 1
+        ;;
+    *)
+        if [ "$mito_code" -lt 1 ] || [ "$mito_code" -gt 25 ]; then
+            echo "Genetic code must be a number between 1 and 25"
+            exit 1
+        fi
+        ;;
+esac
 
-# Check if the argument is in the list of valid names
-if [[ ! " ${avail_ref[@]} " =~ " ${ref_database} " ]]; then
-  echo "Incorrect reference database. Available options are:"
-  printf ' - %s\n' "${avail_ref[@]}"
-  exit 1
+for file in "$path_to_ref"/mito_reference_*.gb; do
+    base=${file##*/}
+    tmp=${base#mito_reference_}
+    taxon=${tmp%_*}
+
+    avail_ref="$avail_ref $taxon"
+
+    if [ "$taxon" = "$ref_database" ]; then
+        found_ref=1
+        ref_file=$file
+    fi
+done
+
+if [ -z "$found_ref" ]; then
+    echo "Incorrect reference database. Available options are:"
+    for t in $avail_ref; do
+        echo " - $t"
+    done
+    exit 1
 fi
 
 mkdir -p ${results}/mitofinder_medaka ${results}/mitofinder_results

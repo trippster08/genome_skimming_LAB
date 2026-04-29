@@ -5,23 +5,45 @@ taxa="$2"
 ref="$3"
 results=${contigs}/../
 
+
+
 if [[ -z "$(ls ${contigs}/*.path_sequence.fasta 2>/dev/null | grep fasta)" ]]; then
   echo "Correct path to GetOrganelle results not entered (*.path_sequence.fasta)"
   exit
 fi
 
-if [[ -z $2 ]]; then
-  echo "Genetic code not entered (should be a number between 1 and 25)"
-  exit
-fi
+case $mito_code in
+    ''|*[!0-9]*)
+        echo "Genetic code must be a number between 1 and 25"
+        exit 1
+        ;;
+    *)
+        if [ "$mito_code" -lt 1 ] || [ "$mito_code" -gt 25 ]; then
+            echo "Genetic code must be a number between 1 and 25"
+            exit 1
+        fi
+        ;;
+esac
 
-if
-  [[ ${ref} != Annelida && ${ref} != Arthropoda && ${ref} != Bryozoa && ${ref} != Cnidaria && ${ref} \
-  != Ctenophora && ${ref} != Echinodermata && ${ref} != Mollusca && ${ref} != Nemertea && \
-  ${ref} != Porifera && ${ref} != Tunicata && ${ref} != Vertebrata && ${ref} != Metazoa ]]; then
-  echo 'Incorrect reference database. Please enter "Annelida", "Arthropoda", "Bryozoa", "Cnidaria", \
-   "Ctenophora", "Echinodermata", "Mollusca", "Nemertea", "Porifera", "Tunicata", "Vertebrata" or , "Metazoa"'
-  exit
+for file in "$path_to_ref"/mito_reference_*.gb; do
+    base=${file##*/}
+    tmp=${base#mito_reference_}
+    taxon=${tmp%_*}
+
+    avail_ref="$avail_ref $taxon"
+
+    if [ "$taxon" = "$ref_database" ]; then
+        found_ref=1
+        ref_file=$file
+    fi
+done
+
+if [ -z "$found_ref" ]; then
+    echo "Incorrect reference database. Available options are:"
+    for t in $avail_ref; do
+        echo " - $t"
+    done
+    exit 1
 fi
 
 mkdir -p ${results}/mitofinder_getorganelle ${results}/mitofinder_results
