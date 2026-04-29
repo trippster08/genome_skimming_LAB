@@ -20,14 +20,14 @@ echo + `date` job $JOB_NAME started in $QUEUE with jobID=$JOB_ID on $HOSTNAME
 echo + NSLOTS = $NSLOTS
 #
 assemblies="$1"
-raw_nanopore="$2"
+filtered_nanopore="$2"
 sample="$3"
 name="$4"
 results="$5"
 #
 medaka_consensus \
 -d ${assemblies}/${sample} \
--i ${raw_nanopore}/${name}_trimmed_filtered.fastq.gz \
+-i ${filtered_nanopore}/${name}_trimmed_filtered.fastq.gz \
 -o ${results}/medaka/${name} \
 -m r1041_e82_400bps_hac_v4.3.0 \
 -t $NSLOTS

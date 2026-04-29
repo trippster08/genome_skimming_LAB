@@ -105,14 +105,14 @@ We assemble trimmed and filtered reads using [Flye](https://github.com/mikolmogo
 sh flye.sh path_to_trimmed_filtered_sequences
 ```
 ## Error Correction
-We will error-correct (also called polishing) our assemblies using the program [Medaka](https://github.com/nanoporetech/medaka). Medaka uses the raws reads against a reference (in our case, the contigs assembled by Flye). In general, this should reduce our sequencing error from ~0.3% from our Flye assemblies to ~0.04%. Medaka needs both the path to your raw reads as well as the path to your Flye assemblies. Medaka-corrected assemblies are saved to `results/medaka_corrected_assemblies`.
+We will error-correct (also called polishing) our assemblies using the program [Medaka](https://github.com/nanoporetech/medaka). Medaka uses trimmed and filtered reads against a reference (in our case, the contigs assembled by Flye). In general, this should reduce our sequencing error from ~0.3% from our Flye assemblies to ~0.04%. Medaka needs both the path to your filtered and trimmed reads as well as the path to your Flye assemblies. Medaka-corrected assemblies are saved to `results/medaka_corrected_assemblies`.
 ```
-sh medaka.sh path_to_flye_assemblies path_to_raw_reads
+sh medaka.sh path_to_flye_assemblies path_to_trimmed_filtered_reads
 ```
 ## Short Read Polishing
-If you also have short reads, you can polish your corrected assemblies using Illumina short reads and the program [NextPolish](https://github.com/Nextomics/NextPolish). Polishing your short reads can reduce your error rates furthur, from ~0.04% to 0.0001%. Nor NextPolish you need the path to your Medaka-corrected assemblies and the path to your trimmed Illumina short reads.  
+If you also have short reads, you can polish your corrected assemblies using Illumina short reads and the program [NextPolish](https://github.com/Nextomics/NextPolish). Polishing your short reads can reduce your error rates furthur, from ~0.04% to 0.0001%. Nor NextPolish you need the path to your Medaka-corrected assemblies and the path to your trimmed Illumina short reads.  The short-read samples should have identical names to their long-read partners.
 ```
-sh nextpolish.sh path_to_medaka_corrrecte_assemblies path_to_trimmed_illumina_reads
+sh nextpolish.sh path_to_medaka_corrrected_assemblies path_to_trimmed_illumina_reads
 ```
 ## Annotation
 We identify potential mitogenomes from corrected (and polished, if available) "mitofiltered" assemblies using MitoFinder, then annotate those identified mitogenomes using MitoFinder and MITOS 
