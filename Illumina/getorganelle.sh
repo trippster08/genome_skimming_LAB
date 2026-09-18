@@ -6,7 +6,7 @@ data=${trimmed}/../
 
 if [[ -z "$(ls ${trimmed}/*.fastq.gz 2>/dev/null | grep fastq.gz)" ]]; then
   echo "Correct path to trimmed read files not entered (*.fastq.gz)"
-  exit
+  exit 1
 fi
 
 if
@@ -14,7 +14,7 @@ if
   != embplant_nr && ${2} != other_pt ]]; then
   echo 'Correct organelle not entered. Please enter "animal_mt", "embplant_pt", "fungus_mt", "embplant_mt", \
    "embplant_nr", or "other_pt" after path to trimmed reads.'
-  exit
+  exit 1
 fi
 
 mkdir -p ${data}/results/getorganelle/ ${data}/results/getorganelle_contigs
@@ -33,8 +33,8 @@ respective log file for further information." \
  for x in ${trimmed}/*_R1_PE_trimmed.fastq.gz ; do 
   sample=${x##*/}
   name=`echo ${sample%_R[1-2]_*}`
-  if [ ${data}/results/getorganelle_contigs/${name}*path_sequence.fasta ]; then
-    echo "SPAdes assemblies for ${name} have already been analyzed by GetOrganelle"
+  if [ -f ${data}/results/getorganelle_contigs/${name}*path_sequence.fasta ]; then
+    echo "Getorganelle has already been run for ${name}."
   elif [ -f logs/${name}_getorganelle_hydra.log ]; then
     if [ -d ${data}/results/getorganelle/${name} ]; then
       if [ -f ${data}/results/getorganelle_contigs/${name}_getorganelle_hydra.log ]; then
