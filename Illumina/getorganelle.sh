@@ -41,18 +41,18 @@ respective log file for further information." \
         rm -r ${data}/results/getorganelle/${name} logs/${name}_getorganelle_hydra.log ${data}/results/getorganelle_contigs/${name}_getorganelle_hydra.log
         qsub -o logs/${name}_getorganelle_hydra.log \
         -N ${name}_getorganelle \
-        getorganelle_loop.job ${assembly} ${organelle} ${name} ${data}
+        getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
       else
         rm -r ${data}/results/getorganelle/${name} logs/${name}_getorganelle_hydra.log
         qsub -o logs/${name}_getorganelle_hydra.log \
         -N ${name}_getorganelle \
-        getorganelle_loop.job ${assembly} ${organelle} ${name} ${data}
+        getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
       fi
     else 
       rm logs/${name}_getorganelle_hydra.log
       qsub -o logs/${name}_getorganelle_hydra.log \
       -N ${name}_getorganelle \
-      getorganelle_loop.job ${assem bly} ${organelle} ${name} ${data}
+      getorganelle_loop.job ${trimmed} ${organelle} ${name} ${data}
     fi
   else
   qsub -o logs/${name}_getorganelle_hydra.log \
