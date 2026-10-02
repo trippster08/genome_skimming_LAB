@@ -19,16 +19,16 @@ echo + NSLOTS = $NSLOTS
 #
 contigs="$1"
 shortname="$2"
-taxa="$3"
-ref="$4"
+mito_code="$3"
+reference="$4"
 sample="$5"
 results="$6"
 
 #
 mitofinder \
 -j ${shortname}_mitofinder_getorganelle \
--o ${taxa} \
--r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${ref}*.gb \
+-o ${mito_code} \
+-r /scratch/nmnh_lab/macdonaldk/ref/mito_reference_${reference}*.gb \
 -a ${contigs}/${sample} \
 --new-genes -p $NSLOTS -m 4
 
