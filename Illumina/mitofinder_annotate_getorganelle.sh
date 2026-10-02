@@ -1,8 +1,8 @@
 #!/bin/sh
 
 contigs="$1"
-taxa="$2"
-ref="$3"
+mito_code="$2"
+reference="$3"
 results=${contigs}/../
 
 
@@ -25,14 +25,16 @@ case $mito_code in
         ;;
 esac
 
-for file in "$path_to_ref"/mito_reference_*.gb; do
+path_to_ref=/scratch/nmnh_lab/macdonaldk/ref
+avail_ref=()
+for file in "${path_to_ref}"/mito_reference_*.gb; do
     base=${file##*/}
     tmp=${base#mito_reference_}
     taxon=${tmp%_*}
 
-    avail_ref="$avail_ref $taxon"
+    avail_ref+=("${taxon}")
 
-    if [ "$taxon" = "$ref_database" ]; then
+    if [ "${taxon}" = "${reference}" ]; then
         found_ref=1
         ref_file=$file
     fi
@@ -40,9 +42,10 @@ done
 
 if [ -z "$found_ref" ]; then
     echo "Incorrect reference database. Available options are:"
-    for t in $avail_ref; do
-        echo " - $t"
-    done
+    printf '%s\n' "${avail_ref[@]}"
+    #for ref in ${avail_ref[@]}; do
+    #  echo "${ref}"
+    #done
     exit 1
 fi
 
@@ -61,27 +64,27 @@ for x in ${contigs}/*.path_sequence.fasta ; do
         qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle_hydra.log \
         -wd ${results}/mitofinder_getorganelle \
         -N ${name}_mitofinder_getorganelle \
-        mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
+        mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${mito_code} ${reference} ${sample} ${results}
       else
         rm -r ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle ${results}/mitofinder_getorganelle/${name}_mitofinder_getorganelle_MitoFinder.log \
         logs/${name}_mitofinder_getorganelle_hydra.log
         qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle_hydra.log \
         -wd ${results}/mitofinder_getorganelle \
         -N ${name}_mitofinder_getorganelle \
-        mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
+        mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${mito_code} ${reference} ${sample} ${results}
       fi
     else
       rm logs/${name}_mitofinder_getorganelle_hydra.log
       qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle_hydra.log \
       -wd ${results}/mitofinder_getorganelle \
       -N ${name}_mitofinder_getorganelle \
-      mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
+      mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${mito_code} ${reference} ${sample} ${results}
     fi
   else
     qsub -o ${results}/../../jobs/logs/${name}_mitofinder_getorganelle_hydra.log \
     -wd ${results}/mitofinder_getorganelle \
     -N ${name}_mitofinder_getorganelle \
-    mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${taxa} ${ref} ${sample} ${results}
+    mitofinder_annotate_getorganelle_loop.job ${contigs} ${name} ${mito_code} ${reference} ${sample} ${results}
   fi
   sleep 0.1
 done
