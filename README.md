@@ -69,7 +69,7 @@ wget https://github.com/trippster08/genome_skimming_LAB/archive/refs/heads/main.
 Make the necessary subdirectories.
 Unzip the pipeline, and move all the job and shell script files from your newly unzipped directory into the job directory. Delete the now-empty pipeline directory and zipped download. 
 ```
-mkdir -p data/raw jobs
+mkdir -p data/raw_reads jobs
 unzip main.zip
 mv genome_skimming_LAB-main/Illumina/* genome_skimming_LAB-main/extra_scripts/* genome_skimming_LAB-main/Nanopore/* jobs/
 rm -r genome_skimming_LAB-main main.zip
