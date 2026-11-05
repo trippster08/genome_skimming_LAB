@@ -40,11 +40,16 @@ ${results}/spades_contigs/${name}_spades_hydra.log
 # description how this works).
 
 if [ -f ${results}/spades/${name}/contigs.fasta ]; then
-  awk '/^>/ {if (NR!=1) printf("\n"); printf("%s\n",$0); next} {printf("%s",$0);} END {printf("\n");}' \
-  ${results}/spades/${name}/contigs.fasta > ${results}/spades_contigs/${name}_spades_contigs.fasta
-  seqkit seq ${results}/spades_contigs/${name}_spades_contigs.fasta \
+  seqkit seq ${results}/spades/${name}/contigs.fasta -w 0 \
+  -o ${results}/spades_contigs/${name}_spades_contigs.fasta
+
+  seqkit seq ${results}/spades/${name}/contigs.fasta \
   --max-len 22000 --min-len 1000 -w 0 \
-  -o ${results}/spades_contigs/${name}_spades_contigs_mito_filtered.fasta 
+  -o ${results}/spades_contigs/${name}_spades_contigs_mito_filtered.fasta
+
+  cp ${results}/spades/${name}/assembly_graph.fastg \
+  ${results}/spades_contigs/${name}_assembly_graph.fastg
+
 fi
 
 if [ test -f ${results}/spades/${name}/spades.log ]; then
