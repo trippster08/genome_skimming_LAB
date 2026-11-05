@@ -25,7 +25,7 @@ for x in ${reads}/*.fastq.gz ; do
   else
     qsub -o logs/${name}_fastqc_hydra.log \
     -N ${name}_fastqc \
-    fastqc_loop.job ${reads} ${data} ${sample} ${name}
+    fastqc_loop.job ${reads} ${fastq_results} ${sample} ${name}
   fi
   sleep 0.1
 done
