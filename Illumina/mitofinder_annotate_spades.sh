@@ -1,8 +1,8 @@
 #!/bin/sh
 
 contigs="$1"
-taxa="$2"
-ref="$3"
+mito_code="$2"
+reference="$3"
 results=${contigs}/../
 
 if [[ -z "$(ls ${contigs}/*_spades_contigs.fasta 2>/dev/null | grep fasta)" ]]; then
@@ -10,7 +10,7 @@ if [[ -z "$(ls ${contigs}/*_spades_contigs.fasta 2>/dev/null | grep fasta)" ]]; 
   exit
 fi
 
-case $mito_code in
+case ${mito_code} in
     ''|*[!0-9]*)
         echo "Genetic code must be a number between 1 and 25"
         exit 1
@@ -23,6 +23,8 @@ case $mito_code in
         ;;
 esac
 
+path_to_ref=/scratch/nmnh_lab/macdonaldk/ref
+avail_ref=()
 for file in "$path_to_ref"/mito_reference_*.gb; do
     base=${file##*/}
     tmp=${base#mito_reference_}
@@ -30,16 +32,17 @@ for file in "$path_to_ref"/mito_reference_*.gb; do
 
     avail_ref="$avail_ref $taxon"
 
-    if [ "$taxon" = "$ref_database" ]; then
+    if [ "${taxon}" = "${reference}" ]; then
         found_ref=1
         ref_file=$file
     fi
 done
 if [ -z "$found_ref" ]; then
     echo "Incorrect reference database. Available options are:"
-    for t in $avail_ref; do
-        echo " - $t"
-    done
+    printf '%s\n' "${avail_ref[@]}"
+    #for ref in ${avail_ref[@]}; do
+    #  echo "${ref}"
+    #done
     exit 1
 fi
 
